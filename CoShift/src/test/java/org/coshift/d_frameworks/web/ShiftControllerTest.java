@@ -1,6 +1,6 @@
-package org.coshift.web;              // an deine Paketstruktur anpassen
+package org.coshift.d_frameworks.web;              // an deine Paketstruktur anpassen
 
-import org.coshift.config.SecurityConfig;
+import org.coshift.d_frameworks.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

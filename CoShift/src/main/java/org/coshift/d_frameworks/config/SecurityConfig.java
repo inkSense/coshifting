@@ -1,4 +1,4 @@
-package org.coshift.config;
+package org.coshift.d_frameworks.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
