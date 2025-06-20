@@ -1,34 +1,29 @@
 package org.coshift.a_domain;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 public final class Shift {
 
-    private final Long       id;
-    private final LocalDate  date;
-    private final LocalTime  startTime;
-    private final LocalTime  endTime;
+    private final Long            id;
+    private final LocalDateTime   startTime;
+    private final LocalDateTime   endTime;
+    private final int             durationInMinutes;
 
-    public Shift(Long id, LocalDate date, LocalTime startTime, LocalTime endTime) {
-        this.id        = id;
-        this.date      = date;
-        this.startTime = startTime;
-        this.endTime   = endTime;
+    public Shift(Long id, LocalDateTime startTime, int durationInMinutes) {
+        this.id                = id;
+        this.startTime         = startTime;
+        this.durationInMinutes = durationInMinutes;
+        this.endTime           = startTime.plusMinutes(durationInMinutes);
     }
 
-    public Long       getId()        { return id; }
-    public LocalDate  getDate()      { return date; }
-    public LocalTime  getStartTime() { return startTime; }
-    public LocalTime  getEndTime()   { return endTime; }
+    public Long            getId()               { return id; }
+    public LocalDateTime   getStartTime()        { return startTime; }
+    public LocalDateTime   getEndTime()          { return endTime; }
+    public int             getDurationInMinutes(){ return durationInMinutes; }
 
-    public int durationInMinutes() {
-        return (int) Duration.between(startTime, endTime).toMinutes();
-    }
-
+    /* -------- Geschäftslogik -------- */
     public boolean overlaps(Shift other) {
-        return this.date.equals(other.date) &&
-                !(this.endTime.isBefore(other.startTime) ||
-                        this.startTime.isAfter(other.endTime));
+        return !(this.endTime.isBefore(other.startTime) ||
+                 this.startTime.isAfter(other.endTime));
     }
-
 }
