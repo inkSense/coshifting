@@ -2,11 +2,11 @@
 spring:
   application:
     name: CoShift
-  datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=coshift;encrypt=true;trustServerCertificate=true
-    username: coshift_user
-    password: myPassword
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  # datasource:
+  #   url: jdbc:sqlserver://localhost:1433;databaseName=coshift;encrypt=true;trustServerCertificate=true
+  #   username: coshift_user
+  #   password: myPassword
+  #   driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
       ddl-auto: update

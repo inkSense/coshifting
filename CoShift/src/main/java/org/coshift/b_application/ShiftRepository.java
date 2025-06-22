@@ -14,5 +14,7 @@ public interface ShiftRepository {
 
     List<Shift> findByDate(LocalDate date);
 
+    List<Shift> findByDate(LocalDate startDate, LocalDate endDate);
+
     void deleteById(Long id);
 }

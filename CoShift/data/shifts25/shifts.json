@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "startTime": "2025-06-23T18:00:00",
+    "durationInMinutes": 120,
+    "capacity": 10,
+    "persons": [
+      {
+        "id": 1,
+        "nickname": "Alice",
+        "password": "secret",
+        "timeAccountId": 0
+      }
+    ]
+  }
+]
