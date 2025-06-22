@@ -1,29 +1,41 @@
-// package org.coshift.d_frameworks.web;              // an deine Paketstruktur anpassen
+package org.coshift.d_frameworks.web;
 
-// import org.coshift.d_frameworks.config.SecurityConfig;
-// import org.junit.jupiter.api.Test;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-// import org.springframework.context.annotation.Import;
-// import org.springframework.test.web.servlet.MockMvc;
+import org.coshift.a_domain.Shift;
+import org.coshift.b_application.UseCaseInteractor;
+import org.coshift.d_frameworks.config.SecurityConfig;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
 
-// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-// import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import java.time.LocalDateTime;
+import java.util.List;
 
-// @WebMvcTest(ShiftController.class)
-// @Import(SecurityConfig.class)   // falls SecurityConfig in anderem Package liegt
-// class ShiftControllerTest {
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//     @Autowired
-//     MockMvc mvc;
+@WebMvcTest(ShiftController.class)
+@Import(SecurityConfig.class)
+class ShiftControllerTest {
 
-//     @Test
-//     void shouldReturnOneDemoShift() throws Exception {
-//         mvc.perform(get("/api/shifts")
-//                         .with(httpBasic("mitglied", "secret")))
-//                 .andExpect(status().isOk())
-//                 .andExpect(jsonPath("$.length()").value(1));
-//     }
-// }
+    @Autowired
+    MockMvc mvc;
+
+    @MockBean
+    UseCaseInteractor interactor;
+
+    @Test
+    void authenticatedRequestReturnsShifts() throws Exception {
+        List<Shift> shifts = List.of(new Shift(1L, LocalDateTime.now(), 120, 10));
+        when(interactor.getAllShifts()).thenReturn(shifts);
+
+        mvc.perform(get("/api/shifts").with(httpBasic("mitglied", "secret")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+    }
+}
