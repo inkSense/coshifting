@@ -6,6 +6,8 @@ import com.google.gson.reflect.TypeToken;
 import org.coshift.c_adapters.PersonDto;
 import org.coshift.c_adapters.json.PersonJsonFileAccessor;
 import org.springframework.stereotype.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -24,6 +26,8 @@ public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
 
     private static final Path FILE      = Paths.get("CoShift/data/persons", "persons.json");
     private static final Type LIST_TYPE = new TypeToken<List<PersonDto>>() {}.getType();
+
+    private static final Logger LOG = LoggerFactory.getLogger(PersonGsonFileAccessor.class);
 
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -55,7 +59,7 @@ public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
             }
             return true;
         } catch (IOException e) {
-            // TODO: Logging hinzufügen
+            LOG.error("Unable to write persons JSON file: {}", e.getMessage());
             return false;
         }
     }
