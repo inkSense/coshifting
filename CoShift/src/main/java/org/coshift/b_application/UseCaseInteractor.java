@@ -2,7 +2,7 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.Person;
 import org.coshift.a_domain.Shift;
-
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +15,8 @@ import java.util.List;
  *  – Keine eigene Business-Logik<br>
  *  – Delegiert an die spezialisierten Use-Cases
  */
+
+@Component
 public class UseCaseInteractor {
 
     private final AddShiftUseCase  addShiftUC;

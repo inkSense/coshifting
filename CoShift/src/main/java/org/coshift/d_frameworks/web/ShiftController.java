@@ -1,26 +1,31 @@
-// package org.coshift.d_frameworks.web;
+package org.coshift.d_frameworks.web;
 
-// import org.coshift.d_frameworks.db.ShiftJpaEntity;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RestController;
+import org.coshift.b_application.UseCaseInteractor;
+import org.coshift.c_adapters.ShiftDto;
+import org.coshift.c_adapters.ShiftMapper;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-// import java.time.LocalDate;
-// import java.time.LocalTime;
-// import java.util.List;
+import java.util.List;
 
-// @RestController
-// @RequestMapping("/api/shifts")
-// class ShiftController {
+/**
+ * REST controller exposing shift information.
+ */
+@RestController
+@RequestMapping("/api/shifts")
+class ShiftController {
 
-//     @GetMapping
-//     public List<ShiftJpaEntity> all() {
-//         // Walking-Skeleton: genau **eine** Demo-Schicht zurückgeben
-//         return List.of(
-//                 new ShiftJpaEntity(
-//                         LocalDate.now(),
-//                         LocalTime.of(18, 0),
-//                         LocalTime.of(21, 0))
-//         );
-//     }
-// }
+    private final UseCaseInteractor interactor;
+
+    ShiftController(UseCaseInteractor interactor) {
+        this.interactor = interactor;
+    }
+
+    @GetMapping
+    public List<ShiftDto> all() {
+        return interactor.getAllShifts().stream()
+                .map(ShiftMapper::toDto)
+                .toList();
+    }
+}
