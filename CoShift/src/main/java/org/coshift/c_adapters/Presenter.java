@@ -8,14 +8,13 @@ import org.coshift.a_domain.Shift;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.springframework.context.annotation.Lazy;
 
 @Component
 public class Presenter implements UseCasesOutputPort {
     private List<DayCellViewModel> currentWeek;
     private WeekView weekView;
 
-    public Presenter(@Lazy WeekView weekView) {
+    public Presenter(WeekView weekView) {
         this.weekView = weekView;
     }
 

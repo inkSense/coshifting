@@ -4,26 +4,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import org.coshift.b_application.UseCaseInteractor;
 import java.time.LocalDate;
-import org.springframework.context.annotation.Lazy;
 
 @RestController
 @RequestMapping("/api/week")
-public class WeekViewController implements WeekView {
+public class WeekViewController {
     private final UseCaseInteractor interactor;
+    private final WeekViewModel weekViewModel;
 
-    private final AtomicReference<List<DayCellViewModel>> cache =
-            new AtomicReference<>(List.of());
-
-    public WeekViewController(@Lazy UseCaseInteractor interactor) {
+    public WeekViewController(UseCaseInteractor interactor, WeekViewModel weekViewModel) {
         this.interactor = interactor;
-    }
-
-    @Override
-    public void render(List<DayCellViewModel> cells) {
-        cache.set(cells);            // Presenter liefert hier die Daten ab
+        this.weekViewModel = weekViewModel;
     }
 
     @GetMapping
@@ -33,6 +25,6 @@ public class WeekViewController implements WeekView {
         LocalDate monday = today.minusDays((today.getDayOfWeek().getValue() + 6) % 7);
  
         interactor.showCurrentWeek(monday);   // ruft Presenter → render(...)
-        return cache.get();                   // enthält jetzt aktuelle Daten
+        return weekViewModel.getCurrentWeek();                   // enthält jetzt aktuelle Daten
     }
 }
