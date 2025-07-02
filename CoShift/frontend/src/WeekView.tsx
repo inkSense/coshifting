@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import './ShiftWeekView.css'          // Styles wiederverwenden
+import './WeekView.css'          // Styles wiederverwenden
 
 // View-Model, das der Backend-Endpoint /api/week liefert
 export interface DayCellViewModel {
