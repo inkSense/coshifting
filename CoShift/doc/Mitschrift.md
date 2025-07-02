@@ -204,3 +204,7 @@ Added Person. Added related UseCases. Added related DTO and Mapper in adapters-p
 Added Shift. Added related UseCases. Added related DTO and Mapper in adapters-package. Added ShiftJsonRepository in adapters-package. Added ShiftGsonFileAccessor in frameworks-package.
 
 Added TimeBalance and TimeTransaction in domain-package. 
+
+# 2. Juli
+
+Analysiere das Projekt auf seine Testabdeckung. Identifiziere den wichtigsten fehlenden Testfall, der die Codequalität oder Zuverlässigkeit am meisten verbessern würde. Implementiere genau einen sinnvollen Unit-Test oder Integrationstest dafür. Gib ausschließlich den vollständigen Code des Tests zurück.
