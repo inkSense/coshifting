@@ -8,18 +8,24 @@ export interface DayCellViewModel {
   fullyStaffed: boolean
 }
 
-export default function WeekView() {
+interface Props {
+  authHeader?: string
+}
+
+export default function WeekView({ authHeader }: Props) {
   const [cells, setCells] = useState<DayCellViewModel[]>([])
 
   useEffect(() => {
-    fetch('/api/week')
+    fetch('/api/week', {
+      headers: authHeader ? { Authorization: authHeader } : {}
+    })
       .then(res => {
         if (!res.ok) throw new Error('Network response was not ok')
         return res.json()
       })
       .then((data: DayCellViewModel[]) => setCells(data))
       .catch(err => console.error('Failed to load week data', err))
-  }, [])
+  }, [authHeader])
 
   // Kopfzeile
   const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
