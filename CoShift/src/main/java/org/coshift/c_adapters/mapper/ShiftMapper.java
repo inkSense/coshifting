@@ -1,6 +1,9 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.mapper;
 
 import org.coshift.a_domain.Shift;
+import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.dto.ShiftDto;
+
 import java.util.stream.Collectors;
 import java.util.Collections;
 

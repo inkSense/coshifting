@@ -2,6 +2,9 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.Person;
 import org.coshift.a_domain.Shift;
+import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.b_application.useCases.AddPersonToShiftUseCase;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

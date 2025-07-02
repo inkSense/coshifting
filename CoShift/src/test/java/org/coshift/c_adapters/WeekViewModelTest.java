@@ -1,5 +1,7 @@
 package org.coshift.c_adapters;
 
+import org.coshift.c_adapters.presentation.DayCellViewModel;
+import org.coshift.c_adapters.presentation.WeekViewModel;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 

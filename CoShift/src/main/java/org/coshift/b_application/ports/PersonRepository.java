@@ -1,4 +1,4 @@
-package org.coshift.b_application;
+package org.coshift.b_application.ports;
 
 import org.coshift.a_domain.Person;
 

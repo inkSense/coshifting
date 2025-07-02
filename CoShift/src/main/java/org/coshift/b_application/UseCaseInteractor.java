@@ -2,6 +2,13 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.Person;
 import org.coshift.a_domain.Shift;
+import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.b_application.ports.UseCasesOutputPort;
+import org.coshift.b_application.useCases.AddPersonToShiftUseCase;
+import org.coshift.b_application.useCases.AddPersonUseCase;
+import org.coshift.b_application.useCases.AddShiftUseCase;
+import org.coshift.b_application.useCases.ViewShiftUseCase;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,7 +26,7 @@ import java.util.List;
 @Component
 public class UseCaseInteractor {
 
-    private final AddShiftUseCase  addShiftUC;
+    private final AddShiftUseCase addShiftUC;
     private final ViewShiftUseCase viewShiftUC;
     private final AddPersonUseCase addPersonUC;
     private final AddPersonToShiftUseCase addPersonToShiftUC;

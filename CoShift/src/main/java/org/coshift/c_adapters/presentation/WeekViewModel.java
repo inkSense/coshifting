@@ -1,4 +1,4 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.presentation;
 
 import org.springframework.stereotype.Component;
 import java.util.List;

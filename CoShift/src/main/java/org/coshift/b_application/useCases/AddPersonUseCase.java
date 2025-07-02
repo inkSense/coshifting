@@ -1,6 +1,7 @@
-package org.coshift.b_application;
+package org.coshift.b_application.useCases;
 
 import org.coshift.a_domain.Person;
+import org.coshift.b_application.ports.PersonRepository;
 
 import java.util.Objects;
 

@@ -1,9 +1,9 @@
-package org.coshift.c_adapters.json;
+package org.coshift.c_adapters.persistence.json;
 
 import org.coshift.a_domain.Shift;
-import org.coshift.b_application.ShiftRepository;
-import org.coshift.c_adapters.ShiftDto;
-import org.coshift.c_adapters.ShiftMapper;
+import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.mapper.ShiftMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

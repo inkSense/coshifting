@@ -1,6 +1,8 @@
 package org.coshift.b_application;
 
 import org.coshift.a_domain.Person;
+import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.b_application.useCases.AddPersonUseCase;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

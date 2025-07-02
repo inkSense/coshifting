@@ -1,8 +1,8 @@
-package org.coshift.c_adapters.json;
+package org.coshift.c_adapters.persistence.json;
 
 import java.util.List;
 
-import org.coshift.c_adapters.ShiftDto;
+import org.coshift.c_adapters.dto.ShiftDto;
 
 /**
  * Minimaler Datei-Port für das Lesen und Schreiben des kompletten

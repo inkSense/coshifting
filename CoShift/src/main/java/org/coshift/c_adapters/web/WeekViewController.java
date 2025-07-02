@@ -1,5 +1,7 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.web;
 
+import org.coshift.c_adapters.presentation.DayCellViewModel;
+import org.coshift.c_adapters.presentation.WeekViewModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

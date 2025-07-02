@@ -1,7 +1,9 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.presentation;
 
+import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.mapper.ShiftMapper;
 import org.springframework.stereotype.Component;
-import org.coshift.b_application.UseCasesOutputPort;
+import org.coshift.b_application.ports.UseCasesOutputPort;
 import java.util.List;
 import java.util.ArrayList;
 import org.coshift.a_domain.Shift;

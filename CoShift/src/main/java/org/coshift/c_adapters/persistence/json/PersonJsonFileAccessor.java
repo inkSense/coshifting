@@ -1,6 +1,6 @@
-package org.coshift.c_adapters.json;
+package org.coshift.c_adapters.persistence.json;
 
-import org.coshift.c_adapters.PersonDto;
+import org.coshift.c_adapters.dto.PersonDto;
 
 import java.util.List;
 

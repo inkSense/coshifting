@@ -1,6 +1,8 @@
 package org.coshift.b_application;
 
 import org.coshift.a_domain.Shift;
+import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.b_application.useCases.AddShiftUseCase;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

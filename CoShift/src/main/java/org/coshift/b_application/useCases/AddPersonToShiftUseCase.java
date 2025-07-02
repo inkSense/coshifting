@@ -1,7 +1,9 @@
-package org.coshift.b_application;
+package org.coshift.b_application.useCases;
 
 import org.coshift.a_domain.Person;
 import org.coshift.a_domain.Shift;
+import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.b_application.ports.ShiftRepository;
 
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ import java.util.Objects;
  */
 public class AddPersonToShiftUseCase {
 
-    private final ShiftRepository  shiftRepo;
+    private final ShiftRepository shiftRepo;
     private final PersonRepository personRepo;
 
     public AddPersonToShiftUseCase(ShiftRepository shiftRepo,

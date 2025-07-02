@@ -1,6 +1,7 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.mapper;
 
 import org.coshift.a_domain.Person;
+import org.coshift.c_adapters.dto.PersonDto;
 
 public final class PersonMapper {
 

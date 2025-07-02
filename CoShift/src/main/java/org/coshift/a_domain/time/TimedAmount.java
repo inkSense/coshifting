@@ -1,4 +1,4 @@
-package org.coshift.a_domain;
+package org.coshift.a_domain.time;
 
 import java.time.LocalDateTime;
 

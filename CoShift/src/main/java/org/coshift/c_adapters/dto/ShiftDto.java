@@ -1,4 +1,4 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

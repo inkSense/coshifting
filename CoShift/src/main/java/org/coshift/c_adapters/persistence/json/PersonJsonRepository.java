@@ -1,9 +1,9 @@
-package org.coshift.c_adapters.json;
+package org.coshift.c_adapters.persistence.json;
 
 import org.coshift.a_domain.Person;
-import org.coshift.b_application.PersonRepository;
-import org.coshift.c_adapters.PersonDto;
-import org.coshift.c_adapters.PersonMapper;
+import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.mapper.PersonMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

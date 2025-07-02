@@ -1,4 +1,4 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.presentation;
 
 import java.util.List;
 

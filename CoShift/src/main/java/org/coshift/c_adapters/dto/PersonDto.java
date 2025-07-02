@@ -1,4 +1,4 @@
-package org.coshift.c_adapters;
+package org.coshift.c_adapters.dto;
 
 public record PersonDto(Long   id,
                             String nickname,

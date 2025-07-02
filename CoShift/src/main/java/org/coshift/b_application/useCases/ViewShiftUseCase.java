@@ -1,7 +1,7 @@
-package org.coshift.b_application;
+package org.coshift.b_application.useCases;
 
 import org.coshift.a_domain.Shift;
-import org.coshift.b_application.ShiftRepository;
+import org.coshift.b_application.ports.ShiftRepository;
 import java.util.List;
 import java.time.LocalDate;
 
