@@ -42,4 +42,32 @@ class AddPersonToShiftUseCaseTest {
         assertTrue(shift.getPersons().contains(person));
         assertSame(shift, result);
     }
+
+
+    @Test
+    void addPerson_full_shift_throws_exception() {
+        // Arrange ----------------------------------------------------------
+        ShiftRepository shiftRepo = mock(ShiftRepository.class);
+        PersonRepository personRepo = mock(PersonRepository.class);
+        AddPersonToShiftUseCase useCase = new AddPersonToShiftUseCase(shiftRepo, personRepo);
+
+        long shiftId = 2L;
+        long personId = 7L;
+        Shift shift = new Shift(shiftId, LocalDateTime.of(2025, 6, 23, 18, 0), 60, 1);
+        // Schicht mit einer Person füllen
+        shift.addPerson(new Person(99L, "Alice", "pwd"));
+        Person person = new Person(personId, "Bob", "pwd");
+
+        when(shiftRepo.findById(shiftId)).thenReturn(Optional.of(shift));
+        when(personRepo.findById(personId)).thenReturn(Optional.of(person));
+
+        // Act & Assert -----------------------------------------------------
+        assertThrows(IllegalStateException.class, () -> useCase.add(personId, shiftId));
+
+        verify(shiftRepo).findById(shiftId);
+        verify(personRepo).findById(personId);
+        verify(shiftRepo, never()).save(any());
+    }
+
+
 }

@@ -8,7 +8,7 @@
         <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org</groupId>
+    <groupId>org.coshift</groupId>
     <artifactId>coshift</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>CoShift</name>
