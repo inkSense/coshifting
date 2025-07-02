@@ -38,4 +38,10 @@ class ShiftControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
     }
+
+    @Test
+    void unauthenticatedRequestIsRejected() throws Exception {
+        mvc.perform(get("/api/shifts"))
+                .andExpect(status().isUnauthorized());
+    }
 }
