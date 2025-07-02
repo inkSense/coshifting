@@ -54,6 +54,13 @@
   min-height: 6rem;
 }
 
+.day-header {
+  font-weight: bold;
+  padding: .25rem;
+  background: #eee;
+  border: 1px solid #ddd;
+}
+
 .shift-card {
   background: #f8f8f8;
   margin: 0.25rem 0;

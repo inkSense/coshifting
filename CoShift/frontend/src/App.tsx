@@ -1,10 +1,8 @@
 import './App.css'
-import ShiftWeekView from './ShiftWeekView'
+import WeekView from './WeekView'
 
-function App() {
+export default function App() {
   return (
-    <ShiftWeekView />
+    <WeekView />
   )
 }
-
-export default App

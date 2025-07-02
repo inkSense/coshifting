@@ -23,13 +23,15 @@ public class UseCaseInteractor {
     private final ViewShiftUseCase viewShiftUC;
     private final AddPersonUseCase addPersonUC;
     private final AddPersonToShiftUseCase addPersonToShiftUC;
+    private final UseCasesOutputPort presenter;
 
-    public UseCaseInteractor(ShiftRepository repository, PersonRepository personRepository) {
+    public UseCaseInteractor(ShiftRepository repository, PersonRepository personRepository, UseCasesOutputPort presenter) {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
         this.addShiftUC  = new AddShiftUseCase(repository);
         this.viewShiftUC = new ViewShiftUseCase(repository);
         this.addPersonUC = new AddPersonUseCase(personRepository);
         this.addPersonToShiftUC = new AddPersonToShiftUseCase(repository, personRepository);
+        this.presenter = presenter;
     }
 
     /* ------------ Delegierte Methoden ---------------- */
@@ -54,6 +56,11 @@ public class UseCaseInteractor {
 
     public Shift addPersonToShift(long personId, long shiftId) {
         return addPersonToShiftUC.add(personId, shiftId);
+    }
+
+    public void showCurrentWeek(LocalDate monday) {
+        List<Shift> shifts = viewShiftUC.getShiftsBetween(monday, monday.plusDays(6));
+        presenter.showShiftsInThisWeek(shifts);
     }
 
 }

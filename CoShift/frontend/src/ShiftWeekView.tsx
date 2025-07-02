@@ -1,45 +1,92 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useMemo, useState } from 'react'
+import './ShiftWeekView.css'
 
-interface Shift {
+export interface Shift {
   id: number
-  startTime: string
+  startTime: string   // ISO-String
 }
 
-export default function ShiftWeekView() {
+interface Props {
+  cutoff?: Date                    // default = heute
+}
+
+export default function WeekView({ cutoff = today() }: Props) {
   const [shifts, setShifts] = useState<Shift[]>([])
 
+  /* --- Daten holen ---------------------------------------------------- */
   useEffect(() => {
     fetch('/api/shifts')
-      .then(res => res.json())
-      .then(data => setShifts(data))
-      .catch(err => console.error('Failed to fetch shifts', err))
+      .then(r => r.json())
+      .then(setShifts)
+      .catch(console.error)
   }, [])
 
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  /* --- Shifts gruppieren --------------------------------------------- */
+  const { weeks, sortedKeys } = useMemo(() => {
+    const grid = new Map<string, Map<number, Shift[]>>()     // Map<KW, Map<TagsIndex, Shift[]>>
 
-  const shiftsByDay = days.map((_, i) =>
-    shifts.filter(s => {
-      const date = new Date(s.startTime)
-      const jsDay = date.getDay() // 0 Sun, 1 Mon, ...
-      const dayIndex = (jsDay + 6) % 7 // convert so Monday=0
-      return dayIndex === i
-    })
-  )
+    shifts
+      .filter(s => new Date(s.startTime) >= cutoff)
+      .forEach(s => {
+        const d       = new Date(s.startTime)
+        const weekKey = isoWeekKey(d)
+        const dayIdx  = jsDayToMonday0(d.getDay())          // 0 = Mo
+
+        if (!grid.has(weekKey)) grid.set(weekKey, new Map())
+        const dayMap = grid.get(weekKey)!
+        if (!dayMap.has(dayIdx)) dayMap.set(dayIdx, [])
+        dayMap.get(dayIdx)!.push(s)
+      })
+
+    const keys = Array.from(grid.keys()).sort()             // chronologisch
+    return { weeks: grid, sortedKeys: keys }
+  }, [shifts, cutoff])
+
+  /* --- Render --------------------------------------------------------- */
+  const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
   return (
     <div className="week-grid">
-      {days.map((day, idx) => (
-        <div key={day} className="day-column">
-          <h3>{day}</h3>
-          {shiftsByDay[idx].map(shift => (
-            <div key={shift.id} className="shift-card">
-              <div>ID: {shift.id}</div>
-              <div>{new Date(shift.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      {/* Kopfzeile */}
+      {days.map(d => (
+        <div key={d} className="day-header">{d}</div>
+      ))}
+
+      {/* eine Zeile pro KW */}
+      {sortedKeys.map(kw => (
+        days.map((_, dayIdx) => {
+          const cellShifts = weeks.get(kw)?.get(dayIdx) ?? []
+          return (
+            <div key={kw + dayIdx} className="week-cell">
+              {cellShifts.slice(0, 1).map(s =>
+                <div key={s.id} className="shift-card">
+                  {new Date(s.startTime).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          )
+        })
       ))}
     </div>
   )
+}
+
+/* --- Hilfsfunktionen -------------------------------------------------- */
+function today() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}
+
+function jsDayToMonday0(jsDay: number) {
+  return (jsDay + 6) % 7   // JS: 0=So; wir: 0=Mo
+}
+
+// ISO-Woche als "YYYY-W##"
+function isoWeekKey(d: Date) {
+  const tmp = new Date(d.getTime())
+  tmp.setHours(0, 0, 0, 0)
+  tmp.setDate(tmp.getDate() + 3 - jsDayToMonday0(tmp.getDay()))  // Do der KW
+  const week1 = new Date(tmp.getFullYear(), 0, 4)
+  const weekNo = 1 + Math.round(((tmp.getTime() - week1.getTime()) / 86400000 - 3 + jsDayToMonday0(week1.getDay())) / 7)
+  return `${tmp.getFullYear()}-W${String(weekNo).padStart(2,'0')}`
 }

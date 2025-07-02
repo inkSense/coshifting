@@ -1,28 +1,69 @@
-// package org.coshift.a_domain;
+package org.coshift.a_domain;
 
-// import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-// import java.time.LocalDate;
-// import java.time.LocalTime;
+import java.time.LocalDateTime;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
-// class ShiftTest {
+class ShiftTest {
 
-//     @Test
-//     void durationIsCalculatedCorrectly() {
-//         Shift s = new Shift(null, LocalDate.now(),
-//                 LocalTime.of(18,0), LocalTime.of(20,0));
-//         assertEquals(120, s.durationInMinutes());
-//     }
+    /* ---------- Dauerberechnung ------------------------------------ */
 
-//     @Test
-//     void overlapsDetectsCollision() {
-//         Shift a = new Shift(null, LocalDate.of(2025,6,15),
-//                 LocalTime.of(18,0), LocalTime.of(20,0));
-//         Shift b = new Shift(null, LocalDate.of(2025,6,15),
-//                 LocalTime.of(19,0), LocalTime.of(21,0));
-//         assertTrue(a.overlaps(b));
-//     }
-// }
+    @Nested
+    @DisplayName("Dauerberechnung")
+    class Duration {
+
+        @Test
+        void sameDay_returnsExactMinutes() {
+            Shift s = new Shift(null,
+                                LocalDateTime.of(2025, 7, 3, 18, 0),
+                                120,
+                                10);
+            assertThat(s.getDurationInMinutes()).isEqualTo(120);
+        }
+
+        @Test
+        void overMidnight_keepsDuration() {
+            Shift s = new Shift(null,
+                                LocalDateTime.of(2025, 7, 3, 23, 0),
+                                120,
+                                10);
+            assertThat(s.getDurationInMinutes()).isEqualTo(120);
+        }
+    }
+
+    /* ---------- Überschneidung ------------------------------------- */
+
+    @Nested
+    @DisplayName("Überschneidung")
+    class Overlap {
+
+        @Test
+        void overlappingIntervals_returnTrue() {
+            Shift a = new Shift(null, LocalDateTime.of(2025, 7, 3, 18, 0), 120, 10);
+            Shift b = new Shift(null, LocalDateTime.of(2025, 7, 3, 19, 0), 120, 10);
+
+            assertThat(a.overlaps(b)).isTrue();
+            assertThat(b.overlaps(a)).isTrue();
+        }
+
+        @Test
+        void touchingIntervals_areConsideredOverlappingByCurrentLogic() {
+            Shift a = new Shift(null, LocalDateTime.of(2025, 7, 3, 18, 0), 120, 10); // endet 20:00
+            Shift b = new Shift(null, LocalDateTime.of(2025, 7, 3, 20, 0), 120, 10); // startet 20:00
+
+            assertThat(a.overlaps(b)).isTrue();
+        }
+
+        @Test
+        void differentDays_returnFalse() {
+            Shift a = new Shift(null, LocalDateTime.of(2025, 7, 3, 18, 0), 120, 10);
+            Shift b = new Shift(null, LocalDateTime.of(2025, 7, 4, 18, 0), 120, 10);
+
+            assertThat(a.overlaps(b)).isFalse();
+        }
+    }
+}

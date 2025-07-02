@@ -8,13 +8,13 @@
   {
     "id": 2,
     "nickname": "Bob",
-    "password": "pwd",
+    "password": "secret",
     "timeAccountId": 0
   },
   {
     "id": 3,
     "nickname": "Charlie",
-    "password": "pwd",
+    "password": "secret",
     "timeAccountId": 0
   }
 ]

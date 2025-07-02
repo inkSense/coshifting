@@ -15,14 +15,28 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // @Bean
+    // SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    //     http
+    //             .csrf(c -> c.disable())
+    //             .authorizeHttpRequests(a -> a
+    //                     .requestMatchers("/api/**").authenticated()
+    //                     .anyRequest().permitAll())
+    //             .httpBasic(Customizer.withDefaults())   //  ← NEU
+    //             .formLogin(Customizer.withDefaults());  //  ← darf bleiben
+    //     return http.build();
+    // }
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll())
-                .httpBasic(Customizer.withDefaults())   //  ← NEU
-                .formLogin(Customizer.withDefaults());  //  ← darf bleiben
+            // CSRF und CORS im Dev-Modus abschalten
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.disable())
+    
+            // ALLE Requests erlauben
+            .authorizeHttpRequests(a -> a.anyRequest().permitAll());
+    
         return http.build();
     }
 

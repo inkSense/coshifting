@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * Keine Geschäftslogik – das findet im Adapter statt.
@@ -22,11 +23,12 @@ public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
 
     /* ------------- Konfiguration ---------------- */
 
-    private static final Path FILE      = Paths.get("CoShift/data/shifts25", "shifts.json");
+    private static final Path FILE      = Paths.get("data/shifts25", "shifts.json");
     private static final Type LIST_TYPE = new TypeToken<List<ShiftDto>>() {}.getType();
 
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
 
     /* ------------- Lesen ------------------------ */
