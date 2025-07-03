@@ -1,4 +1,4 @@
-package org.coshift.c_adapters.persistence.json;
+package org.coshift.c_adapters.ports;
 
 import java.util.List;
 

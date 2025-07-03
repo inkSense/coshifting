@@ -1,7 +1,7 @@
 package org.coshift.b_application.useCases;
 
-import org.coshift.a_domain.Person;
 import org.coshift.a_domain.Shift;
+import org.coshift.a_domain.person.Person;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.ShiftRepository;
 

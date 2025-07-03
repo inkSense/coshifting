@@ -4,6 +4,7 @@ import org.coshift.a_domain.Shift;
 import org.coshift.b_application.ports.ShiftRepository;
 import org.coshift.c_adapters.dto.ShiftDto;
 import org.coshift.c_adapters.mapper.ShiftMapper;
+import org.coshift.c_adapters.ports.ShiftJsonFileAccessor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

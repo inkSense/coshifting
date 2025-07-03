@@ -1,4 +1,4 @@
-package org.coshift.c_adapters.persistence.json;
+package org.coshift.c_adapters.ports;
 
 import org.coshift.c_adapters.dto.PersonDto;
 

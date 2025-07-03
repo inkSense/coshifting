@@ -1,13 +1,14 @@
 package org.coshift.b_application;
 
-import org.coshift.a_domain.Person;
 import org.coshift.a_domain.Shift;
+import org.coshift.a_domain.person.Person;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.ShiftRepository;
 import org.coshift.b_application.ports.UseCasesOutputPort;
 import org.coshift.b_application.useCases.AddPersonToShiftUseCase;
 import org.coshift.b_application.useCases.AddPersonUseCase;
 import org.coshift.b_application.useCases.AddShiftUseCase;
+import org.coshift.b_application.useCases.AuthenticateUserUseCase;
 import org.coshift.b_application.useCases.ViewShiftUseCase;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,7 @@ public class UseCaseInteractor {
     private final AddPersonUseCase addPersonUC;
     private final AddPersonToShiftUseCase addPersonToShiftUC;
     private final UseCasesOutputPort presenter;
+    private final AuthenticateUserUseCase authenticateUserUC;
 
     public UseCaseInteractor(ShiftRepository repository, PersonRepository personRepository, UseCasesOutputPort presenter) {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
@@ -38,6 +40,7 @@ public class UseCaseInteractor {
         this.viewShiftUC = new ViewShiftUseCase(repository);
         this.addPersonUC = new AddPersonUseCase(personRepository);
         this.addPersonToShiftUC = new AddPersonToShiftUseCase(repository, personRepository);
+        this.authenticateUserUC = new AuthenticateUserUseCase(personRepository);
         this.presenter = presenter;
     }
 
@@ -70,4 +73,9 @@ public class UseCaseInteractor {
         presenter.showShiftsInThisWeek(shifts);
     }
 
+    public Person authenticateUser(String nickname, String password) {
+        return authenticateUserUC.authenticate(nickname, password);
+    }
+
+    
 }

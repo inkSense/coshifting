@@ -1,12 +1,39 @@
+import { useState, useCallback } from 'react'
 import './App.css'
-import WeekView from './WeekView'
-import Login from './Login'
-import { useState } from 'react'
+import Login     from './Login'
+import WeekView  from './WeekView'
 
+/**
+ * Root-Komponente:
+ * – Verwaltet den Auth-Header im State.
+ * – Reicht eine „tryLogin“-Funktion an <Login/> durch, die
+ *   einen Probe-Call auf ein geschütztes Backend-API macht.
+ * – Zeigt nach erfolgreichem Login die <WeekView/>.
+ */
 export default function App() {
-  const [auth, setAuth] = useState<string | null>(null)
+  const [authHeader, setAuthHeader] = useState<string | null>(null)
 
-  return auth
-    ? <WeekView authHeader={auth} />
-    : <Login onLogin={setAuth} />
+  /**
+   * Versucht, die übergebenen Credentials gegen das Backend zu prüfen.
+   * @return true → Login ok, false → 401 oder Netzwerkfehler
+   */
+  const tryLogin = useCallback(async (header: string): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/shifts', {          // geschütztes Endpoint
+        headers: { Authorization: header }
+      })
+
+      if (res.ok) {
+        setAuthHeader(header)          // Erfolg → Header speichern
+        return true
+      }
+    } catch {
+      /* Network error -> fällt durch */
+    }
+    return false                         // 401 oder Fehler
+  }, [])
+
+  return authHeader
+    ? <WeekView authHeader={authHeader} />   // eingeloggt
+    : <Login onLogin={tryLogin} />           // Login-Formular
 }

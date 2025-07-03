@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.coshift.a_domain.person.Person;
+
 public final class Shift {
 
     private final Long            id;

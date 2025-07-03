@@ -1,9 +1,9 @@
 package org.coshift.b_application.ports;
 
-import org.coshift.a_domain.Person;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.coshift.a_domain.person.Person;
 
 public interface PersonRepository {
 

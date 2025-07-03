@@ -1,11 +1,11 @@
-package org.coshift.d_frameworks.json;
+package org.coshift.d_frameworks.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.coshift.c_adapters.dto.ShiftDto;
-import org.coshift.c_adapters.persistence.json.ShiftJsonFileAccessor;
+import org.coshift.c_adapters.ports.ShiftJsonFileAccessor;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;

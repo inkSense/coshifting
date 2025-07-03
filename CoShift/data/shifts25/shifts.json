@@ -7,9 +7,10 @@
     "persons": [
       {
         "id": 1,
-        "nickname": "Alice",
+        "nickname": "anton",
         "password": "secret",
-        "timeAccountId": 0
+        "timeAccountId": 0,
+        "role": "ADMIN"
       }
     ]
   }

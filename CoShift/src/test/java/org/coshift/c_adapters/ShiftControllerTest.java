@@ -1,7 +1,10 @@
 package org.coshift.c_adapters;
 
 import org.coshift.a_domain.Shift;
+import org.coshift.a_domain.person.Person;
+import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.UseCaseInteractor;
+import org.coshift.c_adapters.security.UseCaseAuthenticationProvider;
 import org.coshift.c_adapters.web.ShiftController;
 import org.coshift.d_frameworks.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
@@ -21,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ShiftController.class)
-@Import(SecurityConfig.class)
-class ShiftControllerTest {
+@Import({SecurityConfig.class, UseCaseAuthenticationProvider.class})
+class ShiftControllerTest { 
 
     @Autowired
     MockMvc mvc;
@@ -35,7 +38,10 @@ class ShiftControllerTest {
         List<Shift> shifts = List.of(new Shift(1L, LocalDateTime.now(), 120, 10));
         when(interactor.getAllShifts()).thenReturn(shifts);
 
-        mvc.perform(get("/api/shifts").with(httpBasic("mitglied", "secret")))
+        when(interactor.authenticateUser("anton", "secret"))
+            .thenReturn(new Person(99L, "anton", "secret", PersonRole.USER));
+ 
+        mvc.perform(get("/api/shifts").with(httpBasic("anton", "secret")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
     }

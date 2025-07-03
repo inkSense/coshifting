@@ -1,4 +1,4 @@
-package org.coshift.d_frameworks.json;
+package org.coshift.d_frameworks.gson;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;

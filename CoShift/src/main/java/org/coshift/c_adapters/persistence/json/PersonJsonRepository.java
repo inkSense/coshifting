@@ -1,9 +1,10 @@
 package org.coshift.c_adapters.persistence.json;
 
-import org.coshift.a_domain.Person;
+import org.coshift.a_domain.person.Person;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.c_adapters.dto.PersonDto;
 import org.coshift.c_adapters.mapper.PersonMapper;
+import org.coshift.c_adapters.ports.PersonJsonFileAccessor;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -43,10 +44,13 @@ public class PersonJsonRepository implements PersonRepository {
         Long id = Optional.ofNullable(person.getId())
                           .orElseGet(nextId::getAndIncrement);
 
-        Person withId = new Person(id,
-                                   person.getNickname(),
-                                   person.getPassword());
-        withId.setTimeAccountId(person.getTimeAccountId());
+        Person withId = new Person(
+            id,
+            person.getNickname(),
+            person.getPassword(),
+            person.getTimeAccountId(),
+            person.getRole()
+        );
 
         List<PersonDto> dtos = new ArrayList<>(fileAccessor.readAll());
         dtos.removeIf(dto -> Objects.equals(dto.id(), id));
