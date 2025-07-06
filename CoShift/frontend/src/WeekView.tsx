@@ -14,10 +14,13 @@ interface Props {
 }
 
 export default function WeekView({ authHeader }: Props) {
+  const weeksToShow = 3;
+  const EXPECTED = weeksToShow * 7;
+
   const [cells, setCells] = useState<DayCellViewModel[]>([])
 
   useEffect(() => {
-    fetch('/api/week', {
+    fetch(`/api/week?count=${weeksToShow}`, {
       headers: authHeader ? { Authorization: authHeader } : {}
     })
       .then(res => {
@@ -32,9 +35,11 @@ export default function WeekView({ authHeader }: Props) {
   const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
   // Fallback: solange noch keine Daten da sind, leere Zellen anzeigen
-  const display = cells.length === 7
+  // test
+  const empty = { hasShift: false, startTime: '', fullyStaffed: false }
+  const display = cells.length === EXPECTED
     ? cells
-    : Array.from({ length: 7 }, () => ({ hasShift: false, startTime: '', fullyStaffed: false }))
+    : Array.from({ length: EXPECTED }, () => empty)
 
   return (
     <div className="week-grid">

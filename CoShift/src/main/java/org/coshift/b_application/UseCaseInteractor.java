@@ -72,6 +72,12 @@ public class UseCaseInteractor {
         presenter.showShiftsInThisWeek(shifts);
     }
 
+    public void showWeeks(LocalDate monday, int weeks) {
+        LocalDate end = monday.plusDays(weeks * 7L - 1);
+        List<Shift> shifts = viewShiftUC.getShiftsBetween(monday, end);
+        presenter.showShifts(monday, weeks, shifts);
+    }
+
     public Person authenticateUser(String nickname, String password) {
         return authenticateUserUC.authenticate(nickname, password);
     }

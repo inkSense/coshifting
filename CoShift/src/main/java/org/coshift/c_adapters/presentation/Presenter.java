@@ -10,6 +10,9 @@ import org.coshift.a_domain.Shift;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 @Component
 public class Presenter implements PresenterInputPort {
@@ -30,6 +33,29 @@ public class Presenter implements PresenterInputPort {
         List<ShiftDto> shiftDtos = mapShifts(shifts);
         currentWeek = createDayCells(shiftDtos);
         weekView.render(currentWeek);
+    }
+
+    @Override
+    public void showShifts(LocalDate monday, int weeks, List<Shift> shifts) {
+        int totalDays = weeks * 7;
+        // Leere Liste mit totalDays Platzhaltern
+        List<DayCellViewModel> cells = new ArrayList<>(
+                Collections.nCopies(totalDays, new DayCellViewModel(false, "", false)));
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
+
+        for (Shift s : shifts) {
+            int idx = (int) ChronoUnit.DAYS.between(
+                    monday, s.getStartTime().toLocalDate());
+            if (idx < 0 || idx >= totalDays) continue;     // Safety-Net
+
+            boolean fullyStaffed = s.getPersons().size() >= s.getCapacity();
+            cells.set(idx, new DayCellViewModel(
+                    true, fmt.format(s.getStartTime()), fullyStaffed));
+        }
+
+        currentWeek = cells;
+        weekView.render(cells);
     }
 
     private List<ShiftDto> mapShifts(List<Shift> shifts) {
@@ -62,3 +88,6 @@ public class Presenter implements PresenterInputPort {
         return cells;
     }
 }
+
+
+

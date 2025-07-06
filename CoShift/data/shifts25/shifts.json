@@ -20,5 +20,12 @@
         "role": "USER"
       }
     ]
+  },
+  {
+    "id": 2,
+    "startTime": "2025-07-08T09:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "persons": []
   }
 ]

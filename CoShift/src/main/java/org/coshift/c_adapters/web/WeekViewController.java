@@ -4,6 +4,7 @@ import org.coshift.c_adapters.presentation.DayCellViewModel;
 import org.coshift.c_adapters.presentation.WeekViewModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.coshift.b_application.UseCaseInteractor;
@@ -35,5 +36,16 @@ public class WeekViewController {
  
         interactor.showCurrentWeek(monday);   // ruft Presenter → render(...)
         return weekViewModel.getCurrentWeek();                   // enthält jetzt aktuelle Daten
+    }
+
+    @GetMapping(params = "count")
+    public List<DayCellViewModel> weeks(
+            @RequestParam(name="count", defaultValue="3") int weeks) {
+
+        LocalDate today   = LocalDate.now();
+        LocalDate monday0 = today.minusDays((today.getDayOfWeek().getValue()+6)%7);
+
+        interactor.showWeeks(monday0, weeks);  
+        return weekViewModel.getCurrentWeeks(); // 21 Zellen
     }
 }

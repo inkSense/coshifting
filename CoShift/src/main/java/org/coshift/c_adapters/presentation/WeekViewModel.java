@@ -16,4 +16,8 @@ public class WeekViewModel implements WeekView {
     public List<DayCellViewModel> getCurrentWeek() {
         return cache.get();
     }
+
+    public List<DayCellViewModel> getCurrentWeeks() { 
+        return cache.get(); 
+    }
 }
