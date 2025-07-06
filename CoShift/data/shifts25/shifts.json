@@ -4,28 +4,13 @@
     "startTime": "2025-07-01T18:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
-    "persons": [
-      {
-        "id": 1,
-        "nickname": "anton",
-        "password": "secret",
-        "timeAccountId": 0,
-        "role": "ADMIN"
-      },
-      {
-        "id": 2,
-        "nickname": "berta",
-        "password": "secret",
-        "timeAccountId": 0,
-        "role": "USER"
-      }
-    ]
+    "personIds": [1, 2]
   },
   {
     "id": 2,
     "startTime": "2025-07-08T09:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
-    "persons": []
+    "personIds": []
   }
 ]

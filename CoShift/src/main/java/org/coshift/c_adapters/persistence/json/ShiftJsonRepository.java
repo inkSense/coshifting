@@ -2,6 +2,7 @@ package org.coshift.c_adapters.persistence.json;
 
 import org.coshift.a_domain.Shift;
 import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.c_adapters.dto.ShiftDto;
 import org.coshift.c_adapters.mapper.ShiftMapper;
 import org.coshift.c_adapters.ports.ShiftJsonFileAccessor;
@@ -23,13 +24,16 @@ import java.util.stream.Collectors;
 public class ShiftJsonRepository implements ShiftRepository {
 
     private final ShiftJsonFileAccessor fileAccessor;
+    private final PersonRepository personRepo;
     private final AtomicLong nextId = new AtomicLong(1); // AtomicLong for thread safety
 
-    public ShiftJsonRepository(ShiftJsonFileAccessor fileAccessor) {
+    public ShiftJsonRepository(ShiftJsonFileAccessor fileAccessor,
+                               PersonRepository personRepo) {
         this.fileAccessor = fileAccessor;
+        this.personRepo  = personRepo;
         // initial max-Id bestimmen
         fileAccessor.readAll().stream()
-                .map(ShiftMapper::toDomain)
+                .map(dto -> ShiftMapper.toDomain(dto, personRepo))
                 .map(Shift::getId)
                 .filter(Objects::nonNull)
                 .mapToLong(Long::longValue)
@@ -68,20 +72,20 @@ public class ShiftJsonRepository implements ShiftRepository {
         return fileAccessor.readAll().stream()
                 .filter(dto -> Objects.equals(dto.id(), id))
                 .findFirst()
-                .map(ShiftMapper::toDomain);
+                .map(dto -> ShiftMapper.toDomain(dto, personRepo));
     }
 
     @Override
     public List<Shift> findAll() {
         return fileAccessor.readAll().stream()
-                .map(ShiftMapper::toDomain)
+                .map(dto -> ShiftMapper.toDomain(dto, personRepo))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Shift> findByDate(LocalDate date) {
         return fileAccessor.readAll().stream()
-                .map(ShiftMapper::toDomain)
+                .map(dto -> ShiftMapper.toDomain(dto, personRepo))
                 .filter(s -> s.getStartTime().toLocalDate().equals(date))
                 .collect(Collectors.toList());
     }
@@ -89,7 +93,7 @@ public class ShiftJsonRepository implements ShiftRepository {
     @Override
     public List<Shift> findByDate(LocalDate start, LocalDate end) {
         return fileAccessor.readAll().stream()
-                .map(ShiftMapper::toDomain)
+                .map(dto -> ShiftMapper.toDomain(dto, personRepo))
                 .filter(s -> {
                     LocalDate d = s.getStartTime().toLocalDate();
                     return (d.isEqual(start) || d.isAfter(start))

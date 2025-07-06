@@ -213,3 +213,13 @@ new interface application.ports.PasswordChecker
 new class adapters.security.SpringPasswordChecker 
 wiring via framewors.config.SecurityConfig 
 update AuthenticateUserUseCaseTest & ShiftControllerTest
+
+# 6. Juli
+
+Changed files:
+1. CoShift/src/main/java/org/coshift/c_adapters/dto/ShiftDto.java  
+2. CoShift/src/main/java/org/coshift/c_adapters/mapper/ShiftMapper.java  
+3. CoShift/src/main/java/org/coshift/c_adapters/persistence/json/ShiftJsonRepository.java  
+4. CoShift/src/main/java/org/coshift/c_adapters/presentation/Presenter.java  
+5. CoShift/data/shifts25/shifts.json  
+

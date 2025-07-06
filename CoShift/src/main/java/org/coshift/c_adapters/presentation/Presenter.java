@@ -77,9 +77,9 @@ public class Presenter implements PresenterInputPort {
 
         for (ShiftDto dto : dtos) {
             LocalDateTime start = dto.startTime();
-            boolean hasShift = dto.persons().size() > 0;
+            boolean hasShift = dto.personIds().size() > 0;
             int dayIdx = (start.getDayOfWeek().getValue() + 6) % 7; // 0=Mo … 6=So
-            boolean fullyStaffed = dto.persons().size() >= dto.capacity();
+            boolean fullyStaffed = dto.personIds().size() >= dto.capacity();
             cells.set(dayIdx,
                       new DayCellViewModel(true,
                                            formatter.format(start),

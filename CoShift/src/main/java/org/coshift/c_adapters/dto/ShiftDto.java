@@ -9,6 +9,6 @@ public record ShiftDto(
     LocalDateTime startTime,          // ISO-8601, z. B. „2025-06-22T14:00“
     int    durationInMinutes,
     int    capacity,
-    List<PersonDto> persons
+    List<Long> personIds                  // geändert: nur noch IDs statt PersonDto
 ) 
 {}
