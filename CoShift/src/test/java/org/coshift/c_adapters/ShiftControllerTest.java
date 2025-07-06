@@ -4,9 +4,11 @@ import org.coshift.a_domain.Shift;
 import org.coshift.a_domain.person.Person;
 import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.UseCaseInteractor;
-import org.coshift.c_adapters.security.UseCaseAuthenticationProvider;
+import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.c_adapters.security.AuthenticationProviderSpring;
+import org.coshift.c_adapters.security.SpringPasswordChecker;
 import org.coshift.c_adapters.web.ShiftController;
-import org.coshift.d_frameworks.config.SecurityConfig;
+import org.coshift.d_frameworks.config.SpringConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,14 +26,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ShiftController.class)
-@Import({SecurityConfig.class, UseCaseAuthenticationProvider.class})
-class ShiftControllerTest { 
+@Import({SpringConfig.class,
+         SpringPasswordChecker.class,       // echter Adapter, kein Mock
+         AuthenticationProviderSpring.class})
+class ShiftControllerTest {
 
-    @Autowired
-    MockMvc mvc;
+    @Autowired MockMvc mvc;
 
     @MockBean
     UseCaseInteractor interactor;
+
+    @MockBean PersonRepository  personRepo;  
 
     @Test
     void authenticatedRequestReturnsShifts() throws Exception {

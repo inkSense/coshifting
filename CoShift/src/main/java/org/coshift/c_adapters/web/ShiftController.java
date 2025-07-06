@@ -11,6 +11,8 @@ import java.util.List;
 
 /**
  * REST controller exposing shift information.
+ * grundsätzlich: übersetzt HTTP-Aufrufe in Use-Case-Aufrufe
+ * 
  */
 @RestController
 @RequestMapping("/api/shifts")

@@ -3,7 +3,7 @@ package org.coshift.c_adapters.presentation;
 import org.coshift.c_adapters.dto.ShiftDto;
 import org.coshift.c_adapters.mapper.ShiftMapper;
 import org.springframework.stereotype.Component;
-import org.coshift.b_application.ports.UseCasesOutputPort;
+import org.coshift.b_application.ports.PresenterInputPort;
 import java.util.List;
 import java.util.ArrayList;
 import org.coshift.a_domain.Shift;
@@ -12,9 +12,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class Presenter implements UseCasesOutputPort {
+public class Presenter implements PresenterInputPort {
     private List<DayCellViewModel> currentWeek;
-    private WeekView weekView;
+    private WeekView weekView; 
+    // ToDo: WeekView ist komisch. 
+    // Das Interface sollte besser ViewModel heißen. 
+    // Die konkretet Implementierung sollte dann WeekViewModel heißen.
+    // Presenter sollte nicht abhängig von der konkreten Implementierung sein.
+    // Oder gibt es einen Presenter pro View? Scheint mir gerade überdimensioniert.
 
     public Presenter(WeekView weekView) {
         this.weekView = weekView;

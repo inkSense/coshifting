@@ -3,7 +3,7 @@ package org.coshift.c_adapters;
 import org.coshift.a_domain.person.Person;
 import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.UseCaseInteractor;
-import org.coshift.c_adapters.security.UseCaseAuthenticationProvider;
+import org.coshift.c_adapters.security.AuthenticationProviderSpring;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit-Tests für {@link UseCaseAuthenticationProvider}.
+ * Unit-Tests für {@link AuthenticationProviderSpring}.
  *
  *  – Reiner JUnit- / Mockito-Test, ohne Spring-Context-Start.  
  *  – Prüft Erfolgsfall und Fehlerfälle (falsches Passwort / unbekannter User).  
@@ -26,7 +26,7 @@ class UseCaseAuthenticationProviderTest {
     void authenticate_validCredentials_returnsAuthenticatedToken() {
         /* ---------- Arrange ---------------------------------------- */
         UseCaseInteractor interactor = mock(UseCaseInteractor.class);
-        UseCaseAuthenticationProvider provider = new UseCaseAuthenticationProvider(interactor);
+        AuthenticationProviderSpring provider = new AuthenticationProviderSpring(interactor);
 
         String nick = "anton";
         String pw   = "secret";
@@ -54,7 +54,7 @@ class UseCaseAuthenticationProviderTest {
     void authenticate_wrongPassword_throwsBadCredentials() {
         /* ---------- Arrange ---------------------------------------- */
         UseCaseInteractor interactor = mock(UseCaseInteractor.class);
-        UseCaseAuthenticationProvider provider = new UseCaseAuthenticationProvider(interactor);
+        AuthenticationProviderSpring provider = new AuthenticationProviderSpring(interactor);
 
         String nick = "berta";
         String pw   = "wrong";
@@ -73,8 +73,8 @@ class UseCaseAuthenticationProviderTest {
 
     @Test
     void supports_usernamePasswordToken_returnsTrue() {
-        UseCaseAuthenticationProvider provider =
-                new UseCaseAuthenticationProvider(mock(UseCaseInteractor.class));
+        AuthenticationProviderSpring provider =
+                new AuthenticationProviderSpring(mock(UseCaseInteractor.class));
 
         assertTrue(provider.supports(UsernamePasswordAuthenticationToken.class));
     }

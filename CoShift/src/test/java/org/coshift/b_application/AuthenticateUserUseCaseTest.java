@@ -1,6 +1,7 @@
 package org.coshift.b_application;
 
 import org.coshift.a_domain.person.Person;
+import org.coshift.b_application.ports.PasswordChecker;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.useCases.AuthenticateUserUseCase;
 import org.junit.jupiter.api.Test;
@@ -15,13 +16,26 @@ import static org.mockito.Mockito.*;
  */
 class AuthenticateUserUseCaseTest {
 
+    private PasswordChecker trueChecker() {
+        return new PasswordChecker() {
+            @Override public boolean matches(String raw, String hashed) {
+                return raw.equals(hashed);
+            }
+            @Override public String hash(String raw) {            // wird im Test gar nicht benutzt
+                return raw;
+            }
+        };
+    }
+
     @Test
     void authenticate_validCredentials_returnsPerson() {
-        // Arrange ------------------------------------------------------
         PersonRepository repo = mock(PersonRepository.class);
-        AuthenticateUserUseCase useCase = new AuthenticateUserUseCase(repo);
+        PasswordChecker  checker = trueChecker();
 
-        String nick = "Alice";
+        AuthenticateUserUseCase useCase =
+                new AuthenticateUserUseCase(repo, checker);
+
+        String nick = "anton";
         String pw   = "secret";
 
         Person persisted = new Person(1L, nick, pw);
@@ -37,11 +51,13 @@ class AuthenticateUserUseCaseTest {
 
     @Test
     void authenticate_wrongPassword_throwsException() {
-        // Arrange ------------------------------------------------------
         PersonRepository repo = mock(PersonRepository.class);
-        AuthenticateUserUseCase useCase = new AuthenticateUserUseCase(repo);
+        PasswordChecker  checker = trueChecker();
 
-        String nick = "Bob";
+        AuthenticateUserUseCase useCase =
+                new AuthenticateUserUseCase(repo, checker);
+
+        String nick = "berta";
         String pw   = "wrong";
 
         Person persisted = new Person(2L, nick, "correct");
@@ -58,9 +74,12 @@ class AuthenticateUserUseCaseTest {
     void authenticate_userNotFound_throwsException() {
         // Arrange ------------------------------------------------------
         PersonRepository repo = mock(PersonRepository.class);
-        AuthenticateUserUseCase useCase = new AuthenticateUserUseCase(repo);
+        PasswordChecker  checker = trueChecker();
 
-        String nick = "Charlie";
+        AuthenticateUserUseCase useCase =
+                new AuthenticateUserUseCase(repo, checker);
+
+        String nick = "charlie";
         String pw   = "secret";
 
         when(repo.findByNickname(nick)).thenReturn(Optional.empty());

@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Service
-public class UseCaseAuthenticationProvider implements AuthenticationProvider {
+public class AuthenticationProviderSpring implements AuthenticationProvider {
 
     private final UseCaseInteractor useCaseInteractor;
-    private static final Logger LOG = LoggerFactory.getLogger(UseCaseAuthenticationProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AuthenticationProviderSpring.class);
 
-    public UseCaseAuthenticationProvider(UseCaseInteractor useCaseInteractor) {
+    public AuthenticationProviderSpring(UseCaseInteractor useCaseInteractor) {
         this.useCaseInteractor = useCaseInteractor;
     }
 
