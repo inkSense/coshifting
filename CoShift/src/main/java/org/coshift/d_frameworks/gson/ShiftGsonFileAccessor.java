@@ -15,10 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.time.LocalDateTime;
 
-/**
- * Keine Geschäftslogik – das findet im Adapter statt.
- */
-@Repository          // als Spring-Bean registrieren
+@Repository          
 public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
 
     /* ------------- Konfiguration ---------------- */

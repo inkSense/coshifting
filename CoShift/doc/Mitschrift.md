@@ -2,7 +2,7 @@
 
 ## Was müsste sich ändern?
 
-Nach der Modell­änderung betrifft die Umstellung im Wesentlichen alle Schichten, in denen
+Nach der Modelländerung betrifft die Umstellung im Wesentlichen alle Schichten, in denen
 
 a) das alte `date`-Feld oder  
 b) die getrennten Typen `LocalDate` / `LocalTime`  
@@ -11,7 +11,7 @@ verwendet wurden.
 Im Projekt sind das nur wenige, klar abgegrenzte Stellen.  
 Hier eine Checkliste von oben (Domäne) nach unten (DB, Web, Tests):
 
-1. Domänen­objekt  
+1. Domänenobjekt  
    • `Shift.java` durch die neue Version ersetzen (kein `date`, neue Felder/Getter/Konstruktor).  
    → Alles Weitere baut darauf auf.
 
@@ -205,5 +205,11 @@ Added Shift. Added related UseCases. Added related DTO and Mapper in adapters-pa
 
 Added TimeBalance and TimeTransaction in domain-package. 
 
-# 2. Juli
+# 5. Juli
 
+refactor (architecture): isolate application core from Spring framework
+
+new interface application.ports.PasswordChecker 
+new class adapters.security.SpringPasswordChecker 
+wiring via framewors.config.SecurityConfig 
+update AuthenticateUserUseCaseTest & ShiftControllerTest

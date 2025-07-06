@@ -9,6 +9,13 @@ import java.util.List;
 import org.coshift.b_application.UseCaseInteractor;
 import java.time.LocalDate;
 
+/**
+ * Controller für die Wochenansicht
+ * 
+ * REST-Controller, der HTTP-Aufrufe in Use-Case-Aufrufe übersetzt
+ * 
+ */
+
 @RestController
 @RequestMapping("/api/week")
 public class WeekViewController {
