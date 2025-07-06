@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import './WeekView.css'          // Styles wiederverwenden
+import DayCell from './components/DayCell'
+import './WeekView.css'          
 
-// View-Model, das der Backend-Endpoint /api/week liefert
+// Typvertrag „Dieses JSON-Objekt muss die Felder hasShift, startTime, fullyStaffed enthalten“.
 export interface DayCellViewModel {
   hasShift: boolean
   startTime: string
@@ -37,19 +38,12 @@ export default function WeekView({ authHeader }: Props) {
 
   return (
     <div className="week-grid">
-      {days.map(d => (
-        <div key={d} className="day-header">{d}</div>
+      {days.map(day => (
+        <div key={day} className="day-header">{day}</div>
       ))}
 
-      {display.map((c, idx) => (
-        <div key={idx} className="week-cell">
-          {c.hasShift && (
-            <div className="shift-card">
-              <span>{c.startTime}</span>
-              {c.fullyStaffed && <span> ✔</span>}
-            </div>
-          )}
-        </div>
+      {display.map((cell, idx) => (
+        <DayCell key={idx} cell={cell} />
       ))}
     </div>
   )

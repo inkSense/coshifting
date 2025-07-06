@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import './App.css'
-import Login     from './Login'
-import WeekView  from './WeekView'
+import Header     from './components/Header'
+import Login      from './components/LoginForm'
+import WeekView   from './WeekView'
 
 /**
  * Root-Komponente:
@@ -13,27 +14,49 @@ import WeekView  from './WeekView'
 export default function App() {
   const [authHeader, setAuthHeader] = useState<string | null>(null)
 
-  /**
-   * Versucht, die übergebenen Credentials gegen das Backend zu prüfen.
-   * @return true → Login ok, false → 401 oder Netzwerkfehler
-   */
   const tryLogin = useCallback(async (header: string): Promise<boolean> => {
     try {
-      const res = await fetch('/api/shifts', {          // geschütztes Endpoint
+      const res = await fetch('/api/shifts', {     
         headers: { Authorization: header }
       })
 
       if (res.ok) {
-        setAuthHeader(header)          // Erfolg → Header speichern
+        setAuthHeader(header)
+        sessionStorage.setItem('authHeader', header)
         return true
       }
     } catch {
-      /* Network error -> fällt durch */
+      console.error('Api unavailable')
     }
-    return false                         // 401 oder Fehler
+    sessionStorage.removeItem('authHeader')
+    return false                         // 401 
   }, [])
 
-  return authHeader
-    ? <WeekView authHeader={authHeader} />   // eingeloggt
-    : <Login onLogin={tryLogin} />           // Login-Formular
+  function logout() {
+    setAuthHeader(null)
+    sessionStorage.removeItem('authHeader')        
+  }
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem('authHeader')
+    if (stored) {
+      // Schnelltest: ist das Token noch gültig?
+      tryLogin(stored).catch(() => {
+        sessionStorage.removeItem('authHeader')
+      })
+    }
+  }, [tryLogin])
+  
+
+
+
+  return (
+    <>
+      {authHeader && <Header onLogout={logout} />}   
+
+      {authHeader
+        ? <WeekView authHeader={authHeader} />       
+        : <Login onLogin={tryLogin} />}
+    </>
+  )
 }
