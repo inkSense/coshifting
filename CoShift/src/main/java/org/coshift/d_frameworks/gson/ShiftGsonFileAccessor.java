@@ -1,13 +1,5 @@
 package org.coshift.d_frameworks.gson;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.coshift.c_adapters.dto.ShiftDto;
-import org.coshift.c_adapters.ports.ShiftJsonFileAccessor;
-import org.springframework.stereotype.Repository;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.*;
@@ -15,20 +7,32 @@ import java.util.Collections;
 import java.util.List;
 import java.time.LocalDateTime;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.ports.ShiftJsonFileAccessor;
+import org.springframework.stereotype.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
+
+
 @Repository          
 public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
 
-    /* ------------- Konfiguration ---------------- */
+
 
     private static final Path FILE      = Paths.get("data/shifts25", "shifts.json");
     private static final Type LIST_TYPE = new TypeToken<List<ShiftDto>>() {}.getType();
-
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
-
-    /* ------------- Lesen ------------------------ */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShiftGsonFileAccessor.class);
 
     @Override
     public List<ShiftDto> readAll() {
@@ -43,8 +47,6 @@ public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
         }
     }
 
-    /* ------------- Schreiben -------------------- */
-
     @Override
     public boolean writeAll(List<ShiftDto> shifts) {
         try {
@@ -54,7 +56,7 @@ public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
             }
             return true;
         } catch (IOException e) {
-            // ToDo: Logging
+            LOGGER.error("writing didnt work");
             return false;
         }
     }

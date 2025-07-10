@@ -4,7 +4,7 @@ public class Person {
     private final Long id; // community member number
     private String nickname;
     private String password;
-    private long timeAccountId;
+    private Long timeAccountId;
     private PersonRole role;
 
     public Person(Long id, String nickname, String password) {
@@ -21,7 +21,7 @@ public class Person {
         this.role = role;
     }
 
-    public Person(Long id, String nickname, String password, long timeAccountId, PersonRole role) {
+    public Person(Long id, String nickname, String password, Long timeAccountId, PersonRole role) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
@@ -37,28 +37,32 @@ public class Person {
         return nickname;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public long getTimeAccountId() {
-        return timeAccountId;
-    }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public long getTimeAccountId() {
+        return timeAccountId;
+    }
     
-    public void setTimeAccountId(long timeAccountId) {
+    public void setTimeAccountId(Long timeAccountId) {
         this.timeAccountId = timeAccountId;
     }
 
     public PersonRole getRole() {
         return role;
+    }
+
+    public void setRole(PersonRole role) {
+        this.role = role;
     }
 
 }
