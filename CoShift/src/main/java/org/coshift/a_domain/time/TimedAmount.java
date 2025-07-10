@@ -2,9 +2,9 @@ package org.coshift.a_domain.time;
 
 import java.time.LocalDateTime;
 
-public abstract class TimedAmount {
-    protected final long amountInMinutes;
-    protected final LocalDateTime pointInTime;
+abstract class TimedAmount {
+    private long amountInMinutes;
+    private LocalDateTime pointInTime;
 
     public TimedAmount(long amountInMinutes, LocalDateTime pointInTime) {
         this.amountInMinutes = amountInMinutes;
@@ -15,8 +15,16 @@ public abstract class TimedAmount {
         return amountInMinutes;
     }
 
+    public void setAmountInMinutes(long amountInMinutes) {
+        this.amountInMinutes = amountInMinutes;
+    }
+
     public LocalDateTime getPointInTime() {
         return pointInTime;
+    }
+
+    public void setPointInTime(LocalDateTime pointInTime) {
+        this.pointInTime = pointInTime;
     }
 }
 
