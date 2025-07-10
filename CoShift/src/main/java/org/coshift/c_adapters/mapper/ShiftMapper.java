@@ -32,7 +32,7 @@ public final class ShiftMapper {
     public static ShiftDto toDto(Shift shift) {
         return new ShiftDto(shift.getId(),
                             shift.getStartTime(),
-                            (int) shift.getDurationInMinutes(),
+                            shift.getDurationInMinutes(),
                             shift.getCapacity(),
                             shift.getPersons().stream()
                                  .map(Person::getId)

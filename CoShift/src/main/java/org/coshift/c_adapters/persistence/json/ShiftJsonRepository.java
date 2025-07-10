@@ -51,7 +51,7 @@ public class ShiftJsonRepository implements ShiftRepository {
         /* ———  neuer Aufruf: Personenliste wird mitgegeben  ——— */
         Shift withId = new Shift(id,
                                  shift.getStartTime(),
-                                 (int) shift.getDurationInMinutes(),
+                                 shift.getDurationInMinutes(),
                                  shift.getCapacity(),
                                  shift.getPersons());          
 

@@ -32,7 +32,7 @@ public class AddShiftUseCase {
      * @throws IllegalArgumentException falls es Terminüberschneidungen gibt
      */
     public Shift add(LocalDateTime startTime,
-                     int durationInMinutes,
+                     long durationInMinutes,
                      int capacity) {
 
         Shift candidate = new Shift(null, startTime, durationInMinutes, capacity);

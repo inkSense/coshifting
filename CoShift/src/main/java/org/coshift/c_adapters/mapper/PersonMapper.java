@@ -6,7 +6,7 @@ import org.coshift.c_adapters.dto.PersonDto;
 
 public final class PersonMapper {
 
-    private PersonMapper() { } // prevents instantiation
+    private PersonMapper() { } // prevents from instantiation
 
     public static Person toDomain(PersonDto dto) {
         Person person = new Person(

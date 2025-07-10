@@ -15,7 +15,7 @@ public final class Shift {
     private List<Person>          persons;
     private final int             capacity;
 
-    public Shift(Long id, LocalDateTime startTime, int durationInMinutes, int capacity) {
+    public Shift(Long id, LocalDateTime startTime, long durationInMinutes, int capacity) {
         this.id                = id;
         this.startTime         = startTime;
         this.durationInMinutes = durationInMinutes;
@@ -24,7 +24,7 @@ public final class Shift {
         this.capacity          = capacity;
     }
 
-    public Shift(Long id, LocalDateTime startTime, int durationInMinutes, int capacity, List<Person> persons) {
+    public Shift(Long id, LocalDateTime startTime, long durationInMinutes, int capacity, List<Person> persons) {
         this.id                = id;
         this.startTime         = startTime;
         this.durationInMinutes = durationInMinutes;

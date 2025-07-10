@@ -46,7 +46,7 @@ public class UseCaseInteractor {
     /* ------------ Delegierte Methoden ---------------- */
 
     public Shift addShift(LocalDateTime startTime,
-                          int durationInMinutes,
+                          long durationInMinutes,
                           int capacity)  {
         return addShiftUC.add(startTime, durationInMinutes, capacity);
     }

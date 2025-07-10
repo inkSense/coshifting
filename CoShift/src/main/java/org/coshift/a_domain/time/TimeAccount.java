@@ -1,27 +1,28 @@
 package org.coshift.a_domain.time;
 
-import org.coshift.a_domain.person.Person;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TimeAccount {
-    Long id;
+    long id;
     /**
      * Transactions sorted from old to new.
      */
     List<TimeTransaction> transactions = new ArrayList<>(); /* Vielleicht nur drei Jahre retrograd?
     Dann würde man jedes Jahr die Transaktionen älter 3 Jahre weg sichern. */
     TimeBalance balance;
+    Logger LOGGER = LoggerFactory.getLogger(TimeAccount.class);
 
-    public TimeAccount(Long id){
+    public TimeAccount(long id){
         this.id = id;
         this.balance = new TimeBalance(0L, LocalDateTime.now());
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -30,6 +31,9 @@ public class TimeAccount {
     }
 
     public TimeTransaction getLastTransaction(){
+        if(transactions.isEmpty()){
+            return null;
+        }
         return transactions.getLast();
     }
 
@@ -61,7 +65,11 @@ public class TimeAccount {
     }
 
     public void removeLastTransaction(){
-        transactions.removeLast();
+        if(transactions.isEmpty()){
+            LOGGER.warn("transactions is empty. Nothing to remove.");
+        } else {
+            transactions.removeLast();
+        }
     }
 
     public void removeTransaction(LocalDateTime pointInTime){

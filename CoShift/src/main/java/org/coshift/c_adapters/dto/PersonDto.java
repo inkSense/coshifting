@@ -1,7 +1,7 @@
 package org.coshift.c_adapters.dto;
 
 public record PersonDto(
-    Long   id,
+    long   id,
     String nickname,
     String password,
     long   timeAccountId,
