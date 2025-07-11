@@ -2,6 +2,7 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.person.Person;
 import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.b_application.ports.TimeAccountRepository;
 import org.coshift.b_application.useCases.AddPersonUseCase;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,8 @@ class AddPersonUseCaseTest {
     void addPerson_saves_and_returns_person_with_id() {
         // Arrange ------------------------------------------------------
         PersonRepository repo = mock(PersonRepository.class);
-        AddPersonUseCase useCase = new AddPersonUseCase(repo);
+        TimeAccountRepository timeAccountRepo = mock(TimeAccountRepository.class);
+        AddPersonUseCase useCase = new AddPersonUseCase(repo, timeAccountRepo);
 
         String nick = "Alice";
         String pw   = "secret";
@@ -46,7 +48,8 @@ class AddPersonUseCaseTest {
     void addPerson_duplicateNickname_throws_exception() {
         // Arrange ------------------------------------------------------
         PersonRepository repo = mock(PersonRepository.class);
-        AddPersonUseCase useCase = new AddPersonUseCase(repo);
+        TimeAccountRepository timeAccountRepo = mock(TimeAccountRepository.class);
+        AddPersonUseCase useCase = new AddPersonUseCase(repo, timeAccountRepo);
 
         String nick = "Bob";
         String pw   = "pwd";

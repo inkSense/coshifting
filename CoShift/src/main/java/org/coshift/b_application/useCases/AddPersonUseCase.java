@@ -5,6 +5,7 @@ import org.coshift.a_domain.time.TimeAccount;
 import org.coshift.a_domain.time.TimeBalance;
 import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.ports.PersonRepository;
+import org.coshift.b_application.ports.TimeAccountRepository;
 
 import java.util.Objects;
 import java.time.LocalDateTime;
@@ -15,9 +16,11 @@ import java.time.LocalDateTime;
 public class AddPersonUseCase {
 
     private final PersonRepository repository;
+    private final TimeAccountRepository timeAccountRepository;
 
-    public AddPersonUseCase(PersonRepository repository) {
+    public AddPersonUseCase(PersonRepository repository, TimeAccountRepository timeAccountRepository) {
         this.repository = Objects.requireNonNull(repository);
+        this.timeAccountRepository = Objects.requireNonNull(timeAccountRepository);
     }
 
     /**
@@ -36,7 +39,8 @@ public class AddPersonUseCase {
                               "Nickname »" + nickname + "« already in use");
                   });
 
-        TimeAccount account = new TimeAccount(0, new TimeBalance(0L,LocalDateTime.now()));
+        TimeAccount account = new TimeAccount(1, new TimeBalance(0L,LocalDateTime.now()));
+        account = timeAccountRepository.save(account);
 
         Person candidate = new Person(0, nickname, password, account.getId(), PersonRole.USER);
 

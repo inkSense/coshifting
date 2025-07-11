@@ -41,7 +41,7 @@ public class UseCaseInteractor {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
         this.addShiftUC  = new AddShiftUseCase(repository);
         this.viewShiftUC = new ViewShiftUseCase(repository);
-        this.addPersonUC = new AddPersonUseCase(personRepository);
+        this.addPersonUC = new AddPersonUseCase(personRepository, timeAccountRepository);
         this.addPersonToShiftUC = new AddPersonToShiftUseCase(repository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
         this.viewTimeAccountUC = new ViewTimeAccountUseCase(timeAccountRepository, personRepository);

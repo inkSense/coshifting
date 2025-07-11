@@ -13,16 +13,31 @@ import WeekView   from './WeekView'
  */
 export default function App() {
   const [authHeader, setAuthHeader] = useState<string | null>(null)
+  const [balance,    setBalance]    = useState<number | null>(null)
 
   const tryLogin = useCallback(async (header: string): Promise<boolean> => {
     try {
-      const res = await fetch('/api/shifts', {     
+      const res = await fetch('/api/shifts', {
         headers: { Authorization: header }
       })
 
       if (res.ok) {
         setAuthHeader(header)
         sessionStorage.setItem('authHeader', header)
+
+        // Saldo laden
+        try {
+          const balRes = await fetch('/api/persons/me/timeaccount', {
+            headers: { Authorization: header }
+          })
+          if (balRes.ok) {
+            const dto = await balRes.json() as { balanceInMinutes: number }
+            setBalance(dto.balanceInMinutes)
+          }
+        } catch (e) {
+          console.error('Unable to fetch balance', e)
+        }
+
         return true
       }
     } catch {
@@ -34,6 +49,7 @@ export default function App() {
 
   function logout() {
     setAuthHeader(null)
+    setBalance(null)
     sessionStorage.removeItem('authHeader')        
   }
 
@@ -52,7 +68,7 @@ export default function App() {
 
   return (
     <>
-      {authHeader && <Header onLogout={logout} />}   
+      {authHeader && <Header onLogout={logout} balance={balance ?? undefined} />}   
 
       {authHeader
         ? <WeekView authHeader={authHeader} />       
