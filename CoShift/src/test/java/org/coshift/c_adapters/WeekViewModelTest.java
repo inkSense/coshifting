@@ -12,7 +12,7 @@ class WeekViewModelTest {
     @Test
     void renderStoresCellsForLaterRetrieval() {
         WeekViewModel model = new WeekViewModel();
-        List<DayCellViewModel> cells = List.of(new DayCellViewModel(true, "10:00", true));
+        List<DayCellViewModel> cells = List.of(new DayCellViewModel(List.of()));
 
         model.render(cells);
 

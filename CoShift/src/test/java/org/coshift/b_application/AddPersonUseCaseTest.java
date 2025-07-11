@@ -33,6 +33,8 @@ class AddPersonUseCaseTest {
         Person persisted = new Person(1L, nick, pw);
         when(repo.save(any(Person.class))).thenReturn(persisted);
 
+        when(timeAccountRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
         // Act ----------------------------------------------------------
         Person result = useCase.add(nick, pw);
 

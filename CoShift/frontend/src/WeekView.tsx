@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import DayCell from './components/DayCell'
 import './WeekView.css'          
 
-// Typvertrag „Dieses JSON-Objekt muss die Felder hasShift, startTime, fullyStaffed enthalten“.
-export interface DayCellViewModel {
-  hasShift: boolean
+export interface ShiftCellVM {
   startTime: string
   fullyStaffed: boolean
+}
+
+export interface DayCellViewModel {
+  shifts: ShiftCellVM[]
 }
 
 interface Props {
@@ -36,7 +38,7 @@ export default function WeekView({ authHeader }: Props) {
 
   // Fallback: solange noch keine Daten da sind, leere Zellen anzeigen
   // test
-  const empty = { hasShift: false, startTime: '', fullyStaffed: false }
+  const empty: DayCellViewModel = { shifts: [] }
   const display = cells.length === EXPECTED
     ? cells
     : Array.from({ length: EXPECTED }, () => empty)

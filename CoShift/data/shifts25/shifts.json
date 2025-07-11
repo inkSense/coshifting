@@ -12,5 +12,19 @@
     "durationInMinutes": 120,
     "capacity": 3,
     "personIds": []
+  },
+  {
+    "id": 3,
+    "startTime": "2025-07-08T12:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 4,
+    "startTime": "2025-07-16T09:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": [1,2,3]
   }
 ]

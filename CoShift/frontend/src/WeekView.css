@@ -16,18 +16,21 @@
     border: 1px solid #ddd;
   }
 
-  .week-cell.full       { 
-    background: #339f4c; /* grün  */
-  }   
+/* einzelne Schichtkarten */
+.shift-card {
+  background: #888888;
+  border-radius: 3px;
+  margin: .25rem;
+  padding: .25rem .4rem;
+  font-size: .85rem;
+}
 
-  .week-cell.not-full   { 
-    background: #888888; /* grau  */
-  }   
-  
-  .shift-card {
-    background: transparent;
-    border-radius: 3px;
-    margin: .25rem;
-    padding: .25rem .4rem;
-    font-size: .85rem;
-  }
+.shift-card.full {
+  background: #339f4c; /* grün */
+  color: #fff;
+  font-weight: 600;
+}
+
+.empty {
+  opacity: .3;
+}

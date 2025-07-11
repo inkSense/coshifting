@@ -38,20 +38,17 @@ public class Presenter implements PresenterInputPort {
     @Override
     public void showShifts(LocalDate monday, int weeks, List<Shift> shifts) {
         int totalDays = weeks * 7;
-        // Leere Liste mit totalDays Platzhaltern
-        List<DayCellViewModel> cells = new ArrayList<>(
-                Collections.nCopies(totalDays, new DayCellViewModel(false, "", false)));
+        List<DayCellViewModel> cells = new ArrayList<>(totalDays);
+        for (int i=0;i<totalDays;i++) cells.add(new DayCellViewModel(new ArrayList<>()));
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
 
         for (Shift s : shifts) {
-            int idx = (int) ChronoUnit.DAYS.between(
-                    monday, s.getStartTime().toLocalDate());
-            if (idx < 0 || idx >= totalDays) continue;     // Safety-Net
+            int idx = (int) ChronoUnit.DAYS.between(monday, s.getStartTime().toLocalDate());
+            if (idx < 0 || idx >= totalDays) continue;
 
             boolean fullyStaffed = s.getPersons().size() >= s.getCapacity();
-            cells.set(idx, new DayCellViewModel(
-                    true, fmt.format(s.getStartTime()), fullyStaffed));
+            cells.get(idx).shifts().add(new ShiftCellViewModel(fmt.format(s.getStartTime()), fullyStaffed));
         }
 
         currentWeek = cells;
@@ -68,22 +65,17 @@ public class Presenter implements PresenterInputPort {
     private List<DayCellViewModel> createDayCells(List<ShiftDto> dtos) {
         // leere Woche vorbereiten
         List<DayCellViewModel> cells = new ArrayList<>(7);
-        for (int i = 0; i < 7; i++) {
-            cells.add(new DayCellViewModel(false, "", false));
-        }
+        for (int i=0;i<7;i++) cells.add(new DayCellViewModel(new ArrayList<>()));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         //DateTimeFormatter ISO = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // ISO 8601 format
 
         for (ShiftDto dto : dtos) {
             LocalDateTime start = dto.startTime();
-            boolean hasShift = dto.personIds().size() > 0;
-            int dayIdx = (start.getDayOfWeek().getValue() + 6) % 7; // 0=Mo … 6=So
+            int dayIdx = (start.getDayOfWeek().getValue() + 6) % 7;
             boolean fullyStaffed = dto.personIds().size() >= dto.capacity();
-            cells.set(dayIdx,
-                      new DayCellViewModel(true,
-                                           formatter.format(start),
-                                           fullyStaffed));
+            cells.get(dayIdx).shifts().add(
+                new ShiftCellViewModel(formatter.format(start), fullyStaffed));
         }
         return cells;
     }
