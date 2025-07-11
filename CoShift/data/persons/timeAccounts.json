@@ -1,0 +1,28 @@
+[
+    {
+      "id": 0,
+      "balanceInMinutes": 0,
+      "balanceTimestamp": "2025-07-10T00:00:00",
+      "transactions": []
+    },
+    {
+      "id": 2,
+      "balanceInMinutes": 120,
+      "balanceTimestamp": "2025-07-09T18:00:00",
+      "transactions": [
+        { "amountInMinutes": 120,
+          "pointInTime": "2025-07-09T18:00:00" }
+      ]
+    },
+    {
+      "id": 3,
+      "balanceInMinutes": 240,
+      "balanceTimestamp": "2025-07-09T19:00:00",
+      "transactions": [
+        { "amountInMinutes": 120,
+          "pointInTime": "2025-07-08T18:00:00" },
+        { "amountInMinutes": 120,
+          "pointInTime": "2025-07-09T19:00:00" }
+      ]
+    }
+  ]

@@ -16,19 +16,24 @@ import org.coshift.b_application.ports.PasswordChecker;
 import org.coshift.b_application.UseCaseInteractor;
 import org.coshift.b_application.ports.PresenterInputPort;
 import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.b_application.ports.TimeAccountRepository;
+import org.coshift.c_adapters.persistence.json.TimeAccountJsonRepository;
+import org.coshift.c_adapters.ports.TimeAccountJsonFileAccessor;
 
 @Configuration
 @EnableWebSecurity
 public class SpringConfig {
 
     @Bean
-    UseCaseInteractor useCaseInteractor(ShiftRepository  shiftRepo,
-                                        PersonRepository personRepo,
-                                        PasswordChecker  passwordChecker,
+    UseCaseInteractor useCaseInteractor(ShiftRepository    shiftRepo,
+                                        PersonRepository   personRepo,
+                                        TimeAccountRepository accountRepo,
+                                        PasswordChecker   passwordChecker,
                                         PresenterInputPort presenter) {
         return new UseCaseInteractor(
                 shiftRepo,
                 personRepo,
+                accountRepo,
                 passwordChecker,
                 presenter);
     }
@@ -65,6 +70,10 @@ public class SpringConfig {
         return new AuthenticateUserUseCase(repo, checker);
     }
 
+    @Bean
+    TimeAccountRepository timeAccountRepo(TimeAccountJsonFileAccessor accessor) {
+        return new TimeAccountJsonRepository(accessor);
+    }
 }
 
 

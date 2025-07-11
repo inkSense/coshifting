@@ -3,21 +3,21 @@
     "id": 1,
     "nickname": "anton",
     "password": "secret",
-    "timeAccountId": 0,
+    "timeAccountId": 1,
     "role": "ADMIN"
   },
   {
     "id": 2,
     "nickname": "berta",
     "password": "secret",
-    "timeAccountId": 0,
+    "timeAccountId": 2,
     "role": "USER"
   },
   {
     "id": 3,
     "nickname": "cäsar",
     "password": "secret",
-    "timeAccountId": 0,
+    "timeAccountId": 3,
     "role": "ADMIN"
   }
 ]

@@ -26,5 +26,13 @@ abstract class TimedAmount {
     public void setPointInTime(LocalDateTime pointInTime) {
         this.pointInTime = pointInTime;
     }
+
+    @Override
+    public String toString() {
+        return "TimedAmount{" +
+                "amountInMinutes=" + amountInMinutes +
+                ", pointInTime=" + pointInTime +
+                '}';
+    }
 }
 

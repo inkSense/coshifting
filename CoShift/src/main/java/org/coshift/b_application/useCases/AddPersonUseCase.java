@@ -1,9 +1,13 @@
 package org.coshift.b_application.useCases;
 
 import org.coshift.a_domain.person.Person;
+import org.coshift.a_domain.time.TimeAccount;
+import org.coshift.a_domain.time.TimeBalance;
+import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.ports.PersonRepository;
 
 import java.util.Objects;
+import java.time.LocalDateTime;
 
 /**
  * Anwendungsfall »Person anlegen«.
@@ -32,7 +36,9 @@ public class AddPersonUseCase {
                               "Nickname »" + nickname + "« already in use");
                   });
 
-        Person candidate = new Person(null, nickname, password);
+        TimeAccount account = new TimeAccount(0, new TimeBalance(0L,LocalDateTime.now()));
+
+        Person candidate = new Person(0, nickname, password, account.getId(), PersonRole.USER);
 
         return repository.save(candidate);
     }

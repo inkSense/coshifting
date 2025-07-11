@@ -1,27 +1,27 @@
 package org.coshift.a_domain.person;
 
 public class Person {
-    private final Long id; // community member number
+    private final long id; // community member number
     private String nickname;
     private String password;
     private Long timeAccountId;
     private PersonRole role;
 
-    public Person(Long id, String nickname, String password) {
+    public Person(long id, String nickname, String password) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.role = PersonRole.USER;
     }
 
-    public Person(Long id, String nickname, String password, PersonRole role) {
+    public Person(long id, String nickname, String password, PersonRole role) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.role = role;
     }
 
-    public Person(Long id, String nickname, String password, Long timeAccountId, PersonRole role) {
+    public Person(long id, String nickname, String password, Long timeAccountId, PersonRole role) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
@@ -29,7 +29,7 @@ public class Person {
         this.role = role;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

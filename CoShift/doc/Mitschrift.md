@@ -223,3 +223,17 @@ Changed files:
 4. CoShift/src/main/java/org/coshift/c_adapters/presentation/Presenter.java  
 5. CoShift/data/shifts25/shifts.json  
 
+# 11. Juli
+11:50:40.984 [main] INFO org.coshift.a_domain.time.TimeAccount -- Refreshing balance 
+from 2025-07-11T11:50:40.**97975**6023 
+to 2025-07-11T11:50:40.**98258**5907
+
+11:50:41.016 [main] INFO org.coshift.c_adapters.TimeAccountJsonRepositoryTest -- 
+Persisted: TimeAccount{id=1, transactions=[TimedAmount{amountInMinutes=480, 
+pointInTime=2025-07-11T11:50:40.**98232**9022}], 
+balance=TimedAmount{amountInMinutes=0, pointInTime=2025-07-11T11:50:40.**98258**5907}}
+
+11:50:41.141 [main] INFO org.coshift.c_adapters.TimeAccountJsonRepositoryTest -- 
+Reloaded: TimeAccount{id=1, transactions=[TimedAmount{amountInMinutes=480, 
+pointInTime=2025-07-11T11:50:40.**98232**9022}], 
+balance=TimedAmount{amountInMinutes=0, pointInTime=2025-07-11T11:50:40.**98258**5907}}

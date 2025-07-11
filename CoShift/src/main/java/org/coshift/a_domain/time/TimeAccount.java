@@ -17,9 +17,9 @@ public class TimeAccount {
     TimeBalance balance;
     Logger LOGGER = LoggerFactory.getLogger(TimeAccount.class);
 
-    public TimeAccount(long id){
+    public TimeAccount(long id, TimeBalance balance){
         this.id = id;
-        this.balance = new TimeBalance(0L, LocalDateTime.now());
+        this.balance = balance;
     }
 
     public long getId() {
@@ -89,8 +89,8 @@ public class TimeAccount {
         long bal = balance.getAmountInMinutes();
         LocalDateTime lastBalance = balance.getPointInTime();
         if(now.isAfter(lastBalance) ){
-            for(TimeTransaction transaction : getTransactionsAfter(now)){
-                bal += transaction.getAmountInMinutes();
+            for(TimeTransaction transaction : getTransactionsAfter(lastBalance)){
+                bal += transaction.getAmountInMinutes();;
             }
             this.balance = new TimeBalance(bal, now);
         }
@@ -100,5 +100,13 @@ public class TimeAccount {
         transactions.sort(Comparator.comparing(TimeTransaction::getPointInTime));
     }
 
+    @Override
+    public String toString() {
+        return "TimeAccount{" +
+                "id=" + id +
+                ", transactions=" + transactions +
+                ", balance=" + balance +
+                '}';
+    }
 
 }

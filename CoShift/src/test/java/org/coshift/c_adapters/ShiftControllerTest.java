@@ -38,6 +38,8 @@ class ShiftControllerTest {
 
     @MockBean PersonRepository  personRepo;  
 
+    @MockBean org.coshift.b_application.ports.TimeAccountRepository timeAccountRepo;
+
     @Test
     void authenticatedRequestReturnsShifts() throws Exception {
         List<Shift> shifts = List.of(new Shift(1L, LocalDateTime.now(), 120, 10));

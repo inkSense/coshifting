@@ -2,8 +2,10 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.Shift;
 import org.coshift.a_domain.person.Person;
+import org.coshift.a_domain.time.TimeAccount;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.ShiftRepository;
+import org.coshift.b_application.ports.TimeAccountRepository;
 import org.coshift.b_application.ports.PresenterInputPort;
 import org.coshift.b_application.ports.PasswordChecker;
 import org.coshift.b_application.useCases.AddPersonToShiftUseCase;
@@ -11,6 +13,7 @@ import org.coshift.b_application.useCases.AddPersonUseCase;
 import org.coshift.b_application.useCases.AddShiftUseCase;
 import org.coshift.b_application.useCases.AuthenticateUserUseCase;
 import org.coshift.b_application.useCases.ViewShiftUseCase;
+import org.coshift.b_application.useCases.ViewTimeAccountUseCase;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,14 +35,16 @@ public class UseCaseInteractor {
     private final AddPersonToShiftUseCase addPersonToShiftUC;
     private final PresenterInputPort presenter;
     private final AuthenticateUserUseCase authenticateUserUC;
+    private final ViewTimeAccountUseCase viewTimeAccountUC;
 
-    public UseCaseInteractor(ShiftRepository repository, PersonRepository personRepository, PasswordChecker passwordChecker, PresenterInputPort presenter) {
+    public UseCaseInteractor(ShiftRepository repository, PersonRepository personRepository, TimeAccountRepository timeAccountRepository, PasswordChecker passwordChecker, PresenterInputPort presenter) {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
         this.addShiftUC  = new AddShiftUseCase(repository);
         this.viewShiftUC = new ViewShiftUseCase(repository);
         this.addPersonUC = new AddPersonUseCase(personRepository);
         this.addPersonToShiftUC = new AddPersonToShiftUseCase(repository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
+        this.viewTimeAccountUC = new ViewTimeAccountUseCase(timeAccountRepository, personRepository);
         this.presenter = presenter;
     }
 
@@ -82,5 +87,7 @@ public class UseCaseInteractor {
         return authenticateUserUC.authenticate(nickname, password);
     }
 
-    
+    public TimeAccount getTimeAccount(long personId) {
+        return viewTimeAccountUC.getByPersonId(personId);
+    }
 }
