@@ -2,18 +2,14 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.Shift;
 import org.coshift.a_domain.person.Person;
+import org.coshift.a_domain.person.PersonRole;
 import org.coshift.a_domain.time.TimeAccount;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.ShiftRepository;
 import org.coshift.b_application.ports.TimeAccountRepository;
 import org.coshift.b_application.ports.PresenterInputPort;
 import org.coshift.b_application.ports.PasswordChecker;
-import org.coshift.b_application.useCases.AddPersonToShiftUseCase;
-import org.coshift.b_application.useCases.AddPersonUseCase;
-import org.coshift.b_application.useCases.AddShiftUseCase;
-import org.coshift.b_application.useCases.AuthenticateUserUseCase;
-import org.coshift.b_application.useCases.ViewShiftUseCase;
-import org.coshift.b_application.useCases.ViewTimeAccountUseCase;
+import org.coshift.b_application.useCases.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,18 +27,24 @@ public class UseCaseInteractor {
 
     private final AddShiftUseCase addShiftUC;
     private final ViewShiftUseCase viewShiftUC;
-    private final AddPersonUseCase addPersonUC;
+    private final ConfigurePersonUseCase addPersonUC;
     private final AddPersonToShiftUseCase addPersonToShiftUC;
     private final PresenterInputPort presenter;
     private final AuthenticateUserUseCase authenticateUserUC;
     private final ViewTimeAccountUseCase viewTimeAccountUC;
 
-    public UseCaseInteractor(ShiftRepository repository, PersonRepository personRepository, TimeAccountRepository timeAccountRepository, PasswordChecker passwordChecker, PresenterInputPort presenter) {
+    public UseCaseInteractor(
+            ShiftRepository shiftRepository,
+            PersonRepository personRepository,
+            TimeAccountRepository timeAccountRepository,
+            PasswordChecker passwordChecker,
+            PresenterInputPort presenter
+    ) {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
-        this.addShiftUC  = new AddShiftUseCase(repository);
-        this.viewShiftUC = new ViewShiftUseCase(repository);
-        this.addPersonUC = new AddPersonUseCase(personRepository, timeAccountRepository);
-        this.addPersonToShiftUC = new AddPersonToShiftUseCase(repository, personRepository);
+        this.addShiftUC  = new AddShiftUseCase(shiftRepository);
+        this.viewShiftUC = new ViewShiftUseCase(shiftRepository);
+        this.addPersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
+        this.addPersonToShiftUC = new AddPersonToShiftUseCase(shiftRepository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
         this.viewTimeAccountUC = new ViewTimeAccountUseCase(timeAccountRepository, personRepository);
         this.presenter = presenter;
@@ -89,5 +91,9 @@ public class UseCaseInteractor {
 
     public TimeAccount getTimeAccount(long personId) {
         return viewTimeAccountUC.getByPersonId(personId);
+    }
+
+    public Person updatePersonRole(long id, PersonRole role) {
+        return addPersonUC.update(id, role);
     }
 }

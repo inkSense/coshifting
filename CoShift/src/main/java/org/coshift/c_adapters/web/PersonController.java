@@ -8,9 +8,11 @@ import org.coshift.c_adapters.dto.TimeAccountDto;
 import org.coshift.c_adapters.mapper.PersonMapper;
 import org.coshift.c_adapters.mapper.TimeAccountMapper;
 import org.coshift.a_domain.person.Person;
+import org.coshift.a_domain.person.PersonRole;
 import org.coshift.a_domain.time.TimeAccount;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +37,17 @@ public class PersonController {
         this.interactor = interactor;
         this.persons    = persons;
         this.accounts   = accounts;
+    }
+
+    /* ---------- CREATE ---------------------------------------------- */
+
+    // Einfaches DTO fürs Anlegen neuer Personen
+    public record NewPersonDto(String nickname, String password) {}
+
+    @PostMapping
+    public PersonDto create(@RequestBody NewPersonDto dto) {
+        Person p = interactor.addPerson(dto.nickname(), dto.password());
+        return PersonMapper.toDto(p);
     }
 
     /* ---------- READ ------------------------------------------------ */
@@ -70,15 +83,15 @@ public class PersonController {
         return TimeAccountMapper.toDto(acc);
     }
 
-    /* ---------- CREATE ---------------------------------------------- */
 
-    // Einfaches DTO fürs Anlegen neuer Personen
-    public record NewPersonDto(String nickname, String password) {}
 
-    @PostMapping
-    public PersonDto create(@RequestBody NewPersonDto dto) {
-        Person p = interactor.addPerson(dto.nickname(), dto.password());
-        return PersonMapper.toDto(p);
+
+    /* ---------- UPDATE ---------------------------------------------- */
+
+    @PutMapping("/{id}/role")
+    public PersonDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
+        Person person = interactor.updatePersonRole(id, role);
+        return PersonMapper.toDto(person);
     }
 
 }

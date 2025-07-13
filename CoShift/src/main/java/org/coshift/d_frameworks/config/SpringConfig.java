@@ -47,6 +47,7 @@ public class SpringConfig {
           .csrf(c -> c.disable())
           .authenticationProvider(ucProvider)
           .authorizeHttpRequests(a -> a
+                  .requestMatchers("/api/admin/**").hasRole("ADMIN")
                   .requestMatchers("/api/**").authenticated()
                   .anyRequest().permitAll())
           .httpBasic(Customizer.withDefaults())

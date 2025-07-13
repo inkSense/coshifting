@@ -11,15 +11,15 @@ import java.util.Objects;
 import java.time.LocalDateTime;
 
 /**
- * Anwendungsfall »Person anlegen«.
+ * CRUD »Person«.
  */
-public class AddPersonUseCase {
+public class ConfigurePersonUseCase {
 
-    private final PersonRepository repository;
+    private final PersonRepository personRepository;
     private final TimeAccountRepository timeAccountRepository;
 
-    public AddPersonUseCase(PersonRepository repository, TimeAccountRepository timeAccountRepository) {
-        this.repository = Objects.requireNonNull(repository);
+    public ConfigurePersonUseCase(PersonRepository personRepository, TimeAccountRepository timeAccountRepository) {
+        this.personRepository = Objects.requireNonNull(personRepository);
         this.timeAccountRepository = Objects.requireNonNull(timeAccountRepository);
     }
 
@@ -32,18 +32,21 @@ public class AddPersonUseCase {
      * @throws IllegalArgumentException falls Nickname schon existiert
      */
     public Person add(String nickname, String password) {
-
-        repository.findByNickname(nickname)
+        personRepository.findByNickname(nickname)
                   .ifPresent(p -> {
                       throw new IllegalArgumentException(
                               "Nickname »" + nickname + "« already in use");
                   });
-
         TimeAccount account = new TimeAccount(1, new TimeBalance(0L,LocalDateTime.now()));
         account = timeAccountRepository.save(account);
-
         Person candidate = new Person(0, nickname, password, account.getId(), PersonRole.USER);
+        return personRepository.save(candidate);
+    }
 
-        return repository.save(candidate);
+    public Person update(long id, PersonRole role) {
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Person not found"));
+        person.setRole(role);
+        return personRepository.save(person);
     }
 }
