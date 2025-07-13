@@ -1,8 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
 import './App.css'
-import Header     from './components/Header'
-import Login      from './components/LoginForm'
-import WeekView   from './WeekView'
+import Login       from '../feature/auth/LoginForm'
+import WeekView    from '../feature/week/WeekView'
+import Layout      from '../layout/Layout'
+import PrivateLayout from '../layout/PrivateLayout'
+import { AuthContext } from '../feature/auth/AuthContext'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import AdminPage   from '../feature/admin/AdminPage'   // gleich anlegen, siehe unten
 
 /**
  * Root-Komponente:
@@ -14,6 +18,8 @@ import WeekView   from './WeekView'
 export default function App() {
   const [authHeader, setAuthHeader] = useState<string | null>(null)
   const [balance,    setBalance]    = useState<number | null>(null)
+
+
 
   const tryLogin = useCallback(async (header: string): Promise<boolean> => {
     try {
@@ -67,12 +73,20 @@ export default function App() {
 
 
   return (
-    <>
-      {authHeader && <Header onLogout={logout} balance={balance ?? undefined} />}   
+    <AuthContext.Provider value={{ header: authHeader, balance, logout }}>
+      {authHeader && <Layout />}          {/* <- MUI-AppBar inkl. Burger */}
 
-      {authHeader
-        ? <WeekView authHeader={authHeader} />       
-        : <Login onLogin={tryLogin} />}
-    </>
+      {!authHeader ? (
+        <Login onLogin={tryLogin} />
+      ) : (
+        <Routes>
+          <Route element={<PrivateLayout />}>
+            <Route path="/"      element={<WeekView />} />
+            <Route path="/admin" element={<AdminPage />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      )}
+    </AuthContext.Provider>
   )
 }

@@ -1,5 +1,5 @@
-import '../WeekView.css'
-import type { DayCellViewModel } from '../WeekView'
+import './WeekView.css'
+import type { DayCellViewModel } from './WeekView'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
   const base = 'week-cell'
