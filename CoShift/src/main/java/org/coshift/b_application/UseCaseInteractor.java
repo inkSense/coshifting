@@ -27,7 +27,7 @@ public class UseCaseInteractor {
 
     private final AddShiftUseCase addShiftUC;
     private final ViewShiftUseCase viewShiftUC;
-    private final ConfigurePersonUseCase addPersonUC;
+    private final ConfigurePersonUseCase configurePersonUC;
     private final AddPersonToShiftUseCase addPersonToShiftUC;
     private final PresenterInputPort presenter;
     private final AuthenticateUserUseCase authenticateUserUC;
@@ -43,7 +43,7 @@ public class UseCaseInteractor {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
         this.addShiftUC  = new AddShiftUseCase(shiftRepository);
         this.viewShiftUC = new ViewShiftUseCase(shiftRepository);
-        this.addPersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
+        this.configurePersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
         this.addPersonToShiftUC = new AddPersonToShiftUseCase(shiftRepository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
         this.viewTimeAccountUC = new ViewTimeAccountUseCase(timeAccountRepository, personRepository);
@@ -67,7 +67,7 @@ public class UseCaseInteractor {
     }
 
     public Person addPerson(String nickname, String password) {
-        return addPersonUC.add(nickname, password);
+        return configurePersonUC.add(nickname, password);
     }
 
     public Shift addPersonToShift(long personId, long shiftId) {
@@ -94,6 +94,6 @@ public class UseCaseInteractor {
     }
 
     public Person updatePersonRole(long id, PersonRole role) {
-        return addPersonUC.update(id, role);
+        return configurePersonUC.update(id, role);
     }
 }

@@ -22,9 +22,8 @@ import java.util.List;
 @Repository
 public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
 
-    /* ------------------ Pfade & Typen ----------------------------- */
 
-    private static final Path FILE      = Paths.get("data/persons", "persons.json");
+    private static Path FILE = Paths.get("data/persons", "persons.json");     
     private static final Type LIST_TYPE = new TypeToken<List<PersonDto>>() {}.getType();
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonGsonFileAccessor.class);
@@ -32,6 +31,12 @@ public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();
+
+    public PersonGsonFileAccessor() {} 
+
+    public PersonGsonFileAccessor(Path file) {
+        this.FILE = file;
+    }
 
     /* -------------------- Lesen ----------------------------------- */
 
