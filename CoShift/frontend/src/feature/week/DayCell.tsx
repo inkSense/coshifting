@@ -2,10 +2,9 @@ import './WeekView.css'
 import type { DayCellViewModel } from './WeekView'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
-  const base = 'week-cell'
 
   return (
-    <div className={base}>
+    <div className='week-cell'>
       {cell.shifts.length === 0 && <span className="empty">&nbsp;</span>}
 
       {cell.shifts.map((s, i) => (
