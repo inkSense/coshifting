@@ -66,8 +66,22 @@ public class UseCaseInteractor {
         return viewShiftUC.getShiftsBetween(start, end);
     }
 
+    // Overload: default role USER
     public Person addPerson(String nickname, String password) {
-        return configurePersonUC.add(nickname, password);
+        return configurePersonUC.add(nickname, password, PersonRole.USER);
+    }
+
+    // New overload with explicit role
+    public Person addPerson(String nickname, String password, PersonRole role) {
+        return configurePersonUC.add(nickname, password, role);
+    }
+
+    public Person updatePerson(long id, String nick, String pw, PersonRole role){
+        return configurePersonUC.update(id, nick, pw, role);
+    }
+
+    public void deletePerson(long id) {
+        configurePersonUC.delete(id);
     }
 
     public Shift addPersonToShift(long personId, long shiftId) {

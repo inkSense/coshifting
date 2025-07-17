@@ -32,14 +32,18 @@ public class ConfigurePersonUseCase {
      * @throws IllegalArgumentException falls Nickname schon existiert
      */
     public Person add(String nickname, String password) {
+        return add(nickname, password, PersonRole.USER);
+    }
+
+    public Person add(String nickname, String password, PersonRole role) {
         personRepository.findByNickname(nickname)
                   .ifPresent(p -> {
                       throw new IllegalArgumentException(
                               "Nickname »" + nickname + "« already in use");
                   });
-        TimeAccount account = new TimeAccount(1, new TimeBalance(0L,LocalDateTime.now()));
+        TimeAccount account = new TimeAccount(0, new TimeBalance(0L, LocalDateTime.now()));
         account = timeAccountRepository.save(account);
-        Person candidate = new Person(0, nickname, password, account.getId(), PersonRole.USER);
+        Person candidate = new Person(0, nickname, password, account.getId(), role);
         return personRepository.save(candidate);
     }
 
@@ -48,5 +52,18 @@ public class ConfigurePersonUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("Person not found"));
         person.setRole(role);
         return personRepository.save(person);
+    }
+
+    public Person update(long id, String nickname, String password, PersonRole role){
+        Person p = personRepository.findById(id)
+                   .orElseThrow(() -> new IllegalArgumentException("Person not found"));
+        if(nickname != null && !nickname.isBlank()) p.setNickname(nickname);
+        if(password != null && !password.isBlank()) p.setPassword(password);
+        if(role != null) p.setRole(role);
+        return personRepository.save(p);
+    }
+
+    public void delete(long id) {
+        personRepository.deleteById(id);
     }
 }

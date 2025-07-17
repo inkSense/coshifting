@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST-Controller für Personen-bezogene Funktionen
@@ -41,12 +42,17 @@ public class PersonController {
 
     /* ---------- CREATE ---------------------------------------------- */
 
-    // Einfaches DTO fürs Anlegen neuer Personen
-    public record NewPersonDto(String nickname, String password) {}
+    // Einfaches DTO fürs Anlegen neuer Personen (Role optional)
+    public record NewPersonDto(String nickname, String password, String role) {}
 
     @PostMapping
     public PersonDto create(@RequestBody NewPersonDto dto) {
-        Person p = interactor.addPerson(dto.nickname(), dto.password());
+        PersonRole role = Optional.ofNullable(dto.role())
+                                  .map(String::toUpperCase)
+                                  .map(PersonRole::valueOf)
+                                  .orElse(PersonRole.USER);
+
+        Person p = interactor.addPerson(dto.nickname(), dto.password(), role);
         return PersonMapper.toDto(p);
     }
 
@@ -92,6 +98,24 @@ public class PersonController {
     public PersonDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
         Person person = interactor.updatePersonRole(id, role);
         return PersonMapper.toDto(person);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public PersonDto update(@PathVariable long id,
+                            @RequestBody NewPersonDto dto){
+        PersonRole role = dto.role()==null? null
+                        : PersonRole.valueOf(dto.role().toUpperCase());
+        Person p = interactor.updatePerson(id, dto.nickname(), dto.password(), role);
+        return PersonMapper.toDto(p);
+    }
+
+    /* ---------- DELETE ---------------------------------------------- */
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")      // ToDo: Brauche ich das?
+    public void delete(@PathVariable long id) {
+        interactor.deletePerson(id);
     }
 
 }

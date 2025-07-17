@@ -30,19 +30,18 @@ public class PersonJsonRepository implements PersonRepository {
         /* ----- maximale bestehende Id ermitteln -------------------- */
         fileAccessor.readAll().stream()
                 .map(PersonMapper::toDomain)
-                .map(Person::getId)
-                .filter(Objects::nonNull)
-                .mapToLong(Long::longValue)
+                .mapToLong(Person::getId)
                 .max()
-                .ifPresent(nextId::set);
+                .ifPresent(maxId -> nextId.set(maxId + 1));   //  +1  !
     }
 
     /* ---------------- Speichern ----------------------------------- */
 
     @Override
     public Person save(Person person) {
-        Long id = Optional.ofNullable(person.getId())
-                          .orElseGet(nextId::getAndIncrement);
+        long id = person.getId() > 0
+        ? person.getId()
+        : nextFreeId();
 
         Person withId = new Person(
             id,
@@ -97,5 +96,12 @@ public class PersonJsonRepository implements PersonRepository {
         if (removed && !fileAccessor.writeAll(dtos)) {
             throw new IllegalStateException("Unable to persist persons JSON file.");
         }
+    }
+
+    private long nextFreeId() {
+        return fileAccessor.readAll().stream()
+                           .mapToLong(PersonDto::id)
+                           .max()
+                           .orElse(0) + 1;
     }
 }
