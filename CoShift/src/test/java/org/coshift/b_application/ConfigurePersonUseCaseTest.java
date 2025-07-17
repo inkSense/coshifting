@@ -93,7 +93,7 @@ class ConfigurePersonUseCaseTest {
         var useCase = new ConfigurePersonUseCase(personRepo, timeAccountRepo);
 
         /* --- When  ------------------------------------------------ */
-        Person updated = useCase.update(anton.getId(), PersonRole.ADMIN);
+        Person updated = useCase.update(anton.getId(), anton.getNickname(), anton.getPassword(), PersonRole.ADMIN);
 
         /* --- Then  ------------------------------------------------ */
         assertEquals(PersonRole.ADMIN, updated.getRole());

@@ -1,18 +1,30 @@
-import './WeekView.css'
+import { Box } from '@mui/material'
 import type { DayCellViewModel } from './WeekView'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
-  const base = 'week-cell'
 
   return (
-    <div className={base}>
-      {cell.shifts.length === 0 && <span className="empty">&nbsp;</span>}
+    <Box sx={{ minHeight: '4rem', border: 1, borderColor: 'divider' }}>
+      {cell.shifts.length === 0 && (
+        <Box sx={{ opacity: 0.3 }}>&nbsp;</Box>
+      )}
 
       {cell.shifts.map((s, i) => (
-        <div key={i} className={s.fullyStaffed ? 'shift-card full' : 'shift-card'}>
-          <span>{s.startTime}</span>
-        </div>
+        <Box
+          key={i}
+          sx={{
+            bgcolor: s.fullyStaffed ? 'success.main' : 'grey.600',
+            color: s.fullyStaffed ? 'common.white' : 'text.primary',
+            fontWeight: s.fullyStaffed ? 600 : 'normal',
+            borderRadius: 1,
+            m: 0.5,
+            p: 0.5,
+            fontSize: '0.85rem',
+          }}
+        >
+          {s.startTime}
+        </Box>
       ))}
-    </div>
+    </Box>
   )
 }

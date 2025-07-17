@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import DayCell from './DayCell.tsx'
-import './WeekView.css'          
+import DayCell from './DayCell.tsx'     
 import { useAuth } from '../auth/AuthContext'
+import { Box } from '@mui/material'
 
 export interface ShiftCellVM {
   startTime: string
@@ -42,14 +42,31 @@ export default function WeekView() {
     : Array.from({ length: EXPECTED }, () => empty)
 
   return (
-    <div className="week-grid">
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(7, 1fr)',
+        gap: 2,                       // theme.spacing(2) → 2*4px
+      }}
+    >
       {days.map(day => (
-        <div key={day} className="day-header">{day}</div>
+        <Box
+          key={day}
+          sx={{
+            fontWeight: 'bold',
+            p: 0.5,
+            bgcolor: 'background.paper',
+            border: 1,
+            borderColor: 'divider',
+            textAlign: 'center',
+          }}
+        >
+          {day}
+        </Box>
       ))}
-
       {display.map((cell, idx) => (
         <DayCell key={idx} cell={cell} />
       ))}
-    </div>
+    </Box>
   )
 }
