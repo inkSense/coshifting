@@ -1,19 +1,19 @@
 import { useState, useCallback, useEffect } from 'react'
 import './App.css'
 import Login       from '../features/auth/components/LoginForm'
-import WeekView    from '../features/week/components/WeekView'
+import WeekPage    from '../pages/WeekPage'
 import Layout      from '../layout/Layout'
 import PrivateLayout from '../layout/PrivateLayout'
 import { AuthContext } from '../features/auth/hooks/AuthContext'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import AdminPage   from '../features/admin/components/AdminPage'   // gleich anlegen, siehe unten
+import AdminPage   from '../pages/AdminPage'
 
 /**
  * Root-Komponente:
  * – Verwaltet den Auth-Header im State.
  * – Reicht eine „tryLogin“-Funktion an <Login/> durch, die
  *   einen Probe-Call auf ein geschütztes Backend-API macht.
- * – Zeigt nach erfolgreichem Login die <WeekView/>.
+ * – Zeigt nach erfolgreichem Login die <WeekPage/>.
  */
 export default function App() {
   const [authHeader, setAuthHeader] = useState<string | null>(null)
@@ -81,7 +81,7 @@ export default function App() {
       ) : (
         <Routes>
           <Route element={<PrivateLayout />}>
-            <Route path="/"      element={<WeekView />} />
+            <Route path="/"      element={<WeekPage />} />
             <Route path="/admin" element={<AdminPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
