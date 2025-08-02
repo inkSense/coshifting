@@ -7,6 +7,7 @@ import PrivateLayout from '../layout/PrivateLayout'
 import { AuthContext } from '../feature/auth/AuthContext'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import AdminPage   from '../feature/admin/AdminPage'   // gleich anlegen, siehe unten
+import { client } from '../api/client'
 
 /**
  * Root-Komponente:
@@ -23,34 +24,28 @@ export default function App() {
 
   const tryLogin = useCallback(async (header: string): Promise<boolean> => {
     try {
-      const res = await fetch('/api/shifts', {
-        headers: { Authorization: header }
-      })
+      await client.get('/api/shifts', { headers: { Authorization: header } })
 
-      if (res.ok) {
-        setAuthHeader(header)
-        sessionStorage.setItem('authHeader', header)
+      setAuthHeader(header)
+      sessionStorage.setItem('authHeader', header)
 
-        // Saldo laden
-        try {
-          const balRes = await fetch('/api/persons/me/timeaccount', {
-            headers: { Authorization: header }
-          })
-          if (balRes.ok) {
-            const dto = await balRes.json() as { balanceInMinutes: number }
-            setBalance(dto.balanceInMinutes)
-          }
-        } catch (e) {
-          console.error('Unable to fetch balance', e)
-        }
-
-        return true
+      // Saldo laden
+      try {
+        const dto = await client.get<{ balanceInMinutes: number }>(
+          '/api/persons/me/timeaccount',
+          { headers: { Authorization: header } }
+        )
+        setBalance(dto.balanceInMinutes)
+      } catch (e) {
+        console.error('Unable to fetch balance', e)
       }
+
+      return true
     } catch {
       console.error('Api unavailable')
     }
     sessionStorage.removeItem('authHeader')
-    return false                         // 401 
+    return false                         // 401
   }, [])
 
   function logout() {
