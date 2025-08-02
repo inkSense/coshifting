@@ -1,10 +1,6 @@
 import { createContext, useContext } from 'react'
+import type { AuthCtx } from '../types'
 
-export interface AuthCtx {
-  header:  string | null
-  balance: number | null
-  logout: () => void
-}
 export const AuthContext = createContext<AuthCtx | null>(null)
 export const useAuth = () => {
   const ctx = useContext(AuthContext)

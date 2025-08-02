@@ -1,16 +1,8 @@
-import DayCell from './DayCell.tsx'
+import DayCell from './DayCell'
 import { Box } from '@mui/material'
-import { useApi } from '../../api'
+import { useApi } from '../../../api'
 import { useQuery } from '@tanstack/react-query'
-
-export interface ShiftCellVM {
-  startTime: string
-  fullyStaffed: boolean
-}
-
-export interface DayCellViewModel {
-  shifts: ShiftCellVM[]
-}
+import type { DayCellViewModel } from '../types'
 
 export default function WeekView() {
   const api = useApi()

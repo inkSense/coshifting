@@ -1,4 +1,4 @@
-import { useAuth } from './feature/auth/AuthContext'
+import { useAuth } from './features/auth/hooks/AuthContext'
 import { useCallback, useMemo } from 'react'
 
 // Hook providing helper functions for HTTP calls with optional auth header

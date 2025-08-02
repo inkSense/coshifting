@@ -21,8 +21,8 @@ import { IconButton as MuiIconButton } from '@mui/material'
 
 import AddPersonDialog from './AddPersonDialog'
 import EditPersonDialog from './EditPersonDialog'
-import { usePersons } from './hooks/usePersons'
-import type { PersonDto } from '../../types/person'
+import { usePersons } from '../hooks/usePersons'
+import type { PersonDto } from '../../../types/person'
 
 export default function AdminPage() {
     const {

@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
 import './App.css'
-import Login       from '../feature/auth/LoginForm'
-import WeekView    from '../feature/week/WeekView'
+import Login       from '../features/auth/components/LoginForm'
+import WeekView    from '../features/week/components/WeekView'
 import Layout      from '../layout/Layout'
 import PrivateLayout from '../layout/PrivateLayout'
-import { AuthContext } from '../feature/auth/AuthContext'
+import { AuthContext } from '../features/auth/hooks/AuthContext'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import AdminPage   from '../feature/admin/AdminPage'   // gleich anlegen, siehe unten
+import AdminPage   from '../features/admin/components/AdminPage'   // gleich anlegen, siehe unten
 
 /**
  * Root-Komponente:
