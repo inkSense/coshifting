@@ -1,5 +1,5 @@
 import DayCell from './DayCell.tsx'
-import { Box } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import { useApi } from '../../api'
 import { useQuery } from '@tanstack/react-query'
 
@@ -14,22 +14,24 @@ export interface DayCellViewModel {
 
 export default function WeekView() {
   const api = useApi()
-  const weeksToShow = 3
-  const EXPECTED = weeksToShow * 7
 
-  const { data: cells = [] } = useQuery({
-    queryKey: ['week', weeksToShow],
-    queryFn: () => api.get<DayCellViewModel[]>(`/api/week?count=${weeksToShow}`),
+  const { data: cells, isLoading } = useQuery({
+    queryKey: ['week'],
+    queryFn: () => api.get<DayCellViewModel[]>(`/api/week?count=1`),
   })
 
   // Kopfzeile
   const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
-  // Fallback: solange noch keine Daten da sind, leere Zellen anzeigen
-  const empty: DayCellViewModel = { shifts: [] }
-  const display = cells.length === EXPECTED
-    ? cells
-    : Array.from({ length: EXPECTED }, () => empty)
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  const display = (cells ?? Array.from({ length: 7 }, () => ({ shifts: [] })) ) as DayCellViewModel[]
 
   return (
     <Box

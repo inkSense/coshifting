@@ -1,21 +1,18 @@
 import { useState, type FormEvent } from 'react'
 import { Box, TextField, Button, Alert } from '@mui/material'
+import { useAuth } from './AuthContext'
 
-interface Props {
-  /* Liefert true bei erfolgreichem Login, sonst false */
-  onLogin: (authHeader: string) => Promise<boolean>
-}
-
-export default function Login({ onLogin }: Props) {
+export default function Login() {
   const [user,  setUser]  = useState('')
   const [pass,  setPass]  = useState('')
   const [error, setError] = useState<string | null>(null)
+  const { login } = useAuth()
 
   async function submit(e: FormEvent) {
     e.preventDefault()
     setError(null)                               // alte Fehlermeldung zurücksetzen
     const token   = btoa(`${user}:${pass}`)
-    const success = await onLogin(`Basic ${token}`)
+    const success = await login(`Basic ${token}`)
 
     if (!success) {
       setError('Benutzername oder Passwort falsch')
