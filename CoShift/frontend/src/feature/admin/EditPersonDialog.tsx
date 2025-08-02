@@ -3,8 +3,8 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions,
     TextField, FormControl, InputLabel, Select, MenuItem, Button
 } from '@mui/material'
-import { useAuth } from '../auth/AuthContext'
-import type {PersonDto} from '../../types/person'
+import type { PersonDto } from '../../types/person'
+import { useApi } from '../../api'
 
 
 
@@ -17,7 +17,7 @@ export default function EditPersonDialog({
     onClose: () => void
     onUpdated: (p: PersonDto) => void
 }) {
-    const { header } = useAuth()
+    const api = useApi()
 
     // lokaler Formular-State
     const [nick, setNick] = useState('')
@@ -35,23 +35,17 @@ export default function EditPersonDialog({
 
     const handleSave = async () => {
         if (!person) return
-        const res = await fetch(`/api/persons/${person.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(header ? { Authorization: header } : {}),
-            },
-            body: JSON.stringify({
+        try {
+            const updated = await api.put<PersonDto>(`/api/persons/${person.id}`, {
                 nickname: nick.trim(),
                 password: pass.trim() === '' ? null : pass,
                 role,
-            }),
-        })
-        if (res.ok) {
-            const updated = (await res.json()) as PersonDto
+            })
             onUpdated(updated)
             onClose()
-        } else console.error('update failed')
+        } catch (err) {
+            console.error('update failed', err)
+        }
     }
 
     return (

@@ -5,8 +5,8 @@ import {
     TextField, FormControl, InputLabel, Select, MenuItem,
     Button
 } from '@mui/material'
-import { useAuth } from '../auth/AuthContext'
 import type { PersonDto } from '../../types/person'
+import { useApi } from '../../api'
 
 
 
@@ -17,7 +17,7 @@ interface AddPersonDialogProps {
 }
 
 export default function AddPersonDialog({ open, onClose, onCreated }: AddPersonDialogProps) {
-    const { header } = useAuth()
+    const api = useApi()
 
     // lokaler Formular-State
     const [nick, setNick] = useState('')
@@ -31,16 +31,11 @@ export default function AddPersonDialog({ open, onClose, onCreated }: AddPersonD
         if (!canSave) return
         setSaving(true)
         try {
-            const res = await fetch('/api/persons', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(header ? { Authorization: header } : {}),
-                },
-                body: JSON.stringify({ nickname: nick.trim(), password: pass, role }),
+            const created = await api.post<PersonDto>('/api/persons', {
+                nickname: nick.trim(),
+                password: pass,
+                role,
             })
-            if (!res.ok) throw new Error('Create failed')
-            const created: PersonDto = await res.json()
             onCreated(created)          // 👉 Parent informieren
             onClose()
             // Reset für nächstes Öffnen

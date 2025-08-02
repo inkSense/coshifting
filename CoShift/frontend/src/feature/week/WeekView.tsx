@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import DayCell from './DayCell.tsx'     
-import { useAuth } from '../auth/AuthContext'
+import DayCell from './DayCell.tsx'
 import { Box } from '@mui/material'
+import { useApi } from '../../api'
+import { useQuery } from '@tanstack/react-query'
 
 export interface ShiftCellVM {
   startTime: string
@@ -13,29 +13,19 @@ export interface DayCellViewModel {
 }
 
 export default function WeekView() {
-  const { header: authHeader } = useAuth()
-  const weeksToShow = 3;
-  const EXPECTED = weeksToShow * 7;
+  const api = useApi()
+  const weeksToShow = 3
+  const EXPECTED = weeksToShow * 7
 
-  const [cells, setCells] = useState<DayCellViewModel[]>([])
-
-  useEffect(() => {
-    fetch(`/api/week?count=${weeksToShow}`, {
-      headers: authHeader ? { Authorization: authHeader } : {}
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Network response was not ok')
-        return res.json()
-      })
-      .then((data: DayCellViewModel[]) => setCells(data))
-      .catch(err => console.error('Failed to load week data', err))
-  }, [authHeader])
+  const { data: cells = [] } = useQuery({
+    queryKey: ['week', weeksToShow],
+    queryFn: () => api.get<DayCellViewModel[]>(`/api/week?count=${weeksToShow}`),
+  })
 
   // Kopfzeile
   const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
   // Fallback: solange noch keine Daten da sind, leere Zellen anzeigen
-  // test
   const empty: DayCellViewModel = { shifts: [] }
   const display = cells.length === EXPECTED
     ? cells

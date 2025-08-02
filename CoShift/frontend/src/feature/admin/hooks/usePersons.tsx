@@ -1,61 +1,29 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { PersonDto } from '../../../types/person'
-import { useAuth } from '../../auth/AuthContext'
+import { useApi } from '../../../api'
 
 export function usePersons() {
-    const { header } = useAuth()
+    const api = useApi()
     const qc = useQueryClient()
 
     const persons = useQuery({
         queryKey: ['persons'],
-        queryFn: async (): Promise<PersonDto[]> => {
-            const res = await fetch('/api/persons', {
-                headers: header ? { Authorization: header } : {},
-            })
-            if (!res.ok) throw new Error('Network error')
-            return res.json()
-        },
+        queryFn: (): Promise<PersonDto[]> => api.get('/api/persons'),
     })
 
     const addPerson = useMutation({
-        mutationFn: async (body: Omit<PersonDto, 'id'>) => {
-            const res = await fetch('/api/persons', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(header ? { Authorization: header } : {}),
-                },
-                body: JSON.stringify(body),
-            })
-            return res.json()
-        },
+        mutationFn: (body: Omit<PersonDto, 'id'>) => api.post<PersonDto>('/api/persons', body),
         onSuccess: () => qc.invalidateQueries({ queryKey: ['persons'] }),
     })
 
     const updatePerson = useMutation({
-        mutationFn: async (p: PersonDto) => {
-            const res = await fetch(`/api/persons/${p.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(header ? { Authorization: header } : {}),
-                },
-                body: JSON.stringify(p),
-            })
-            return res.json()
-        },
+        mutationFn: (p: PersonDto) => api.put<PersonDto>(`/api/persons/${p.id}`, p),
         onSuccess: () => qc.invalidateQueries({ queryKey: ['persons'] }),
     })
 
     const deletePerson = useMutation({
-        mutationFn: async (id: number) => {
-            await fetch(`/api/persons/${id}`, {
-                method: 'DELETE',
-                headers: header ? { Authorization: header } : {},
-            })
-            return id
-        },
+        mutationFn: (id: number) => api.del(`/api/persons/${id}`),
         onSuccess: () => qc.invalidateQueries({ queryKey: ['persons'] }),
     })
 
