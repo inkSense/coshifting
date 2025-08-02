@@ -17,6 +17,13 @@ Layer:
 2. feature/  → fachliche Features (auth, week, admin)
 3. layout/   → AppBar & Drawer
 
+## Login-Flow
+
+- `AuthProvider` erzeugt aus Benutzername/Passwort einen Basic-Auth-Header und speichert ihn in `sessionStorage`.
+- Ein Probeaufruf auf `/api/shifts` validiert die Credentials und lädt bei Erfolg das Zeitkonto.
+- Netzfehler und `401` werden unterschieden: Bei `401` bleibt das Formular mit "Benutzername oder Passwort falsch", andere Fehler führen zu "Server nicht erreichbar".
+- API-Aufrufe gehen entweder über den Dev-Proxy (`/api`) oder verwenden `VITE_API_URL` aus `.env` als Basis-URL.
+
 ## Dev-Skripte
 
 ```
@@ -33,7 +40,8 @@ npm run test
 - Beispiel‐Test `AuthProvider.test.tsx` zeigt grundlegendes Rendern
 
 ## API-Konfiguration
-- Basis‐URL via  `.env`  ⇒  `VITE_API_URL`
+- Dev-Proxy leitet `/api` an `http://localhost:8080` (siehe `vite.config.ts`).
+- Alternativ setzt `.env` die Basis-URL via `VITE_API_URL`.
 - Globale 401-Behandlung in `shared/api.ts` (Logout & Redirect)
 
 

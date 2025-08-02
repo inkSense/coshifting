@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import type { PropsWithChildren } from 'react'
-import { authFetch } from '../../shared/api'
+import { authFetch, ApiError } from '../../shared/api'
 
 interface AuthState {
   header: string | null
@@ -40,24 +40,32 @@ export function AuthProvider({ children }: PropsWithChildren) {
     async (hdr: string) => {
       setLoading(true)
       setError(null)
-      const ok = await authFetch('/api/shifts', hdr).then(() => true).catch(() => false)
-
-      if (ok) {
+      try {
+        await authFetch('/api/shifts', hdr)
         setHeader(hdr)
         sessionStorage.setItem('authHeader', hdr)
         await fetchBalance(hdr)
-      } else {
-        logout()
+        return true
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          // credentials invalid
+          logout()
+        } else {
+          setError('Server nicht erreichbar')
+          logout()
+        }
+        return false
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
-      return ok
     },
     [fetchBalance],
   )
 
   const login = useCallback(
     async (user: string, pass: string) => {
-      const hdr = `Basic ${btoa(`${user}:${pass}`)}`
+      // Unicode-fähige Base64-Kodierung für Basic Auth
+      const hdr = `Basic ${btoa(unescape(encodeURIComponent(`${user}:${pass}`)))}`
       return checkToken(hdr)
     },
     [checkToken],
@@ -66,6 +74,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const logout = () => {
     setHeader(null)
     setBalance(null)
+    setError(null)
     sessionStorage.removeItem('authHeader')
   }
 

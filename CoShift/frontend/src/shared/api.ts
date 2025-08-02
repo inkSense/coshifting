@@ -7,7 +7,13 @@ export class ApiError extends Error {
 }
 
 export const apiFetch = async <T>(url: string, init: RequestInit = {}): Promise<T> => {
-  const res = await fetch(BASE_URL + url, init)
+  let res: Response
+  try {
+    res = await fetch(BASE_URL + url, init)
+  } catch (err) {
+    // Network/connection error – wrap into ApiError with status 0
+    throw new ApiError(0, (err as Error).message)
+  }
   if (!res.ok) {
     const errMsg = `API error ${res.status}`
     // 401: Token invalid – entferne lokale Auth-Daten und leite um

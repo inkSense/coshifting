@@ -3,7 +3,7 @@ import { useAuth } from './AuthProvider'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
-  const { login } = useAuth()
+  const { login, error: authError } = useAuth()
   const navigate = useNavigate()
   const [user,  setUser]  = useState('')
   const [pass,  setPass]  = useState('')
@@ -16,7 +16,8 @@ export default function Login() {
 
     if (success) {
       navigate('/')
-    } else {
+    } else if (!authError) {
+      // Nur zeigen, wenn kein globaler Fehler (z.B. Netzwerk) vorliegt
       setError('Benutzername oder Passwort falsch')
     }
   }
@@ -38,7 +39,8 @@ export default function Login() {
       />
       <button type="submit">Login</button>
 
-      {error && <div className="error-msg">{error}</div>}
+      {authError && <div className="error-msg">{authError}</div>}
+      {!authError && error && <div className="error-msg">{error}</div>}
     </form>
   )
 }

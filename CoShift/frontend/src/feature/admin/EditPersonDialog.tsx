@@ -46,7 +46,7 @@ export default function EditPersonDialog({
             onUpdated(updated)
             onClose()
         } catch (e) {
-            console.error('update failed')
+            console.error('update failed', e)
         }
     }
 
