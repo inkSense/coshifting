@@ -3,8 +3,8 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions,
     TextField, FormControl, InputLabel, Select, MenuItem, Button
 } from '@mui/material'
-import type { PersonDto } from '../../types/person'
-import { useApi } from '../../api'
+import type { PersonDto } from '../../../types/person'
+import { useApi } from '../../../api'
 
 
 

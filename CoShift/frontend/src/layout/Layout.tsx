@@ -5,7 +5,7 @@ import HomeIcon      from '@mui/icons-material/Home'
 import AdminPanelIcon from '@mui/icons-material/AdminPanelSettings'
 import LogoutIcon    from '@mui/icons-material/Logout'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { useAuth }   from '../feature/auth/AuthContext'
+import { useAuth }   from '../features/auth/hooks/AuthContext'
 
 function formatMinutes(total: number): string {
   const hours = Math.floor(total / 60)
