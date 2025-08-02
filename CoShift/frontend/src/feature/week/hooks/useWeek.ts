@@ -10,7 +10,10 @@ export interface DayCellViewModel {
   shifts: ShiftCellVM[]
 }
 
-async function fetchWeek(weeksToShow: number, header?: string): Promise<DayCellViewModel[]> {
+async function fetchWeek(
+  weeksToShow: number,
+  header?: string | null
+): Promise<DayCellViewModel[]> {
   const res = await fetch(`/api/week?count=${weeksToShow}`, {
     headers: header ? { Authorization: header } : {},
   })

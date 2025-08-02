@@ -14,14 +14,14 @@ import useAuth from '../feature/auth/useAuth'
  * – Stellt Routen und den AuthContext bereit.
  */
 export default function App() {
-  const auth = useAuth()
+  const { header, login, balance, logout } = useAuth()
 
   return (
-    <AuthContext.Provider value={auth}>
-      {auth.header && <Layout />}
+    <AuthContext.Provider value={{ header, balance, logout }}>
+      {header && <Layout />}
 
-      {!auth.header ? (
-        <Login onLogin={auth.login} />
+      {!header ? (
+        <Login onLogin={login} />
       ) : (
         <Routes>
           <Route element={<PrivateLayout />}>

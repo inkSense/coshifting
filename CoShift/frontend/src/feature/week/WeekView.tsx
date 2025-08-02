@@ -1,6 +1,6 @@
 import DayCell from './DayCell.tsx'
 import { Box } from '@mui/material'
-import { useWeek, DayCellViewModel } from './hooks/useWeek'
+import { useWeek, type DayCellViewModel } from './hooks/useWeek'
 
 export default function WeekView() {
   const weeksToShow = 3
