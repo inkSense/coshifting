@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { Box, TextField, Button, Alert } from '@mui/material'
 
 interface Props {
   /* Liefert true bei erfolgreichem Login, sonst false */
@@ -22,23 +23,35 @@ export default function Login({ onLogin }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="login-form">
-      <input
+    <Box
+      component="form"
+      onSubmit={submit}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        width: 300,
+        mx: 'auto',
+        mt: 8,
+      }}
+    >
+      <TextField
+        label="User"
         value={user}
         onChange={e => setUser(e.target.value)}
-        placeholder="User"
         autoComplete="username"
+        fullWidth
       />
-      <input
+      <TextField
+        label="Password"
         type="password"
         value={pass}
         onChange={e => setPass(e.target.value)}
-        placeholder="Password"
         autoComplete="current-password"
+        fullWidth
       />
-      <button type="submit">Login</button>
-
-      {error && <div className="error-msg">{error}</div>}
-    </form>
+      {error && <Alert severity="error">{error}</Alert>}
+      <Button type="submit" variant="contained">Login</Button>
+    </Box>
   )
 }
