@@ -1,10 +1,10 @@
-import DayCell from './DayCell'
+import DayCell from '../features/week/components/DayCell'
 import { Box } from '@mui/material'
-import { useApi } from '../../../api'
+import { useApi } from '../api'
 import { useQuery } from '@tanstack/react-query'
-import type { DayCellViewModel } from '../types'
+import type { DayCellViewModel } from '../features/week/types'
 
-export default function WeekView() {
+export default function WeekPage() {
   const api = useApi()
   const weeksToShow = 3
   const EXPECTED = weeksToShow * 7
