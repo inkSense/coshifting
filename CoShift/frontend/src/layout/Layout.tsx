@@ -1,16 +1,33 @@
 import { useState } from 'react'
-import { AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Button } from '@mui/material'
-import MenuIcon      from '@mui/icons-material/Menu'
-import HomeIcon      from '@mui/icons-material/Home'
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Box,
+  Button,
+} from '@mui/material'
+import MenuIcon       from '@mui/icons-material/Menu'
+import HomeIcon       from '@mui/icons-material/Home'
 import AdminPanelIcon from '@mui/icons-material/AdminPanelSettings'
-import LogoutIcon    from '@mui/icons-material/Logout'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { useAuth }   from '../feature/auth/AuthContext'
+import LogoutIcon     from '@mui/icons-material/Logout'
+import { Link as RouterLink, useLocation, Outlet } from 'react-router-dom'
+import { useAuth } from '../feature/auth/AuthProvider'
 
 export default function Layout(){
   const [open,setOpen]=useState(false)
   const { logout, balance } = useAuth()
   const loc = useLocation()
+
+  const menuItems = [
+    { label: 'Übersicht', icon: <HomeIcon/>, path: '/' },
+    { label: 'Admin',      icon: <AdminPanelIcon/>, path: '/admin' },
+  ] as const
 
   return (
     <>
@@ -30,20 +47,28 @@ export default function Layout(){
       <Drawer open={open} onClose={()=>setOpen(false)}>
         <Box sx={{width:240}} role="presentation" onClick={()=>setOpen(false)}>
           <List>
-            <ListItemButton component={RouterLink} to="/" selected={loc.pathname==='/'}>
-              <ListItemIcon><HomeIcon/></ListItemIcon>
-              <ListItemText primary="Übersicht"/>
-            </ListItemButton>
-            <ListItemButton component={RouterLink} to="/admin" selected={loc.pathname==='/admin'}>
-              <ListItemIcon><AdminPanelIcon/></ListItemIcon>
-              <ListItemText primary="Admin"/>
-            </ListItemButton>
+            {menuItems.map(item => (
+              <ListItemButton
+                key={item.path}
+                component={RouterLink}
+                to={item.path}
+                selected={loc.pathname === item.path}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            ))}
           </List>
         </Box>
       </Drawer>
 
       {/* Platz für Inhalt unter der AppBar */}
-      <Toolbar/>  {/* push content under fixed AppBar */}
+      <Toolbar />  {/* push content under fixed AppBar */}
+
+      {/* Nested routed pages */}
+      <Box sx={{ p: 2 }}>
+        <Outlet />
+      </Box>
     </>
   )
 } 

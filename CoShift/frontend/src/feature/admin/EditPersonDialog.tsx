@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
-import {
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    TextField, FormControl, InputLabel, Select, MenuItem, Button
-} from '@mui/material'
-import { useAuth } from '../auth/AuthContext'
-import type {PersonDto} from '../../types/person'
-
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material'
+import { useAuth } from '../auth/AuthProvider'
+import { authFetch } from '../../shared/api'
+import type { PersonDto } from '../../types/person'
+import PersonFields from './PersonFields'
 
 
 export default function EditPersonDialog({
@@ -35,23 +33,21 @@ export default function EditPersonDialog({
 
     const handleSave = async () => {
         if (!person) return
-        const res = await fetch(`/api/persons/${person.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(header ? { Authorization: header } : {}),
-            },
-            body: JSON.stringify({
-                nickname: nick.trim(),
-                password: pass.trim() === '' ? null : pass,
-                role,
-            }),
-        })
-        if (res.ok) {
-            const updated = (await res.json()) as PersonDto
+        if (!header) return
+        try {
+            const updated = await authFetch<PersonDto>(`/api/persons/${person.id}`, header, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    nickname: nick.trim(),
+                    password: pass.trim() === '' ? null : pass,
+                    role,
+                }),
+            })
             onUpdated(updated)
             onClose()
-        } else console.error('update failed')
+        } catch (e) {
+            console.error('update failed')
+        }
     }
 
     return (
@@ -59,29 +55,15 @@ export default function EditPersonDialog({
             <DialogTitle>Person bearbeiten</DialogTitle>
 
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <TextField
-                    label="Nickname"
-                    value={nick}
-                    onChange={e => setNick(e.target.value)}
+                <PersonFields
+                  nick={nick}
+                  setNick={setNick}
+                  pass={pass}
+                  setPass={setPass}
+                  role={role}
+                  setRole={setRole}
+                  passwordLabel="Neues Passwort"
                 />
-                <TextField
-                    label="Neues Passwort"
-                    type="password"
-                    value={pass}
-                    onChange={e => setPass(e.target.value)}
-                />
-                <FormControl size="small">
-                    <InputLabel id="role-label">Rolle</InputLabel>
-                    <Select
-                        labelId="role-label"
-                        value={role}
-                        label="Rolle"
-                        onChange={e => setRole(e.target.value as 'USER' | 'ADMIN')}
-                    >
-                        <MenuItem value="USER">USER</MenuItem>
-                        <MenuItem value="ADMIN">ADMIN</MenuItem>
-                    </Select>
-                </FormControl>
             </DialogContent>
 
             <DialogActions>

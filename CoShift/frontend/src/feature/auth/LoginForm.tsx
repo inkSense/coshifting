@@ -1,11 +1,10 @@
 import { useState, type FormEvent } from 'react'
+import { useAuth } from './AuthProvider'
+import { useNavigate } from 'react-router-dom'
 
-interface Props {
-  /* Liefert true bei erfolgreichem Login, sonst false */
-  onLogin: (authHeader: string) => Promise<boolean>
-}
-
-export default function Login({ onLogin }: Props) {
+export default function Login() {
+  const { login } = useAuth()
+  const navigate = useNavigate()
   const [user,  setUser]  = useState('')
   const [pass,  setPass]  = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -13,10 +12,11 @@ export default function Login({ onLogin }: Props) {
   async function submit(e: FormEvent) {
     e.preventDefault()
     setError(null)                               // alte Fehlermeldung zurücksetzen
-    const token   = btoa(`${user}:${pass}`)
-    const success = await onLogin(`Basic ${token}`)
+    const success = await login(user, pass)
 
-    if (!success) {
+    if (success) {
+      navigate('/')
+    } else {
       setError('Benutzername oder Passwort falsch')
     }
   }
