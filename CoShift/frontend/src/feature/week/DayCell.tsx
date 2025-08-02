@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import type { DayCellViewModel } from './WeekView'
+import type { DayCellViewModel } from './hooks/useWeek'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
 
