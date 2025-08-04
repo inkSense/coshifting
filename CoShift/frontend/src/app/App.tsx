@@ -3,6 +3,7 @@ import Login            from '../features/auth/components/LoginForm'
 import PrivateLayout    from '../layout/PrivateLayout'
 import RequireAdmin     from '../layout/RequireAdmin'
 import WeekPage         from '../pages/weekPage/WeekPage.tsx'
+import DayPage          from '../pages/dayPage/DayPage.tsx'
 import AdminPage        from '../pages/adminPage/AdminPage.tsx'
 import { AuthProvider, useAuth } from '../features/auth/AuthProvider'
 
@@ -16,6 +17,7 @@ function Routing() {
         <Routes>
           <Route element={<PrivateLayout />}>
             <Route path="/" element={<WeekPage />} />
+            <Route path="day/:date" element={<DayPage />} />
             <Route element={<RequireAdmin />}>           {/* ⬅︎ Guard */}
               <Route path="admin" element={<AdminPage />} />
             </Route>

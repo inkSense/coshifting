@@ -18,7 +18,7 @@ export default function WeekPage() {
   const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
   // Fallback: solange noch keine Daten da sind, leere Zellen anzeigen
-  const empty: DayCellViewModel = { shifts: [] }
+  const empty: DayCellViewModel = { date: '', shifts: [] }
   const display = cells.length === EXPECTED
     ? cells
     : Array.from({ length: EXPECTED }, () => empty)
