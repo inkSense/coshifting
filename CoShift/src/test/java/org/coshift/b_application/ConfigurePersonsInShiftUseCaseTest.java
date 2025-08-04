@@ -73,4 +73,34 @@ class ConfigurePersonsInShiftUseCaseTest {
     }
 
 
+    @Test
+    void removePerson_persists_updated_shift() {
+        // Arrange ----------------------------------------------------------
+        ShiftRepository shiftRepo = mock(ShiftRepository.class);
+        PersonRepository personRepo = mock(PersonRepository.class);
+        ConfigurePersonsInShiftUseCase useCase = new ConfigurePersonsInShiftUseCase(shiftRepo, personRepo);
+
+        long shiftId = 3L;
+        long personId = 8L;
+        Person person = new Person(personId, "Eve", "pwd");
+        Shift shift = new Shift(shiftId, LocalDateTime.of(2025, 6, 24, 10, 0), 90, 2);
+        shift.addPerson(person);
+
+        when(shiftRepo.findById(shiftId)).thenReturn(Optional.of(shift));
+        when(personRepo.findById(personId)).thenReturn(Optional.of(person));
+        when(shiftRepo.save(any(Shift.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act --------------------------------------------------------------
+        Shift result = useCase.remove(personId, shiftId);
+
+        // Assert -----------------------------------------------------------
+        verify(shiftRepo).findById(shiftId);
+        verify(personRepo).findById(personId);
+        verify(shiftRepo).save(shift);
+
+        assertFalse(shift.getPersons().contains(person));
+        assertSame(shift, result);
+    }
+
+
 }
