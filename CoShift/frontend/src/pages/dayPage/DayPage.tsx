@@ -2,20 +2,8 @@ import { Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useApi } from '../api.ts'
 import { useQuery } from '@tanstack/react-query'
-
-interface ShiftPerson {
-  id: number
-  nickname: string
-  role: string
-}
-
-interface ShiftDetail {
-  id: number
-  startTime: string
-  durationInMinutes: number
-  capacity: number
-  persons: ShiftPerson[]
-}
+import ShiftBlock from '../../components/ShiftBlock.tsx'
+import type { ShiftDetail } from '../../types/shift.ts'
 
 export default function DayPage() {
   const { date = '' } = useParams<{ date: string }>()
@@ -74,23 +62,19 @@ export default function DayPage() {
           const height = shift.durationInMinutes * pxPerMinute
           const names = shift.persons.map(p => p.nickname).join(', ')
           return (
-            <Box
+            <ShiftBlock
               key={shift.id}
+              filled={shift.persons.length > 0}
+              text={names || 'frei'}
               sx={{
                 position: 'absolute',
                 top,
                 height,
                 left: 0,
                 right: 0,
-                bgcolor: 'secondary.main',
-                color: 'secondary.contrastText',
-                borderRadius: 1,
-                p: 0.5,
                 overflow: 'hidden',
               }}
-            >
-              {names || 'frei'}
-            </Box>
+            />
           )
         })}
       </Box>
