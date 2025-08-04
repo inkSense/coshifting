@@ -38,7 +38,9 @@ public class Presenter implements PresenterInputPort {
     public void showShifts(LocalDate monday, int weeks, List<Shift> shifts) {
         int totalDays = weeks * 7;
         List<DayCellViewModel> cells = new ArrayList<>(totalDays);
-        for (int i=0;i<totalDays;i++) cells.add(new DayCellViewModel(new ArrayList<>()));
+        for (int i = 0; i < totalDays; i++) {
+            cells.add(new DayCellViewModel(monday.plusDays(i), new ArrayList<>()));
+        }
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -63,8 +65,12 @@ public class Presenter implements PresenterInputPort {
 
     private List<DayCellViewModel> createDayCells(List<ShiftSummeryDto> dtos) {
         // leere Woche vorbereiten
+        LocalDate today = LocalDate.now();
+        LocalDate monday = today.minusDays((today.getDayOfWeek().getValue() + 6) % 7);
         List<DayCellViewModel> cells = new ArrayList<>(7);
-        for (int i=0;i<7;i++) cells.add(new DayCellViewModel(new ArrayList<>()));
+        for (int i = 0; i < 7; i++) {
+            cells.add(new DayCellViewModel(monday.plusDays(i), new ArrayList<>()));
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         //DateTimeFormatter ISO = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // ISO 8601 format

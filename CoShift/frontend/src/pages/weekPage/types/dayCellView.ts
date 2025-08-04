@@ -4,5 +4,6 @@ export interface ShiftCellVM {
 }
 
 export interface DayCellViewModel {
+  date: string
   shifts: ShiftCellVM[]
 }
