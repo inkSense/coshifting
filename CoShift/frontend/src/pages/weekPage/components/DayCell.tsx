@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import type { DayCellViewModel } from '../types/dayCellView.ts'
-import ShiftBlock from '../../../components/ShiftBlock.tsx'
+import ShiftBlock from '../../ShiftBlock.tsx'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
   const navigate = useNavigate()

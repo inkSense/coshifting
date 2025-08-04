@@ -2,8 +2,8 @@ import { Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useApi } from '../api.ts'
 import { useQuery } from '@tanstack/react-query'
-import ShiftBlock from '../../components/ShiftBlock.tsx'
-import type { ShiftDetail } from '../../types/shift.ts'
+import ShiftBlock from '../ShiftBlock.tsx'
+import type { ShiftDetail } from './shift.ts'
 
 export default function DayPage() {
   const { date = '' } = useParams<{ date: string }>()
@@ -64,7 +64,7 @@ export default function DayPage() {
           return (
             <ShiftBlock
               key={shift.id}
-              filled={shift.persons.length > 0}
+              filled={shift.persons.length >= shift.capacity}
               text={names || 'frei'}
               sx={{
                 position: 'absolute',

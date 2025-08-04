@@ -11,14 +11,14 @@
     "startTime": "2025-08-15T09:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
-    "personIds": []
+    "personIds": [1,2,3]
   },
   {
     "id": 3,
     "startTime": "2025-08-15T12:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
-    "personIds": []
+    "personIds": [1,2]
   },
   {
     "id": 4,
