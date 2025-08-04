@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import type { DayCellViewModel } from '../types/dayCellView.ts'
+import ShiftBlock from '../../../components/ShiftBlock.tsx'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
   const navigate = useNavigate()
@@ -15,20 +16,7 @@ export default function DayCell({ cell }: { cell: DayCellViewModel }) {
       )}
 
       {cell.shifts.map((s, i) => (
-        <Box
-          key={i}
-          sx={{
-            bgcolor: s.fullyStaffed ? 'success.main' : 'grey.600',
-            color: s.fullyStaffed ? 'common.white' : 'text.primary',
-            fontWeight: s.fullyStaffed ? 600 : 'normal',
-            borderRadius: 1,
-            m: 0.5,
-            p: 0.5,
-            fontSize: '0.85rem',
-          }}
-        >
-          {s.startTime}
-        </Box>
+        <ShiftBlock key={i} filled={s.fullyStaffed} text={s.startTime} />
       ))}
     </Box>
   )
