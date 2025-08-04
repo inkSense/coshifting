@@ -1,11 +1,13 @@
 import { Box, type BoxProps } from '@mui/material'
+import { type ReactNode } from 'react'
 
 interface ShiftBlockProps extends BoxProps {
   filled: boolean
   text: string
+  children?: ReactNode
 }
 
-export default function ShiftBlock({ filled, text, sx, ...rest }: ShiftBlockProps) {
+export default function ShiftBlock({ filled, text, children, sx, ...rest }: ShiftBlockProps) {
   return (
     <Box
       {...rest}
@@ -17,10 +19,13 @@ export default function ShiftBlock({ filled, text, sx, ...rest }: ShiftBlockProp
         m: 0.5,
         p: 0.5,
         fontSize: '0.85rem',
+        display: 'flex',
+        flexDirection: 'column',
         ...(sx ?? {}),
       }}
     >
-      {text}
+        <Box sx={{ flexGrow: 1 }}>{text}</Box>
+        {children}
     </Box>
   )
 }

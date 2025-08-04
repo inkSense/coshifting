@@ -8,7 +8,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [header, setHeader]   = useState<string | null>(null)
   const [balance, setBalance] = useState<number | null>(null)
   const [role,       setRole]       = useState<'ADMIN' | 'USER' | null>(null)
-
+  const [personId,   setPersonId]   = useState<number | null>(null)
   const tryLogin = useCallback(async (authHeader: string): Promise<boolean> => {
     try {
       const res = await fetch('/api/shifts', {
@@ -34,8 +34,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
           const me = await fetch('/api/persons/me', { headers:{ Authorization: authHeader }})
           if (me.ok) {
-            const dto = await me.json() as { role: 'ADMIN' | 'USER' }
+            const dto = await me.json() as { role: 'ADMIN' | 'USER', id: number }
             setRole(dto.role)
+            setPersonId(dto.id)
           }
         } catch (e) {
           console.error('Unable to fetch role', e)
@@ -65,17 +66,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [tryLogin])
 
   return (
-    <AuthContext.Provider value={{ 
-      authHeader: header, 
-      balance, 
-      role, 
-      isAuthenticated: header!==null, 
-      isAdmin: role==='ADMIN', 
-      tryLogin, 
-      logout 
+      <AuthContext.Provider value={{
+        authHeader: header,
+        balance,
+        role,
+        personId,
+        isAuthenticated: header!==null,
+        isAdmin: role==='ADMIN',
+        tryLogin,
+        logout
       }}>
-      {children}
-    </AuthContext.Provider>
+        {children}
+      </AuthContext.Provider>
   )
 }
 
