@@ -5,10 +5,7 @@ import org.coshift.c_adapters.dto.ShiftPublicDetailDto;
 import org.coshift.c_adapters.dto.ShiftSummeryDto;
 import org.coshift.c_adapters.mapper.ShiftMapper;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,5 +38,20 @@ public class ShiftController {
                 .map(ShiftMapper::toPublicDetailDto)
                 .toList();
     }
+
+
+    @PutMapping("/{id}/participation")
+    public ShiftPublicDetailDto addUserToShift(@PathVariable long id, @RequestBody long personId){
+        var shift = interactor.addPersonToShift(personId, id);
+        return ShiftMapper.toPublicDetailDto(shift);
+    }
+
+    @DeleteMapping("/{id}/participation")
+    public ShiftPublicDetailDto deleteUserFromShift(@PathVariable long id, @RequestBody long personId){
+        var shift = interactor.removePersonFromShift(personId, id);
+        return ShiftMapper.toPublicDetailDto(shift);
+    }
+
+
 
 }

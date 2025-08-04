@@ -4,19 +4,22 @@ import org.coshift.a_domain.Shift;
 import org.coshift.a_domain.person.Person;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.ShiftRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 /**
- * Use-Case: Fügt einer bestehenden Schicht eine Person hinzu.
+ * Use-Case: Verwalte bestehende Schicht
  */
-public class AddPersonToShiftUseCase {
+public class ConfigurePersonsInShiftUseCase {
 
     private final ShiftRepository shiftRepo;
     private final PersonRepository personRepo;
+    private final Logger LOGGER = LoggerFactory.getLogger(ConfigurePersonsInShiftUseCase.class);
 
-    public AddPersonToShiftUseCase(ShiftRepository shiftRepo,
-                                   PersonRepository personRepo) {
+    public ConfigurePersonsInShiftUseCase(ShiftRepository shiftRepo,
+                                          PersonRepository personRepo) {
         this.shiftRepo  = Objects.requireNonNull(shiftRepo);
         this.personRepo = Objects.requireNonNull(personRepo);
     }
@@ -47,10 +50,35 @@ public class AddPersonToShiftUseCase {
             return shift;                       // Person schon eingetragen
         }
 
-        /* --- Aktion ------------------------------------------------- */
         shift.addPerson(person);
 
-        /* --- Persistenz -------------------------------------------- */
         return shiftRepo.save(shift);           // aktualisierte Schicht zurück
+    }
+
+
+
+    public Shift remove(long personId, long shiftId) {
+        /* --- Get Data ---------------------------------------------- */
+        Shift shift  = shiftRepo.findById(shiftId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Shift " + shiftId + " not found"));
+        Person person = personRepo.findById(personId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Person " + personId + " not found"));
+
+        /* --- Check domain logic  ------------------------------------- */
+        if(shift.getPersons().isEmpty()) {
+            LOGGER.error("Shift " + shiftId + " is empty. Nothing to remove");
+            return shift;
+        }
+
+        if(!shift.getPersons().contains(person)) {
+            LOGGER.error("Person {} is not in shift {}. Nothing to remove.", personId, shiftId);
+            return shift;
+        }
+
+        /* --- everything allright ----------------------------------------- */
+        shift.removePerson(person);
+        return shiftRepo.save(shift);
     }
 }

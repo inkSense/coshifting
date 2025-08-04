@@ -28,7 +28,7 @@ public class UseCaseInteractor {
     private final AddShiftUseCase addShiftUC;
     private final ViewShiftUseCase viewShiftUC;
     private final ConfigurePersonUseCase configurePersonUC;
-    private final AddPersonToShiftUseCase addPersonToShiftUC;
+    private final ConfigurePersonsInShiftUseCase configurePersonsInShiftUseCase;
     private final PresenterInputPort presenter;
     private final AuthenticateUserUseCase authenticateUserUC;
     private final ViewTimeAccountUseCase viewTimeAccountUC;
@@ -44,13 +44,40 @@ public class UseCaseInteractor {
         this.addShiftUC  = new AddShiftUseCase(shiftRepository);
         this.viewShiftUC = new ViewShiftUseCase(shiftRepository);
         this.configurePersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
-        this.addPersonToShiftUC = new AddPersonToShiftUseCase(shiftRepository, personRepository);
+        this.configurePersonsInShiftUseCase = new ConfigurePersonsInShiftUseCase(shiftRepository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
         this.viewTimeAccountUC = new ViewTimeAccountUseCase(timeAccountRepository, personRepository);
         this.presenter = presenter;
     }
 
-    /* ------------ Delegierte Methoden ---------------- */
+    /* ---- Person ---- */
+
+    public Person addPerson(String nickname, String password) {
+        return configurePersonUC.add(nickname, password, PersonRole.USER);
+    }
+
+    public Person addPerson(String nickname, String password, PersonRole role) {
+        return configurePersonUC.add(nickname, password, role);
+    }
+
+    public Person updatePerson(long id, String nick, String pw, PersonRole role){
+        return configurePersonUC.update(id, nick, pw, role);
+    }
+
+    public void deletePerson(long id) {
+        configurePersonUC.delete(id);
+    }
+
+    public Person updatePersonRole(long id, PersonRole role) {
+        return configurePersonUC.update(id, role);
+    }
+
+    public Person authenticateUser(String nickname, String password) {
+        return authenticateUserUC.authenticate(nickname, password);
+    }
+
+
+    /* ---- Shift ---- */
 
     public Shift addShift(LocalDateTime startTime,
                           long durationInMinutes,
@@ -66,26 +93,15 @@ public class UseCaseInteractor {
         return viewShiftUC.getShiftsBetween(start, end);
     }
 
-    // Overload: default role USER
-    public Person addPerson(String nickname, String password) {
-        return configurePersonUC.add(nickname, password, PersonRole.USER);
-    }
 
-    // New overload with explicit role
-    public Person addPerson(String nickname, String password, PersonRole role) {
-        return configurePersonUC.add(nickname, password, role);
-    }
-
-    public Person updatePerson(long id, String nick, String pw, PersonRole role){
-        return configurePersonUC.update(id, nick, pw, role);
-    }
-
-    public void deletePerson(long id) {
-        configurePersonUC.delete(id);
-    }
+    /* ---- Person AND Shift ---- */
 
     public Shift addPersonToShift(long personId, long shiftId) {
-        return addPersonToShiftUC.add(personId, shiftId);
+        return configurePersonsInShiftUseCase.add(personId, shiftId);
+    }
+
+    public Shift removePersonFromShift(long personId, long shiftId){
+        return configurePersonsInShiftUseCase.remove(personId, shiftId);
     }
 
     public void showCurrentWeek(LocalDate monday) {
@@ -99,15 +115,12 @@ public class UseCaseInteractor {
         presenter.showShifts(monday, weeks, shifts);
     }
 
-    public Person authenticateUser(String nickname, String password) {
-        return authenticateUserUC.authenticate(nickname, password);
-    }
+
+    /* ---- Time Account ---- */
 
     public TimeAccount getTimeAccount(long personId) {
         return viewTimeAccountUC.getByPersonId(personId);
     }
 
-    public Person updatePersonRole(long id, PersonRole role) {
-        return configurePersonUC.update(id, role);
-    }
+
 }

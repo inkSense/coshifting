@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class AddShiftUseCase {
 
+    // ToDo: Dies mit ViewShiftUseCase vereinigen
+
     private final ShiftRepository repository;
 
     public AddShiftUseCase(ShiftRepository repository) {

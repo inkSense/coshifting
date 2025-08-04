@@ -9,7 +9,7 @@ public class ViewShiftUseCase {
     /**
      * returns Information about shifts to the User Interface
      */
-    
+    // ToDo: Dies mit ViewShiftUseCase vereinigen
     private final ShiftRepository repository;
 
     public ViewShiftUseCase(ShiftRepository repository) {
