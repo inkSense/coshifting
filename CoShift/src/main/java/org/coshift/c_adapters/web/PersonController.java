@@ -58,14 +58,14 @@ public class PersonController {
 
     /* ---------- READ ------------------------------------------------ */
 
-    @GetMapping
+    @GetMapping // ToDo: DTO sollte kein Passwort enthalten
     public List<PersonDto> all() {
         return persons.findAll().stream()
                       .map(PersonMapper::toDto)
                       .toList();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // ToDo: DTO sollte kein Passwort enthalten
     public PersonDto byId(@PathVariable long id) {
         Person p = persons.findById(id)
                           .orElseThrow(() -> new IllegalArgumentException("Person not found"));
@@ -78,6 +78,14 @@ public class PersonController {
         return TimeAccountMapper.toDto(acc);
     }
 
+    @GetMapping("/me") // ToDo: DTO sollte kein Passwort enthalten
+    public PersonDto me(Authentication auth) {
+        Object principal = auth.getPrincipal();
+        if (!(principal instanceof Person user))
+            throw new IllegalStateException("Principal is not a Person");
+        return PersonMapper.toDto(user);   // dto.role enthält ADMIN|USER
+    }
+
     @GetMapping("/me/timeaccount")
     public TimeAccountDto myAccount(Authentication auth) {
         Object principal = auth.getPrincipal();
@@ -88,8 +96,6 @@ public class PersonController {
                                   .orElseThrow(() -> new IllegalStateException("Account missing"));
         return TimeAccountMapper.toDto(acc);
     }
-
-
 
 
     /* ---------- UPDATE ---------------------------------------------- */
@@ -113,7 +119,7 @@ public class PersonController {
     /* ---------- DELETE ---------------------------------------------- */
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")      // ToDo: Brauche ich das?
+    @PreAuthorize("hasRole('ADMIN')")  
     public void delete(@PathVariable long id) {
         interactor.deletePerson(id);
     }

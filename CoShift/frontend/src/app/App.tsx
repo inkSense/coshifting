@@ -1,31 +1,29 @@
-import './App.css'
-import Login       from '../features/auth/components/LoginForm'
-import WeekPage    from '../pages/WeekPage'
-import Layout      from '../layout/Layout'
-import PrivateLayout from '../layout/PrivateLayout'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import AdminPage   from '../pages/AdminPage'
-import { AuthProvider } from '../features/auth/AuthProvider'
-import { useAuth } from '../features/auth/hooks/AuthContext'
+import { Routes, Route } from 'react-router-dom'
+import Login            from '../features/auth/components/LoginForm'
+import PrivateLayout    from '../layout/PrivateLayout'
+import RequireAdmin     from '../layout/RequireAdmin'
+import WeekPage         from '../pages/WeekPage'
+import AdminPage        from '../pages/AdminPage'
+import { AuthProvider, useAuth } from '../features/auth/AuthProvider'
 
 function Routing() {
-  const { header, tryLogin } = useAuth()
+  
+  const { authHeader, tryLogin } = useAuth()
 
   return (
     <>
-      {header && <Layout />}
-
-      {!header ? (
-        <Login onLogin={tryLogin} />
-      ) : (
+      {authHeader ? (
         <Routes>
           <Route element={<PrivateLayout />}>
-            <Route path="/"      element={<WeekPage />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/" element={<WeekPage />} />
+            <Route element={<RequireAdmin />}>           {/* ⬅︎ Guard */}
+              <Route path="admin" element={<AdminPage />} />
+            </Route>
           </Route>
-          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      )}
+      ) : (
+        <Login onLogin={tryLogin} />
+      ) }
     </>
   )
 }

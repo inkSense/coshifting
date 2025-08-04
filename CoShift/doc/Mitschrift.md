@@ -270,7 +270,7 @@ Ich habe das Frontend mit Hilfe von ChatGpt gemacht. Zwischenzeitlich habe ich e
 Read file: CoShift/frontend/src/app/App.tsx
 Read file: CoShift/frontend/src/app/index.css
 Read file: CoShift/frontend/src/app/main.tsx
-Read file: CoShift/frontend/src/layout/Layout.tsx
+Read file: CoShift/frontend/src/layout/MainHeader.tsx
 Read file: CoShift/frontend/src/layout/PrivateLayout.tsx
 Read file: CoShift/frontend/src/feature/auth/AuthContext.tsx
 Read file: CoShift/frontend/src/feature/auth/LoginForm.tsx
@@ -312,8 +312,8 @@ Read file: CoShift/frontend/src/types/person.tsx
    • Zeigt vor Login das `<LoginForm/>`, danach die geschützten Routen  
    • Enthält das Routing-Schema & privat geschützte Layouts
 
-5. Layout & Navigation  
-   • `Layout.tsx`: feste MUI-AppBar + Burger-Drawer  
+5. MainHeader & Navigation  
+   • `MainHeader.tsx`: feste MUI-AppBar + Burger-Drawer  
      – Links zu „Übersicht“ (`/`) und „Admin“ (`/admin`)  
      – zeigt Saldo & Logout-Button  
    • `PrivateLayout.tsx`: simple Route-Guard (`Outlet` oder Redirect)

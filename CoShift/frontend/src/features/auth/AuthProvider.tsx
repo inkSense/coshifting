@@ -1,5 +1,5 @@
 /* eslint react-refresh/only-export-components: "off" */
-import { createContext, useCallback, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { AuthCtx } from './types'
 
 export const AuthContext = createContext<AuthCtx | null>(null)
@@ -7,6 +7,7 @@ export const AuthContext = createContext<AuthCtx | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [header, setHeader]   = useState<string | null>(null)
   const [balance, setBalance] = useState<number | null>(null)
+  const [role,       setRole]       = useState<'ADMIN' | 'USER' | null>(null)
 
   const tryLogin = useCallback(async (authHeader: string): Promise<boolean> => {
     try {
@@ -28,6 +29,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         } catch (e) {
           console.error('Unable to fetch balance', e)
+        }
+
+        try {
+          const me = await fetch('/api/persons/me', { headers:{ Authorization: authHeader }})
+          if (me.ok) {
+            const dto = await me.json() as { role: 'ADMIN' | 'USER' }
+            setRole(dto.role)
+          }
+        } catch (e) {
+          console.error('Unable to fetch role', e)
         }
         return true
       }
@@ -54,8 +65,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [tryLogin])
 
   return (
-    <AuthContext.Provider value={{ header, balance, tryLogin, logout }}>
+    <AuthContext.Provider value={{ 
+      authHeader: header, 
+      balance, 
+      role, 
+      isAuthenticated: header!==null, 
+      isAdmin: role==='ADMIN', 
+      tryLogin, 
+      logout 
+      }}>
       {children}
     </AuthContext.Provider>
   )
 }
+
+export const useAuth = () => {
+  const ctx = useContext<AuthCtx | null>(AuthContext)
+  if (!ctx) throw new Error('useAuth must be inside <AuthProvider>')
+  return ctx
+}
+

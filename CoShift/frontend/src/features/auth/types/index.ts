@@ -1,6 +1,9 @@
 export interface AuthCtx {
-  header: string | null
-  balance: number | null
+  authHeader: string | null
+  role:       'ADMIN' | 'USER' | null
+  balance:    number | null
+  isAuthenticated: boolean
+  isAdmin:    boolean
   tryLogin: (authHeader: string) => Promise<boolean>
-  logout: () => void
+  logout:   () => void
 }

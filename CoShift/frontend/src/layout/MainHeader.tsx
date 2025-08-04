@@ -5,7 +5,7 @@ import HomeIcon      from '@mui/icons-material/Home'
 import AdminPanelIcon from '@mui/icons-material/AdminPanelSettings'
 import LogoutIcon    from '@mui/icons-material/Logout'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { useAuth }   from '../features/auth/hooks/AuthContext'
+import { useAuth }   from '../features/auth/AuthProvider'
 
 function formatMinutes(total: number): string {
   const hours = Math.floor(total / 60)
@@ -13,9 +13,9 @@ function formatMinutes(total: number): string {
   return `${hours}h ${minutes}m`
 }
 
-export default function Layout(){
+export default function MainHeader(){
   const [open,setOpen]=useState(false)
-  const { logout, balance } = useAuth()
+  const { logout, balance, isAdmin } = useAuth()
   const loc = useLocation()
 
   return (
@@ -42,10 +42,12 @@ export default function Layout(){
               <ListItemIcon><HomeIcon/></ListItemIcon>
               <ListItemText primary="Übersicht"/>
             </ListItemButton>
-            <ListItemButton component={RouterLink} to="/admin" selected={loc.pathname==='/admin'}>
-              <ListItemIcon><AdminPanelIcon/></ListItemIcon>
-              <ListItemText primary="Admin"/>
-            </ListItemButton>
+            {isAdmin && (
+              <ListItemButton component={RouterLink} to="/admin" selected={loc.pathname==='/admin'}>
+                <ListItemIcon><AdminPanelIcon/></ListItemIcon>
+                <ListItemText primary="Admin"/>
+              </ListItemButton>
+            )}
           </List>
         </Box>
       </Drawer>
