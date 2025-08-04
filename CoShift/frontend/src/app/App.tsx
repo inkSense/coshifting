@@ -2,8 +2,8 @@ import { Routes, Route } from 'react-router-dom'
 import Login            from '../features/auth/components/LoginForm'
 import PrivateLayout    from '../layout/PrivateLayout'
 import RequireAdmin     from '../layout/RequireAdmin'
-import WeekPage         from '../pages/WeekPage'
-import AdminPage        from '../pages/AdminPage'
+import WeekPage         from '../pages/weekPage/WeekPage.tsx'
+import AdminPage        from '../pages/adminPage/AdminPage.tsx'
 import { AuthProvider, useAuth } from '../features/auth/AuthProvider'
 
 function Routing() {

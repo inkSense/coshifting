@@ -5,8 +5,8 @@ import {
     TextField, FormControl, InputLabel, Select, MenuItem,
     Button
 } from '@mui/material'
-import type { PersonDto } from '../../../types/person'
-import { useApi } from '../../../api'
+import type { PersonDto } from '../types/person.ts'
+import { useApi } from '../../api.ts'
 
 
 

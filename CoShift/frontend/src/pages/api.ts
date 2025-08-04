@@ -1,14 +1,14 @@
-import { useAuth } from './features/auth/AuthProvider'
+import { useAuth } from '../features/auth/AuthProvider.tsx'
 import { useCallback, useMemo } from 'react'
 
 // Hook providing helper functions for HTTP calls with optional auth header
 export function useApi() {
-  const { header } = useAuth()
+  const { authHeader } = useAuth()
 
   const request = useCallback(async <T>(url: string, init: RequestInit = {}): Promise<T> => {
     const headers: HeadersInit = {
       ...(init.headers || {}),
-      ...(header ? { Authorization: header } : {}),
+      ...(authHeader ? { Authorization: authHeader } : {}),
     }
 
     const res = await fetch(url, { ...init, headers })
@@ -20,7 +20,7 @@ export function useApi() {
     }
 
     return res.json() as Promise<T>
-  }, [header])
+  }, [authHeader])
 
   return useMemo(() => ({
     get: <T>(url: string) => request<T>(url),

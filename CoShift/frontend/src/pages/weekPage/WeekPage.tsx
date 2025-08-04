@@ -1,8 +1,8 @@
-import DayCell from '../features/week/components/DayCell'
+import DayCell from './components/DayCell.tsx'
 import { Box } from '@mui/material'
-import { useApi } from '../api'
+import { useApi } from '../api.ts'
 import { useQuery } from '@tanstack/react-query'
-import type { DayCellViewModel } from '../features/week/types'
+import type { DayCellViewModel } from './types/dayCellView.ts'
 
 export default function WeekPage() {
   const api = useApi()

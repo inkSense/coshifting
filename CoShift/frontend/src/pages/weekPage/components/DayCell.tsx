@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import type { DayCellViewModel } from '../types'
+import type { DayCellViewModel } from '../types/dayCellView.ts'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
 

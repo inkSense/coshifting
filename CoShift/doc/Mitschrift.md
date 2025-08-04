@@ -281,7 +281,7 @@ Read file: CoShift/frontend/src/feature/admin/AdminPage.tsx
 Read file: CoShift/frontend/src/feature/admin/AddPersonDialog.tsx
 Read file: CoShift/frontend/src/feature/admin/EditPersonDialog.tsx
 Read file: CoShift/frontend/src/feature/admin/hooks/usePersons.tsx
-Read file: CoShift/frontend/src/types/person.tsx
+Read file: CoShift/frontend/src/types/person.ts
 
 Überblick über das Frontend (v1)  
 – jedes nummerierte Kapitel kannst du in den nächsten Schritten gezielt nachfragen –

@@ -1,7 +1,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { PersonDto } from '../../../types/person'
-import { useApi } from '../../../api'
+import type { PersonDto } from '../types/person.ts'
+import { useApi } from '../../api.ts'
 
 export function usePersons() {
     const api = useApi()

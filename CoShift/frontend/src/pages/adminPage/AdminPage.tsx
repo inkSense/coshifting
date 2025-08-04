@@ -18,10 +18,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import { IconButton as MuiIconButton } from '@mui/material'
 
-import AddPersonDialog from '../features/admin/components/AddPersonDialog'
-import EditPersonDialog from '../features/admin/components/EditPersonDialog'
-import { usePersons } from '../features/admin/hooks/usePersons'
-import type { PersonDto } from '../types/person'
+import AddPersonDialog from './components/AddPersonDialog.tsx'
+import EditPersonDialog from './components/EditPersonDialog.tsx'
+import { usePersons } from './hooks/usePersons.tsx'
+import type { PersonDto } from './types/person.ts'
 
 export default function AdminPage() {
     const {
