@@ -14,7 +14,7 @@ export default function Login({ onLogin }: Props) {
   async function submit(e: FormEvent) {
     e.preventDefault()
     setError(null)                               // alte Fehlermeldung zurücksetzen
-    const token   = btoa(`${user}:${pass}`)
+    const token   = btoa(unescape(encodeURIComponent(`${user}:${pass}`)))
     const success = await onLogin(`Basic ${token}`)
 
     if (!success) {
