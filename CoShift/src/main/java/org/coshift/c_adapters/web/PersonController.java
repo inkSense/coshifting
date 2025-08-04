@@ -3,7 +3,7 @@ package org.coshift.c_adapters.web;
 import org.coshift.b_application.UseCaseInteractor;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.TimeAccountRepository;
-import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.dto.PersonDetailsDto;
 import org.coshift.c_adapters.dto.TimeAccountDto;
 import org.coshift.c_adapters.mapper.PersonMapper;
 import org.coshift.c_adapters.mapper.TimeAccountMapper;
@@ -46,30 +46,30 @@ public class PersonController {
     public record NewPersonDto(String nickname, String password, String role) {}
 
     @PostMapping
-    public PersonDto create(@RequestBody NewPersonDto dto) {
+    public PersonDetailsDto create(@RequestBody NewPersonDto dto) {
         PersonRole role = Optional.ofNullable(dto.role())
                                   .map(String::toUpperCase)
                                   .map(PersonRole::valueOf)
                                   .orElse(PersonRole.USER);
 
         Person p = interactor.addPerson(dto.nickname(), dto.password(), role);
-        return PersonMapper.toDto(p);
+        return PersonMapper.toDetailDto(p);
     }
 
     /* ---------- READ ------------------------------------------------ */
 
     @GetMapping // ToDo: DTO sollte kein Passwort enthalten
-    public List<PersonDto> all() {
+    public List<PersonDetailsDto> all() {
         return persons.findAll().stream()
-                      .map(PersonMapper::toDto)
+                      .map(PersonMapper::toDetailDto)
                       .toList();
     }
 
     @GetMapping("/{id}") // ToDo: DTO sollte kein Passwort enthalten
-    public PersonDto byId(@PathVariable long id) {
+    public PersonDetailsDto byId(@PathVariable long id) {
         Person p = persons.findById(id)
                           .orElseThrow(() -> new IllegalArgumentException("Person not found"));
-        return PersonMapper.toDto(p);
+        return PersonMapper.toDetailDto(p);
     }
 
     @GetMapping("/{id}/timeaccount")
@@ -79,11 +79,11 @@ public class PersonController {
     }
 
     @GetMapping("/me") // ToDo: DTO sollte kein Passwort enthalten
-    public PersonDto me(Authentication auth) {
+    public PersonDetailsDto me(Authentication auth) {
         Object principal = auth.getPrincipal();
         if (!(principal instanceof Person user))
             throw new IllegalStateException("Principal is not a Person");
-        return PersonMapper.toDto(user);   // dto.role enthält ADMIN|USER
+        return PersonMapper.toDetailDto(user);   // dto.role enthält ADMIN|USER
     }
 
     @GetMapping("/me/timeaccount")
@@ -101,19 +101,19 @@ public class PersonController {
     /* ---------- UPDATE ---------------------------------------------- */
 
     @PutMapping("/{id}/role")
-    public PersonDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
+    public PersonDetailsDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
         Person person = interactor.updatePersonRole(id, role);
-        return PersonMapper.toDto(person);
+        return PersonMapper.toDetailDto(person);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public PersonDto update(@PathVariable long id,
-                            @RequestBody NewPersonDto dto){
+    public PersonDetailsDto update(@PathVariable long id,
+                                   @RequestBody NewPersonDto dto){
         PersonRole role = dto.role()==null? null
                         : PersonRole.valueOf(dto.role().toUpperCase());
         Person p = interactor.updatePerson(id, dto.nickname(), dto.password(), role);
-        return PersonMapper.toDto(p);
+        return PersonMapper.toDetailDto(p);
     }
 
     /* ---------- DELETE ---------------------------------------------- */

@@ -1,7 +1,8 @@
 package org.coshift.c_adapters.mapper;
 
 import org.coshift.a_domain.Shift;
-import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.dto.ShiftPublicDetailDto;
+import org.coshift.c_adapters.dto.ShiftSummeryDto;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.a_domain.person.Person;
 
@@ -12,7 +13,7 @@ public final class ShiftMapper {
 
     private ShiftMapper() {  } // undermines instantiation
 
-    public static Shift toDomain(ShiftDto dto, PersonRepository repo) {
+    public static Shift toDomain(ShiftSummeryDto dto, PersonRepository repo) {
         var ids = dto.personIds() == null
                 ? Collections.<Long>emptyList()
                 : dto.personIds();
@@ -29,8 +30,8 @@ public final class ShiftMapper {
                          persons);
     }
 
-    public static ShiftDto toDto(Shift shift) {
-        return new ShiftDto(shift.getId(),
+    public static ShiftSummeryDto toSummeryDto(Shift shift) {
+        return new ShiftSummeryDto(shift.getId(),
                             shift.getStartTime(),
                             shift.getDurationInMinutes(),
                             shift.getCapacity(),
@@ -38,6 +39,19 @@ public final class ShiftMapper {
                                  .map(Person::getId)
                                  .collect(Collectors.toList()));
     }
+
+    public static ShiftPublicDetailDto toPublicDetailDto(Shift shift) {
+        return new ShiftPublicDetailDto(
+                shift.getId(),
+                shift.getStartTime(),
+                shift.getDurationInMinutes(),
+                shift.getCapacity(),
+                shift.getPersons().stream()
+                        .map(PersonMapper::toPublicDto)
+                        .collect(Collectors.toList()));
+    }
+
+
 }
 
 

@@ -1,28 +1,28 @@
 [
   {
     "id": 1,
-    "startTime": "2025-07-01T18:00:00",
+    "startTime": "2025-08-08T18:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
     "personIds": [1, 2]
   },
   {
     "id": 2,
-    "startTime": "2025-07-08T09:00:00",
+    "startTime": "2025-08-15T09:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
     "personIds": []
   },
   {
     "id": 3,
-    "startTime": "2025-07-08T12:00:00",
+    "startTime": "2025-08-15T12:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
     "personIds": []
   },
   {
     "id": 4,
-    "startTime": "2025-07-16T09:00:00",
+    "startTime": "2025-08-16T09:00:00",
     "durationInMinutes": 120,
     "capacity": 3,
     "personIds": [1,2,3]

@@ -2,13 +2,14 @@ package org.coshift.c_adapters.mapper;
 
 import org.coshift.a_domain.person.Person;
 import org.coshift.a_domain.person.PersonRole;
-import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.dto.PersonDetailsDto;
+import org.coshift.c_adapters.dto.PersonPublicDto;
 
 public final class PersonMapper {
 
-    private PersonMapper() { } // prevents from instantiation
+    private PersonMapper() { } // Verhindert die Instanzierung
 
-    public static Person toDomain(PersonDto dto) {
+    public static Person toDomain(PersonDetailsDto dto) {
         Person person = new Person(
             dto.id(),
             dto.nickname(),
@@ -20,13 +21,21 @@ public final class PersonMapper {
         return person;
     }
 
-    public static PersonDto toDto(Person person) {
-        return new PersonDto(
+    public static PersonDetailsDto toDetailDto(Person person) {
+        return new PersonDetailsDto(
             person.getId(),
             person.getNickname(),
             person.getPassword(),
             person.getTimeAccountId(),
             person.getRole().name()
+        );
+    }
+
+    public static PersonPublicDto toPublicDto(Person person) {
+        return new PersonPublicDto(
+                person.getId(),
+                person.getNickname(),
+                person.getRole().name()
         );
     }
 }

@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.dto.ShiftSummeryDto;
 import org.coshift.c_adapters.ports.ShiftJsonFileAccessor;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
 
 
     private static final Path FILE      = Paths.get("data/shifts25", "shifts.json");
-    private static final Type LIST_TYPE = new TypeToken<List<ShiftDto>>() {}.getType();
+    private static final Type LIST_TYPE = new TypeToken<List<ShiftSummeryDto>>() {}.getType();
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
@@ -35,12 +35,12 @@ public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShiftGsonFileAccessor.class);
 
     @Override
-    public List<ShiftDto> readAll() {
+    public List<ShiftSummeryDto> readAll() {
         if (!Files.exists(FILE)) {
             return Collections.emptyList();
         }
         try (var reader = Files.newBufferedReader(FILE)) {
-            List<ShiftDto> list = gson.fromJson(reader, LIST_TYPE);
+            List<ShiftSummeryDto> list = gson.fromJson(reader, LIST_TYPE);
             return list != null ? list : Collections.emptyList();
         } catch (IOException e) {
             throw new IllegalStateException("Unable to read shifts JSON file", e);
@@ -48,7 +48,7 @@ public class ShiftGsonFileAccessor implements ShiftJsonFileAccessor {
     }
 
     @Override
-    public boolean writeAll(List<ShiftDto> shifts) {
+    public boolean writeAll(List<ShiftSummeryDto> shifts) {
         try {
             Files.createDirectories(FILE.getParent());
             try (var writer = Files.newBufferedWriter(FILE)) {

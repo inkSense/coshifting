@@ -2,7 +2,7 @@ package org.coshift.c_adapters.ports;
 
 import java.util.List;
 
-import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.dto.ShiftSummeryDto;
 
 /**
  * Minimaler Datei-Port für das Lesen und Schreiben des kompletten
@@ -15,9 +15,9 @@ public interface ShiftJsonFileAccessor {
 
     /**
      * Liest den gesamten Speicherinhalt und liefert ihn als Liste
-     * von {@link ShiftDto}.
+     * von {@link ShiftSummeryDto}.
      */
-    List<ShiftDto> readAll();
+    List<ShiftSummeryDto> readAll();
 
     /**
      * Überschreibt den kompletten Speicherinhalt mit der übergebenen Liste.
@@ -26,5 +26,5 @@ public interface ShiftJsonFileAccessor {
      * @return {@code true}, wenn das Schreiben erfolgreich war,
      *         sonst {@code false}
      */
-    boolean writeAll(List<ShiftDto> shifts);
+    boolean writeAll(List<ShiftSummeryDto> shifts);
 }

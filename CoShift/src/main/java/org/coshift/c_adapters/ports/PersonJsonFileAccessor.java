@@ -1,12 +1,12 @@
 package org.coshift.c_adapters.ports;
 
-import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.dto.PersonDetailsDto;
 
 import java.util.List;
 
 public interface PersonJsonFileAccessor {
 
-    List<PersonDto> readAll();
+    List<PersonDetailsDto> readAll();
 
-    boolean writeAll(List<PersonDto> persons);
+    boolean writeAll(List<PersonDetailsDto> persons);
 }

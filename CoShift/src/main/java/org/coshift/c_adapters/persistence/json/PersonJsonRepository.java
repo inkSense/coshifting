@@ -2,7 +2,7 @@ package org.coshift.c_adapters.persistence.json;
 
 import org.coshift.a_domain.person.Person;
 import org.coshift.b_application.ports.PersonRepository;
-import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.dto.PersonDetailsDto;
 import org.coshift.c_adapters.mapper.PersonMapper;
 import org.coshift.c_adapters.ports.PersonJsonFileAccessor;
 import org.springframework.stereotype.Component;
@@ -51,9 +51,9 @@ public class PersonJsonRepository implements PersonRepository {
             person.getRole()
         );
 
-        List<PersonDto> dtos = new ArrayList<>(fileAccessor.readAll());
+        List<PersonDetailsDto> dtos = new ArrayList<>(fileAccessor.readAll());
         dtos.removeIf(dto -> Objects.equals(dto.id(), id));
-        dtos.add(PersonMapper.toDto(withId));
+        dtos.add(PersonMapper.toDetailDto(withId));
 
         if (!fileAccessor.writeAll(dtos)) {
             throw new IllegalStateException("Unable to persist persons JSON file.");
@@ -90,7 +90,7 @@ public class PersonJsonRepository implements PersonRepository {
 
     @Override
     public void deleteById(Long id) {
-        List<PersonDto> dtos = new ArrayList<>(fileAccessor.readAll());
+        List<PersonDetailsDto> dtos = new ArrayList<>(fileAccessor.readAll());
         boolean removed = dtos.removeIf(dto -> Objects.equals(dto.id(), id));
 
         if (removed && !fileAccessor.writeAll(dtos)) {
@@ -100,7 +100,7 @@ public class PersonJsonRepository implements PersonRepository {
 
     private long nextFreeId() {
         return fileAccessor.readAll().stream()
-                           .mapToLong(PersonDto::id)
+                           .mapToLong(PersonDetailsDto::id)
                            .max()
                            .orElse(0) + 1;
     }

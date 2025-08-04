@@ -3,7 +3,7 @@ package org.coshift.d_frameworks.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.coshift.c_adapters.dto.PersonDto;
+import org.coshift.c_adapters.dto.PersonDetailsDto;
 import org.coshift.c_adapters.ports.PersonJsonFileAccessor;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
 
 
     private static Path FILE = Paths.get("data/persons", "persons.json");     
-    private static final Type LIST_TYPE = new TypeToken<List<PersonDto>>() {}.getType();
+    private static final Type LIST_TYPE = new TypeToken<List<PersonDetailsDto>>() {}.getType();
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonGsonFileAccessor.class);
 
@@ -41,13 +41,13 @@ public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
     /* -------------------- Lesen ----------------------------------- */
 
     @Override
-    public List<PersonDto> readAll() {
+    public List<PersonDetailsDto> readAll() {
         if (!Files.exists(FILE)) {
             LOG.warn("Persons file {} not found – returning empty list", FILE.toAbsolutePath());
             return Collections.emptyList();
         }
         try (var reader = Files.newBufferedReader(FILE)) {
-            List<PersonDto> list = gson.fromJson(reader, LIST_TYPE);
+            List<PersonDetailsDto> list = gson.fromJson(reader, LIST_TYPE);
             return list != null ? list : Collections.emptyList();
         } catch (IOException e) {
             throw new IllegalStateException("Unable to read persons JSON file", e);
@@ -57,7 +57,7 @@ public class PersonGsonFileAccessor implements PersonJsonFileAccessor {
     /* -------------------- Schreiben ------------------------------- */
 
     @Override
-    public boolean writeAll(List<PersonDto> persons) {
+    public boolean writeAll(List<PersonDetailsDto> persons) {
         try {
             Files.createDirectories(FILE.getParent());
             try (var writer = Files.newBufferedWriter(FILE)) {

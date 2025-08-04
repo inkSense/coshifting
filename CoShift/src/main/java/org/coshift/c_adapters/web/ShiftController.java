@@ -1,12 +1,16 @@
 package org.coshift.c_adapters.web;
 
 import org.coshift.b_application.UseCaseInteractor;
-import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.dto.ShiftPublicDetailDto;
+import org.coshift.c_adapters.dto.ShiftSummeryDto;
 import org.coshift.c_adapters.mapper.ShiftMapper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -25,9 +29,17 @@ public class ShiftController {
     }
 
     @GetMapping
-    public List<ShiftDto> all() {
+    public List<ShiftSummeryDto> all() {
         return interactor.getAllShifts().stream()
-                .map(ShiftMapper::toDto)
+                .map(ShiftMapper::toSummeryDto)
                 .toList();
     }
+
+    @GetMapping("/day")
+    public List<ShiftPublicDetailDto> getShiftsForDay(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return interactor.getShiftsBetween(date, date).stream()
+                .map(ShiftMapper::toPublicDetailDto)
+                .toList();
+    }
+
 }

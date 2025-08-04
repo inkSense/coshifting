@@ -1,6 +1,6 @@
 package org.coshift.c_adapters.presentation;
 
-import org.coshift.c_adapters.dto.ShiftDto;
+import org.coshift.c_adapters.dto.ShiftSummeryDto;
 import org.coshift.c_adapters.mapper.ShiftMapper;
 import org.springframework.stereotype.Component;
 import org.coshift.b_application.ports.PresenterInputPort;
@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 
 @Component
 public class Presenter implements PresenterInputPort {
@@ -30,8 +29,8 @@ public class Presenter implements PresenterInputPort {
 
     @Override
     public void showShiftsInThisWeek(List<Shift> shifts) {
-        List<ShiftDto> shiftDtos = mapShifts(shifts);
-        currentWeek = createDayCells(shiftDtos);
+        List<ShiftSummeryDto> shiftSummeryDtos = mapShifts(shifts);
+        currentWeek = createDayCells(shiftSummeryDtos);
         weekView.render(currentWeek);
     }
 
@@ -55,14 +54,14 @@ public class Presenter implements PresenterInputPort {
         weekView.render(cells);
     }
 
-    private List<ShiftDto> mapShifts(List<Shift> shifts) {
+    private List<ShiftSummeryDto> mapShifts(List<Shift> shifts) {
         return shifts.stream()
-            .map(ShiftMapper::toDto)
+            .map(ShiftMapper::toSummeryDto)
             .collect(Collectors.toList());
     }
 
 
-    private List<DayCellViewModel> createDayCells(List<ShiftDto> dtos) {
+    private List<DayCellViewModel> createDayCells(List<ShiftSummeryDto> dtos) {
         // leere Woche vorbereiten
         List<DayCellViewModel> cells = new ArrayList<>(7);
         for (int i=0;i<7;i++) cells.add(new DayCellViewModel(new ArrayList<>()));
@@ -70,7 +69,7 @@ public class Presenter implements PresenterInputPort {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         //DateTimeFormatter ISO = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // ISO 8601 format
 
-        for (ShiftDto dto : dtos) {
+        for (ShiftSummeryDto dto : dtos) {
             LocalDateTime start = dto.startTime();
             int dayIdx = (start.getDayOfWeek().getValue() + 6) % 7;
             boolean fullyStaffed = dto.personIds().size() >= dto.capacity();
