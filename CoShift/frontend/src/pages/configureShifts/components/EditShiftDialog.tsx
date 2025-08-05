@@ -14,6 +14,7 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from 'dayjs'
 import type { ShiftDto } from '../types/shift.ts'
+import { defaultDuration, defaultCapacity } from './DefaultValues';
 
 interface Props {
   shift: ShiftDto | null
@@ -23,8 +24,8 @@ interface Props {
 
 export default function EditShiftDialog({ shift, onClose, onSave }: Props) {
   const [start, setStart] = useState<Dayjs | null>(null)
-  const [duration, setDuration] = useState(60)
-  const [capacity, setCapacity] = useState(1)
+  const [duration, setDuration] = useState(defaultDuration)
+  const [capacity, setCapacity] = useState(defaultCapacity)
 
   useEffect(() => {
     if (shift) {

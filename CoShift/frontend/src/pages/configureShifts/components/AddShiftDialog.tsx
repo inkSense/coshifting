@@ -13,7 +13,9 @@ import {
 } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Dayjs } from 'dayjs'
+import 'dayjs/locale/de';
 import type { NewShiftDto } from '../types/shift.ts'
+import { defaultDuration, defaultCapacity } from './DefaultValues';
 
 interface Props {
   open: boolean
@@ -22,9 +24,10 @@ interface Props {
 }
 
 export default function AddShiftDialog({ open, onClose, onSave }: Props) {
+
   const [start, setStart] = useState<Dayjs | null>(null)
-  const [duration, setDuration] = useState(60)
-  const [capacity, setCapacity] = useState(1)
+  const [duration, setDuration] = useState(defaultDuration)
+  const [capacity, setCapacity] = useState(defaultCapacity)
 
   const canSave = start !== null && duration > 0 && capacity > 0
 
@@ -36,13 +39,13 @@ export default function AddShiftDialog({ open, onClose, onSave }: Props) {
       capacity,
     })
     setStart(null)
-    setDuration(60)
-    setCapacity(1)
+    setDuration(defaultDuration)
+    setCapacity(defaultCapacity)
     onClose()
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Neue Schicht anlegen</DialogTitle>
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
