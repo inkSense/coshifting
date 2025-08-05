@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST-Controller für Personen-bezogene Funktionen
@@ -46,13 +45,13 @@ public class PersonController {
     public record NewPersonDto(String nickname, String password, String role) {}
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public PersonPublicDto create(@RequestBody NewPersonDto dto) {
-        PersonRole role = Optional.ofNullable(dto.role())
-                .map(String::toUpperCase)
-                .map(PersonRole::valueOf)
-                .orElse(PersonRole.USER);
+        if (dto.role() != null && !dto.role().equalsIgnoreCase("USER")) {
+            throw new IllegalArgumentException("Role must be USER");
+        }
 
-        Person p = interactor.addPerson(dto.nickname(), dto.password(), role);
+        Person p = interactor.addPerson(dto.nickname(), dto.password(), PersonRole.USER);
         return PersonMapper.toPublicDto(p);
     }
 
@@ -101,6 +100,7 @@ public class PersonController {
     /* ---------- UPDATE ---------------------------------------------- */
 
     @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
     public PersonPublicDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
         Person person = interactor.updatePersonRole(id, role);
         return PersonMapper.toPublicDto(person);
