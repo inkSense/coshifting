@@ -5,6 +5,7 @@ import RequireAdmin     from '../layout/RequireAdmin'
 import WeekPage         from '../pages/weekPage/WeekPage.tsx'
 import DayPage          from '../pages/dayPage/DayPage.tsx'
 import AdminPage        from '../pages/adminPage/AdminPage.tsx'
+import ConfigureShiftsPage from '../pages/configureShifts/ConfigureShiftsPage.tsx'
 import { AuthProvider, useAuth } from '../features/auth/AuthProvider'
 
 function Routing() {
@@ -20,6 +21,7 @@ function Routing() {
             <Route path="day/:date" element={<DayPage />} />
             <Route element={<RequireAdmin />}>           {/* ⬅︎ Guard */}
               <Route path="admin" element={<AdminPage />} />
+              <Route path="configure-shifts" element={<ConfigureShiftsPage />} />
             </Route>
           </Route>
         </Routes>

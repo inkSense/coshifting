@@ -2,7 +2,7 @@ package org.coshift.b_application;
 
 import org.coshift.a_domain.Shift;
 import org.coshift.b_application.ports.ShiftRepository;
-import org.coshift.b_application.useCases.AddShiftUseCase;
+import org.coshift.b_application.useCases.ConfigureShiftUseCase;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -13,15 +13,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit-Test für {@link AddShiftUseCase}.
+ * Unit test for {@link ConfigureShiftUseCase}.
  */
-class AddShiftUseCaseTest {
+class ConfigureShiftUseCaseTest {
 
     @Test
     void addShift_persists_and_returns_shift_with_id() {
         // Arrange ----------------------------------------------------------
         ShiftRepository repo = mock(ShiftRepository.class);
-        AddShiftUseCase useCase = new AddShiftUseCase(repo);
+        ConfigureShiftUseCase useCase = new ConfigureShiftUseCase(repo);
 
         LocalDateTime start = LocalDateTime.of(2025, 6, 22, 14, 0);
 

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class UseCaseInteractor {
 
-    private final AddShiftUseCase addShiftUC;
+    private final ConfigureShiftUseCase configureShiftUC;
     private final ViewShiftUseCase viewShiftUC;
     private final ConfigurePersonUseCase configurePersonUC;
     private final ConfigurePersonsInShiftUseCase configurePersonsInShiftUseCase;
@@ -41,7 +41,7 @@ public class UseCaseInteractor {
             PresenterInputPort presenter
     ) {
         // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
-        this.addShiftUC  = new AddShiftUseCase(shiftRepository);
+        this.configureShiftUC  = new ConfigureShiftUseCase(shiftRepository);
         this.viewShiftUC = new ViewShiftUseCase(shiftRepository);
         this.configurePersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
         this.configurePersonsInShiftUseCase = new ConfigurePersonsInShiftUseCase(shiftRepository, personRepository);
@@ -82,7 +82,18 @@ public class UseCaseInteractor {
     public Shift addShift(LocalDateTime startTime,
                           long durationInMinutes,
                           int capacity)  {
-        return addShiftUC.add(startTime, durationInMinutes, capacity);
+        return configureShiftUC.add(startTime, durationInMinutes, capacity);
+    }
+
+    public Shift updateShift(long id,
+                             LocalDateTime startTime,
+                             long durationInMinutes,
+                             int capacity) {
+        return configureShiftUC.update(id, startTime, durationInMinutes, capacity);
+    }
+
+    public void deleteShift(long id) {
+        configureShiftUC.delete(id);
     }
 
     public List<Shift> getAllShifts() {

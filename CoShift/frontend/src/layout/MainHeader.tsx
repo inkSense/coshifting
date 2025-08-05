@@ -3,6 +3,7 @@ import { AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItemButton, 
 import MenuIcon      from '@mui/icons-material/Menu'
 import HomeIcon      from '@mui/icons-material/Home'
 import AdminPanelIcon from '@mui/icons-material/AdminPanelSettings'
+import SettingsIcon from '@mui/icons-material/Settings'
 import LogoutIcon    from '@mui/icons-material/Logout'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { useAuth }   from '../features/auth/AuthProvider'
@@ -43,10 +44,16 @@ export default function MainHeader(){
               <ListItemText primary="Übersicht"/>
             </ListItemButton>
             {isAdmin && (
-              <ListItemButton component={RouterLink} to="/admin" selected={loc.pathname==='/admin'}>
-                <ListItemIcon><AdminPanelIcon/></ListItemIcon>
-                <ListItemText primary="Admin"/>
-              </ListItemButton>
+              <>
+                <ListItemButton component={RouterLink} to="/admin" selected={loc.pathname==='/admin'}>
+                  <ListItemIcon><AdminPanelIcon/></ListItemIcon>
+                  <ListItemText primary="Admin"/>
+                </ListItemButton>
+                <ListItemButton component={RouterLink} to="/configure-shifts" selected={loc.pathname==='/configure-shifts'}>
+                  <ListItemIcon><SettingsIcon/></ListItemIcon>
+                  <ListItemText primary="Configure Shifts"/>
+                </ListItemButton>
+              </>
             )}
           </List>
         </Box>
