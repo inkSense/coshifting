@@ -47,5 +47,61 @@
       2,
       3
     ]
+  },
+  {
+    "id": 6,
+    "startTime": "2025-08-20T15:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 7,
+    "startTime": "2025-08-21T10:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 8,
+    "startTime": "2025-08-25T10:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 9,
+    "startTime": "2025-08-26T10:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 10,
+    "startTime": "2025-08-27T10:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 11,
+    "startTime": "2025-09-01T10:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 12,
+    "startTime": "2025-09-02T10:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
+  },
+  {
+    "id": 13,
+    "startTime": "2025-08-19T15:00:00",
+    "durationInMinutes": 120,
+    "capacity": 3,
+    "personIds": []
   }
 ]
