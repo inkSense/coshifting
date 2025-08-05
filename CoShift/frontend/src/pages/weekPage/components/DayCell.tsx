@@ -3,33 +3,34 @@ import { useNavigate } from 'react-router-dom'
 import type { DayCellViewModel } from '../types/dayCellView.ts'
 import ShiftBlock from '../../ShiftBlock.tsx'
 import dayjs from 'dayjs'
+import 'dayjs/locale/de'
 
 export default function DayCell({ cell }: { cell: DayCellViewModel }) {
-  const navigate = useNavigate()
+    const navigate = useNavigate()
 
-  return (
-    <Box
-      sx={{
-        minHeight: '4rem',
-        border: 1,
-        borderColor: 'divider',
-        cursor: 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-      onClick={() => cell.date && navigate(`/day/${cell.date}`)}
-    >
-      {cell.date && (
-        <Box sx={{ fontSize: '0.75rem', textAlign: 'right', px: 0.5, pt: 0.5 }}>
-          {dayjs(cell.date).format('DD.MM.YY')}
+    return (
+        <Box
+            sx={{
+                minHeight: '4rem',
+                border: 1,
+                borderColor: 'divider',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+            onClick={() => cell.date && navigate(`/day/${cell.date}`)}
+        >
+            {cell.date && (
+                <Box sx={{ fontSize: '0.75rem', textAlign: 'center', px: 0.5, pt: 0.5 }}>
+                    {dayjs(cell.date).locale('de').format('DD. MMM')}
+                </Box>
+            )}
+
+            {cell.shifts.length === 0 && <Box sx={{ opacity: 0.3 }}>&nbsp;</Box>}
+
+            {cell.shifts.map((s, i) => (
+                <ShiftBlock key={i} filled={s.fullyStaffed} text={s.startTime} />
+            ))}
         </Box>
-      )}
-
-      {cell.shifts.length === 0 && <Box sx={{ opacity: 0.3 }}>&nbsp;</Box>}
-
-      {cell.shifts.map((s, i) => (
-        <ShiftBlock key={i} filled={s.fullyStaffed} text={s.startTime} />
-      ))}
-    </Box>
-  )
+    )
 }
