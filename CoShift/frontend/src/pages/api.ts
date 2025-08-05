@@ -1,14 +1,22 @@
 import { useAuth } from '../features/auth/AuthProvider.tsx'
 import { useCallback, useMemo } from 'react'
 
+function getCsrfToken() {
+  const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/)
+  return match ? decodeURIComponent(match[1]) : undefined
+}
+
 // Hook providing helper functions for HTTP calls with optional auth header
 export function useApi() {
   const { authHeader } = useAuth()
 
   const request = useCallback(async <T>(url: string, init: RequestInit = {}): Promise<T> => {
+    const isCsrfMethod = init.method && ['POST', 'PUT', 'DELETE'].includes(init.method.toUpperCase())
+    const token = getCsrfToken()
     const headers: HeadersInit = {
       ...(init.headers || {}),
       ...(authHeader ? { Authorization: authHeader } : {}),
+      ...(isCsrfMethod && token ? { 'X-XSRF-TOKEN': token } : {}),
     }
 
     const res = await fetch(url, { ...init, headers })

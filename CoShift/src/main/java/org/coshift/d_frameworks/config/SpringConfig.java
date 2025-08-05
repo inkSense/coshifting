@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.coshift.b_application.useCases.AuthenticateUserUseCase;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.PasswordChecker;
@@ -44,7 +45,7 @@ public class SpringConfig {
         AuthenticationProvider ucProvider
     ) throws Exception {
         http
-          .csrf(c -> c.disable())
+          .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
           .authenticationProvider(ucProvider)
           .authorizeHttpRequests(a -> a
                   .requestMatchers("/api/admin/**").hasRole("ADMIN")
