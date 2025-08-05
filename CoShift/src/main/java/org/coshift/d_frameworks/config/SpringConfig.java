@@ -9,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.coshift.b_application.useCases.AuthenticateUserUseCase;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.PasswordChecker;
@@ -36,21 +37,21 @@ public class SpringConfig {
                 passwordChecker,
                 presenter);
     }
-    
+
     @Bean
     SecurityFilterChain filterChain(
         HttpSecurity http,
         AuthenticationProvider ucProvider
     ) throws Exception {
         http
-          .csrf(c -> c.disable())
-          .authenticationProvider(ucProvider)
-          .authorizeHttpRequests(a -> a
+            .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+            .authenticationProvider(ucProvider)
+            .authorizeHttpRequests(a -> a
                   .requestMatchers("/api/admin/**").hasRole("ADMIN")
                   .requestMatchers("/api/**").authenticated()
                   .anyRequest().permitAll())
-          .httpBasic(Customizer.withDefaults())
-          .formLogin(Customizer.withDefaults());
+            .httpBasic(Customizer.withDefaults())
+            .formLogin(Customizer.withDefaults());
         return http.build();
     }
 
