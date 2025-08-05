@@ -2,28 +2,28 @@
   {
     "id": 1,
     "nickname": "anton",
-    "password": "secret",
+    "password": "$2b$12$KVcFEupQDxK0zzrBIUnWVuX2IOq3aI8mJVUmlgl50qk5DNWvJo9uu",
     "timeAccountId": 1,
     "role": "ADMIN"
   },
   {
     "id": 2,
     "nickname": "berta",
-    "password": "secret",
+    "password": "$2b$12$J6CJaYbG8IfjH.goJUaOvO3d8Nt9doaUUjMiV3fPApWDy/1ZQKt66",
     "timeAccountId": 2,
     "role": "USER"
   },
   {
     "id": 3,
     "nickname": "cäsar",
-    "password": "secret",
+    "password": "$2b$12$/IpDuVJ7GFfzkoacpqvLx.yt/yb77Exwd/1NGqzSRKlSvovqfYetm",
     "timeAccountId": 3,
     "role": "ADMIN"
   },
   {
     "id": 4,
     "nickname": "philipp",
-    "password": "secret",
+    "password": "$2b$12$/LmXw2zkLqZ2bKplgADlAuesWHqVlkYp6K9nAeNFcEUwfXTQCNtIO",
     "timeAccountId": 4,
     "role": "ADMIN"
   }

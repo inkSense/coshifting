@@ -40,7 +40,7 @@ public class UseCaseInteractor {
             PresenterInputPort presenter
     ) {
         this.configureShiftUC  = new ConfigureShiftUseCase(shiftRepository);
-        this.configurePersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
+        this.configurePersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository, passwordChecker);
         this.configurePersonsInShiftUseCase = new ConfigurePersonsInShiftUseCase(shiftRepository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
         this.viewTimeAccountUC = new ViewTimeAccountUseCase(timeAccountRepository, personRepository);
