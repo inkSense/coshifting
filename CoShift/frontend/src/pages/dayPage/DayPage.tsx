@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useApi } from '../api.ts'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -36,70 +36,83 @@ export default function DayPage() {
     const pxPerMinute = hourHeight / 60
     const totalHours = endHour - startHour
     const containerHeight = totalHours * hourHeight
+    const formattedDate = date
+        ? new Date(date + 'T00:00').toLocaleDateString('de-DE', {
+              weekday: 'long',
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+          })
+        : ''
 
     return (
-        <Box sx={{ display: 'grid', gridTemplateColumns: '4rem 1fr' }}>
-            <Box sx={{ position: 'relative', height: containerHeight }}>
-                {Array.from({ length: totalHours + 1 }).map((_, i) => (
-                    <Box
-                        key={i}
-                        sx={{
-                            position: 'absolute',
-                            top: i * hourHeight,
-                            height: hourHeight,
-                            borderTop: 1,
-                            borderColor: 'divider',
-                            fontSize: '0.75rem',
-                        }}
-                    >
-                        {(startHour + i).toString().padStart(2, '0')}:00
-                    </Box>
-                ))}
-            </Box>
-            <Box sx={{ position: 'relative', height: containerHeight, borderLeft: 1, borderColor: 'divider' }}>
-                {Array.from({ length: totalHours + 1 }).map((_, i) => (
-                    <Box
-                        key={i}
-                        sx={{
-                            position: 'absolute',
-                            top: i * hourHeight,
-                            left: 0,
-                            right: 0,
-                            borderTop: 1,
-                            borderColor: 'divider',
-                        }}
-                    />
-                ))}
-                {shifts.map(shift => {
-                    const start = new Date(shift.startTime)
-                    const startMinutes = start.getHours() * 60 + start.getMinutes()
-                    const top = (startMinutes - startHour * 60) * pxPerMinute
-                    const height = shift.durationInMinutes * pxPerMinute
-                    const names = shift.persons.map(p => p.nickname).join(', ')
-                    const isParticipant = personId != null && shift.persons.some(p => p.id === personId)
-                    return (
-                        <ShiftBlock
-                            key={shift.id}
-                            filled={shift.persons.length >= shift.capacity}
-                            text={names || 'frei'}
+        <Box>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+                {formattedDate}
+            </Typography>
+            <Box sx={{ display: 'grid', gridTemplateColumns: '4rem 1fr' }}>
+                <Box sx={{ position: 'relative', height: containerHeight }}>
+                    {Array.from({ length: totalHours + 1 }).map((_, i) => (
+                        <Box
+                            key={i}
                             sx={{
                                 position: 'absolute',
-                                top,
-                                height,
-                                left: 0,
-                                right: 0,
+                                top: i * hourHeight,
+                                height: hourHeight,
+                                borderTop: 1,
+                                borderColor: 'divider',
+                                fontSize: '0.75rem',
                             }}
                         >
-                            <Button
-                                variant="contained"
-                                size="small"
-                                onClick={() => toggleParticipation(shift.id, isParticipant)}
+                            {(startHour + i).toString().padStart(2, '0')}:00
+                        </Box>
+                    ))}
+                </Box>
+                <Box sx={{ position: 'relative', height: containerHeight, borderLeft: 1, borderColor: 'divider' }}>
+                    {Array.from({ length: totalHours + 1 }).map((_, i) => (
+                        <Box
+                            key={i}
+                            sx={{
+                                position: 'absolute',
+                                top: i * hourHeight,
+                                left: 0,
+                                right: 0,
+                                borderTop: 1,
+                                borderColor: 'divider',
+                            }}
+                        />
+                    ))}
+                    {shifts.map(shift => {
+                        const start = new Date(shift.startTime)
+                        const startMinutes = start.getHours() * 60 + start.getMinutes()
+                        const top = (startMinutes - startHour * 60) * pxPerMinute
+                        const height = shift.durationInMinutes * pxPerMinute
+                        const names = shift.persons.map(p => p.nickname).join(', ')
+                        const isParticipant = personId != null && shift.persons.some(p => p.id === personId)
+                        return (
+                            <ShiftBlock
+                                key={shift.id}
+                                filled={shift.persons.length >= shift.capacity}
+                                text={names || 'frei'}
+                                sx={{
+                                    position: 'absolute',
+                                    top,
+                                    height,
+                                    left: 0,
+                                    right: 0,
+                                }}
                             >
-                                {isParticipant ? 'austragen' : 'eintragen'}
-                            </Button>
-                        </ShiftBlock>
-                    )
-                })}
+                                <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() => toggleParticipation(shift.id, isParticipant)}
+                                >
+                                    {isParticipant ? 'austragen' : 'eintragen'}
+                                </Button>
+                            </ShiftBlock>
+                        )
+                    })}
+                </Box>
             </Box>
         </Box>
     )
