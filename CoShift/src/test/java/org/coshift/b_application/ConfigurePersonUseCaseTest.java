@@ -4,6 +4,7 @@ import org.coshift.a_domain.person.Person;
 import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.TimeAccountRepository;
+import org.coshift.b_application.ports.PasswordChecker;
 import org.coshift.b_application.useCases.ConfigurePersonUseCase;
 import org.coshift.c_adapters.persistence.json.PersonJsonRepository;
 import org.coshift.d_frameworks.gson.PersonGsonFileAccessor;
@@ -27,7 +28,8 @@ class ConfigurePersonUseCaseTest {
     @TempDir static Path tmp;
     PersonRepository personRepository = mock(PersonRepository.class);
     TimeAccountRepository timeAccountRepo = mock(TimeAccountRepository.class);
-    ConfigurePersonUseCase useCase = new ConfigurePersonUseCase(personRepository, timeAccountRepo);
+    PasswordChecker passwordChecker = mock(PasswordChecker.class);
+    ConfigurePersonUseCase useCase = new ConfigurePersonUseCase(personRepository, timeAccountRepo, passwordChecker);
 
     @BeforeAll
     static void setUp() throws IOException {
@@ -51,7 +53,9 @@ class ConfigurePersonUseCaseTest {
         String pw   = "secret";
         when(personRepository.findByNickname(nick))
                 .thenReturn(Optional.empty());
-        Person persisted = new Person(1L, nick, pw);
+        String hashed = "hashed";
+        when(passwordChecker.hash(pw)).thenReturn(hashed);
+        Person persisted = new Person(1L, nick, hashed);
         when(personRepository.save(any(Person.class))).thenReturn(persisted);
         when(timeAccountRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
@@ -61,6 +65,7 @@ class ConfigurePersonUseCaseTest {
         // Assert -------------------------------------------------------
         verify(personRepository).findByNickname(nick);
         verify(personRepository).save(any(Person.class));
+        verify(passwordChecker).hash(pw);
 
         assertEquals(1L, result.getId());
         assertEquals(nick, result.getNickname());
@@ -87,7 +92,11 @@ class ConfigurePersonUseCaseTest {
         PersonRepository personRepo = new PersonJsonRepository(accessor);
 
         Person anton = personRepo.findById(1L).orElseThrow(() -> new IllegalArgumentException("Person not found")); //save(new Person(1, "anton", "secret"));
-        var useCase = new ConfigurePersonUseCase(personRepo, timeAccountRepo);
+        PasswordChecker pc = new PasswordChecker() {
+            @Override public boolean matches(String raw, String hashed) { return true; }
+            @Override public String hash(String raw) { return raw; }
+        };
+        var useCase = new ConfigurePersonUseCase(personRepo, timeAccountRepo, pc);
 
         /* --- When  ------------------------------------------------ */
         Person updated = useCase.update(anton.getId(), anton.getNickname(), anton.getPassword(), PersonRole.ADMIN);

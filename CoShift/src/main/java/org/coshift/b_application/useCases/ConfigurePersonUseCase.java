@@ -6,6 +6,7 @@ import org.coshift.a_domain.time.TimeBalance;
 import org.coshift.a_domain.person.PersonRole;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.TimeAccountRepository;
+import org.coshift.b_application.ports.PasswordChecker;
 
 import java.util.Objects;
 import java.time.LocalDateTime;
@@ -17,10 +18,14 @@ public class ConfigurePersonUseCase {
 
     private final PersonRepository personRepository;
     private final TimeAccountRepository timeAccountRepository;
+    private final PasswordChecker passwordChecker;
 
-    public ConfigurePersonUseCase(PersonRepository personRepository, TimeAccountRepository timeAccountRepository) {
+    public ConfigurePersonUseCase(PersonRepository personRepository,
+                                  TimeAccountRepository timeAccountRepository,
+                                  PasswordChecker passwordChecker) {
         this.personRepository = Objects.requireNonNull(personRepository);
         this.timeAccountRepository = Objects.requireNonNull(timeAccountRepository);
+        this.passwordChecker = Objects.requireNonNull(passwordChecker);
     }
 
     /**
@@ -43,7 +48,8 @@ public class ConfigurePersonUseCase {
                   });
         TimeAccount account = new TimeAccount(0, new TimeBalance(0L, LocalDateTime.now()));
         account = timeAccountRepository.save(account);
-        Person candidate = new Person(0, nickname, password, account.getId(), role);
+        String hashed = passwordChecker.hash(password);
+        Person candidate = new Person(0, nickname, hashed, account.getId(), role);
         return personRepository.save(candidate);
     }
 
@@ -58,7 +64,7 @@ public class ConfigurePersonUseCase {
         Person p = personRepository.findById(id)
                    .orElseThrow(() -> new IllegalArgumentException("Person not found"));
         if(nickname != null && !nickname.isBlank()) p.setNickname(nickname);
-        if(password != null && !password.isBlank()) p.setPassword(password);
+        if(password != null && !password.isBlank()) p.setPassword(passwordChecker.hash(password));
         if(role != null) p.setRole(role);
         return personRepository.save(p);
     }

@@ -9,7 +9,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.coshift.b_application.useCases.AuthenticateUserUseCase;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.PasswordChecker;
@@ -55,16 +54,10 @@ public class SpringConfig {
         return http.build();
     }
 
-    @Bean  // ToDo: löschen und unten einkommentieren
+    @Bean
     PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();  
+        return new BCryptPasswordEncoder();
     }
-
-    // ToDo: einkommentieren und oben löschen
-    // @Bean
-    // PasswordEncoder passwordEncoder() {
-    //     return new BCryptPasswordEncoder();
-    // }
 
     @Bean
     AuthenticateUserUseCase authUC(PersonRepository repo, PasswordChecker checker){
