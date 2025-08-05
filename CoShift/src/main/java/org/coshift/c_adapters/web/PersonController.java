@@ -3,7 +3,7 @@ package org.coshift.c_adapters.web;
 import org.coshift.b_application.UseCaseInteractor;
 import org.coshift.b_application.ports.PersonRepository;
 import org.coshift.b_application.ports.TimeAccountRepository;
-import org.coshift.c_adapters.dto.PersonDetailsDto;
+import org.coshift.c_adapters.dto.PersonPublicDto;
 import org.coshift.c_adapters.dto.TimeAccountDto;
 import org.coshift.c_adapters.mapper.PersonMapper;
 import org.coshift.c_adapters.mapper.TimeAccountMapper;
@@ -46,30 +46,30 @@ public class PersonController {
     public record NewPersonDto(String nickname, String password, String role) {}
 
     @PostMapping
-    public PersonDetailsDto create(@RequestBody NewPersonDto dto) {
+    public PersonPublicDto create(@RequestBody NewPersonDto dto) {
         PersonRole role = Optional.ofNullable(dto.role())
-                                  .map(String::toUpperCase)
-                                  .map(PersonRole::valueOf)
-                                  .orElse(PersonRole.USER);
+                .map(String::toUpperCase)
+                .map(PersonRole::valueOf)
+                .orElse(PersonRole.USER);
 
         Person p = interactor.addPerson(dto.nickname(), dto.password(), role);
-        return PersonMapper.toDetailDto(p);
+        return PersonMapper.toPublicDto(p);
     }
 
     /* ---------- READ ------------------------------------------------ */
 
-    @GetMapping // ToDo: DTO sollte kein Passwort enthalten
-    public List<PersonDetailsDto> all() {
+    @GetMapping
+    public List<PersonPublicDto> all() {
         return persons.findAll().stream()
-                      .map(PersonMapper::toDetailDto)
-                      .toList();
+                .map(PersonMapper::toPublicDto)
+                .toList();
     }
 
-    @GetMapping("/{id}") // ToDo: DTO sollte kein Passwort enthalten
-    public PersonDetailsDto byId(@PathVariable long id) {
+    @GetMapping("/{id}")
+    public PersonPublicDto byId(@PathVariable long id) {
         Person p = persons.findById(id)
-                          .orElseThrow(() -> new IllegalArgumentException("Person not found"));
-        return PersonMapper.toDetailDto(p);
+                .orElseThrow(() -> new IllegalArgumentException("Person not found"));
+        return PersonMapper.toPublicDto(p);
     }
 
     @GetMapping("/{id}/timeaccount")
@@ -78,12 +78,12 @@ public class PersonController {
         return TimeAccountMapper.toDto(acc);
     }
 
-    @GetMapping("/me") // ToDo: DTO sollte kein Passwort enthalten
-    public PersonDetailsDto me(Authentication auth) {
+    @GetMapping("/me")
+    public PersonPublicDto me(Authentication auth) {
         Object principal = auth.getPrincipal();
         if (!(principal instanceof Person user))
             throw new IllegalStateException("Principal is not a Person");
-        return PersonMapper.toDetailDto(user);   // dto.role enthält ADMIN|USER
+        return PersonMapper.toPublicDto(user);   // dto.role enthält ADMIN|USER
     }
 
     @GetMapping("/me/timeaccount")
@@ -93,7 +93,7 @@ public class PersonController {
             throw new IllegalStateException("Principal is not a Person");
         }
         TimeAccount acc = accounts.findById(user.getTimeAccountId())
-                                  .orElseThrow(() -> new IllegalStateException("Account missing"));
+                .orElseThrow(() -> new IllegalStateException("Account missing"));
         return TimeAccountMapper.toDto(acc);
     }
 
@@ -101,25 +101,25 @@ public class PersonController {
     /* ---------- UPDATE ---------------------------------------------- */
 
     @PutMapping("/{id}/role")
-    public PersonDetailsDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
+    public PersonPublicDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
         Person person = interactor.updatePersonRole(id, role);
-        return PersonMapper.toDetailDto(person);
+        return PersonMapper.toPublicDto(person);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public PersonDetailsDto update(@PathVariable long id,
-                                   @RequestBody NewPersonDto dto){
+    public PersonPublicDto update(@PathVariable long id,
+                                  @RequestBody NewPersonDto dto){
         PersonRole role = dto.role()==null? null
-                        : PersonRole.valueOf(dto.role().toUpperCase());
+                : PersonRole.valueOf(dto.role().toUpperCase());
         Person p = interactor.updatePerson(id, dto.nickname(), dto.password(), role);
-        return PersonMapper.toDetailDto(p);
+        return PersonMapper.toPublicDto(p);
     }
 
     /* ---------- DELETE ---------------------------------------------- */
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")  
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable long id) {
         interactor.deletePerson(id);
     }
