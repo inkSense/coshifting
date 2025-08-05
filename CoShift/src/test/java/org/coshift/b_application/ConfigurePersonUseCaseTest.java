@@ -30,9 +30,20 @@ class ConfigurePersonUseCaseTest {
     ConfigurePersonUseCase useCase = new ConfigurePersonUseCase(personRepository, timeAccountRepo);
 
     @BeforeAll
-    static void setUp() {
-        // ToDo: Hier sollten die Testdaten für die Personen-Datei erstellt werden
+    static void setUp() throws IOException {
+        Path file = tmp.resolve("persons.json");
+        String json = """
+        [{
+            "id": 1,
+            "nickname": "anton",
+            "password": "secret",
+            "timeAccountId": 1,
+            "role": "USER"
+        }]
+        """;
+        Files.writeString(file, json);
     }
+
 
     @Test
     void addPerson_saves_and_returns_person_with_id() {
@@ -70,22 +81,8 @@ class ConfigurePersonUseCaseTest {
 
     @Test
     void update_changes_role_and_persists_it() {
-
         Path file = tmp.resolve("persons.json");
-        String json = """
-            [{
-                "id": 1,
-                "nickname": "anton",
-                "password": "secret",
-                "timeAccountId": 1,
-                "role": "USER"
-            }]
-        """;
-        try {
-            Files.writeString(file, json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         var accessor = new PersonGsonFileAccessor(file);
         PersonRepository personRepo = new PersonJsonRepository(accessor);
 
