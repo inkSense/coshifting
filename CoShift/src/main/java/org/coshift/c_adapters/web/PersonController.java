@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST-Controller für Personen-bezogene Funktionen
@@ -42,17 +41,13 @@ public class PersonController {
 
     /* ---------- CREATE ---------------------------------------------- */
 
-    // Einfaches DTO fürs Anlegen neuer Personen (Role optional)
-    public record NewPersonDto(String nickname, String password, String role) {}
+    // Einfaches DTO fürs Anlegen neuer Personen
+    public record NewPersonDto(String nickname, String password) {}
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public PersonPublicDto create(@RequestBody NewPersonDto dto) {
-        PersonRole role = Optional.ofNullable(dto.role())
-                .map(String::toUpperCase)
-                .map(PersonRole::valueOf)
-                .orElse(PersonRole.USER);
-
-        Person p = interactor.addPerson(dto.nickname(), dto.password(), role);
+        Person p = interactor.addPerson(dto.nickname(), dto.password());
         return PersonMapper.toPublicDto(p);
     }
 
@@ -101,6 +96,7 @@ public class PersonController {
     /* ---------- UPDATE ---------------------------------------------- */
 
     @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
     public PersonPublicDto updateRole(@PathVariable long id, @RequestBody PersonRole role) {
         Person person = interactor.updatePersonRole(id, role);
         return PersonMapper.toPublicDto(person);
@@ -110,9 +106,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     public PersonPublicDto update(@PathVariable long id,
                                   @RequestBody NewPersonDto dto){
-        PersonRole role = dto.role()==null? null
-                : PersonRole.valueOf(dto.role().toUpperCase());
-        Person p = interactor.updatePerson(id, dto.nickname(), dto.password(), role);
+        Person p = interactor.updatePerson(id, dto.nickname(), dto.password(), null);
         return PersonMapper.toPublicDto(p);
     }
 
