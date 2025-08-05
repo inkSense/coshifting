@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,5 +60,29 @@ class ShiftControllerTest {
     void unauthenticatedRequestIsRejected() throws Exception {
         mvc.perform(get("/api/shifts"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void userCannotAddOtherUserToShift() throws Exception {
+        when(interactor.authenticateUser("anton", "secret"))
+                .thenReturn(new Person(1L, "anton", "secret", PersonRole.USER));
+
+        mvc.perform(put("/api/shifts/5/participation")
+                        .with(httpBasic("anton", "secret"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("2"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void userCannotRemoveOtherUserFromShift() throws Exception {
+        when(interactor.authenticateUser("anton", "secret"))
+                .thenReturn(new Person(1L, "anton", "secret", PersonRole.USER));
+
+        mvc.perform(delete("/api/shifts/5/participation")
+                        .with(httpBasic("anton", "secret"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("2"))
+                .andExpect(status().isForbidden());
     }
 }

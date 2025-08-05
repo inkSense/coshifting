@@ -65,12 +65,14 @@ public class ShiftController {
 
 
     @PutMapping("/{id}/participation")
+    @PreAuthorize("hasRole('ADMIN') or #personId == principal.id")
     public ShiftPublicDetailDto addUserToShift(@PathVariable long id, @RequestBody long personId){
         var shift = interactor.addPersonToShift(personId, id);
         return ShiftMapper.toPublicDetailDto(shift);
     }
 
     @DeleteMapping("/{id}/participation")
+    @PreAuthorize("hasRole('ADMIN') or #personId == principal.id")
     public ShiftPublicDetailDto deleteUserFromShift(@PathVariable long id, @RequestBody long personId){
         var shift = interactor.removePersonFromShift(personId, id);
         return ShiftMapper.toPublicDetailDto(shift);

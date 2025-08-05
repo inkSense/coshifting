@@ -10,6 +10,9 @@ import org.coshift.b_application.ports.TimeAccountRepository;
 import org.coshift.b_application.ports.PresenterInputPort;
 import org.coshift.b_application.ports.PasswordChecker;
 import org.coshift.b_application.useCases.*;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -105,11 +108,33 @@ public class UseCaseInteractor {
     /* ---- Person AND Shift ---- */
 
     public Shift addPersonToShift(long personId, long shiftId) {
+        ensureAuthorized(personId);
         return configurePersonsInShiftUseCase.add(personId, shiftId);
     }
 
     public Shift removePersonFromShift(long personId, long shiftId){
+        ensureAuthorized(personId);
         return configurePersonsInShiftUseCase.remove(personId, shiftId);
+    }
+
+    private void ensureAuthorized(long personId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            throw new AccessDeniedException("No authentication");
+        }
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+        if (isAdmin) {
+            return;
+        }
+        Object principal = auth.getPrincipal();
+        if (principal instanceof org.coshift.a_domain.person.Person p) {
+            if (p.getId() != personId) {
+                throw new AccessDeniedException("Access denied for person " + personId);
+            }
+        } else {
+            throw new AccessDeniedException("Unknown principal");
+        }
     }
 
     public void showCurrentWeek(LocalDate monday) {
