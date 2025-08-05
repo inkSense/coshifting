@@ -22,15 +22,17 @@ export default function DayCell({ cell }: { cell: DayCellViewModel }) {
         >
             {cell.date && (
                 <Box sx={{ fontSize: '0.75rem', textAlign: 'center', px: 0.5, pt: 0.5 }}>
-                    {dayjs(cell.date).locale('de').format('DD. MMM')}
+                    {dayjs(cell.date).locale('de').format('DD. MMMM')}
                 </Box>
             )}
 
             {cell.shifts.length === 0 && <Box sx={{ opacity: 0.3 }}>&nbsp;</Box>}
-
-            {cell.shifts.map((s, i) => (
-                <ShiftBlock key={i} filled={s.fullyStaffed} text={s.startTime} />
-            ))}
+            {[...cell.shifts]
+                .sort((a, b) => a.startTime.localeCompare(b.startTime))
+                .map((s, i) => (
+                    <ShiftBlock key={i} filled={s.fullyStaffed} text={s.startTime} />
+                ))
+            }
         </Box>
     )
 }
