@@ -11,7 +11,7 @@ dayjs.extend(isoWeek)
 
 export default function WeekPage() {
   const api = useApi()
-  const weeksToShow = 3
+  const weeksToShow = 12
   const EXPECTED = weeksToShow * 7
 
   const { data: cells = [] } = useQuery({
