@@ -40,6 +40,15 @@ public class ConfigureShiftUseCase {
         return repository.save(candidate);
     }
 
+
+    public List<Shift> getShifts() {
+        return repository.findAll();
+    }
+
+    public List<Shift> getShiftsBetween(LocalDate startDate, LocalDate endDate) {
+        return repository.findByDate(startDate, endDate);
+    }
+
     /**
      * Updates an existing shift.
      *

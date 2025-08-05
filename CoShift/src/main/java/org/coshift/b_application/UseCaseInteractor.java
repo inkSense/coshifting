@@ -26,12 +26,11 @@ import java.util.List;
 public class UseCaseInteractor {
 
     private final ConfigureShiftUseCase configureShiftUC;
-    private final ViewShiftUseCase viewShiftUC;
     private final ConfigurePersonUseCase configurePersonUC;
     private final ConfigurePersonsInShiftUseCase configurePersonsInShiftUseCase;
-    private final PresenterInputPort presenter;
     private final AuthenticateUserUseCase authenticateUserUC;
     private final ViewTimeAccountUseCase viewTimeAccountUC;
+    private final PresenterInputPort presenter;
 
     public UseCaseInteractor(
             ShiftRepository shiftRepository,
@@ -40,9 +39,7 @@ public class UseCaseInteractor {
             PasswordChecker passwordChecker,
             PresenterInputPort presenter
     ) {
-        // Alle Use-Cases teilen sich dasselbe Repository (Falls erwünscht)
         this.configureShiftUC  = new ConfigureShiftUseCase(shiftRepository);
-        this.viewShiftUC = new ViewShiftUseCase(shiftRepository);
         this.configurePersonUC = new ConfigurePersonUseCase(personRepository, timeAccountRepository);
         this.configurePersonsInShiftUseCase = new ConfigurePersonsInShiftUseCase(shiftRepository, personRepository);
         this.authenticateUserUC = new AuthenticateUserUseCase(personRepository, passwordChecker);
@@ -97,11 +94,11 @@ public class UseCaseInteractor {
     }
 
     public List<Shift> getAllShifts() {
-        return viewShiftUC.getShifts();
+        return configureShiftUC.getShifts();
     }
 
     public List<Shift> getShiftsBetween(LocalDate start, LocalDate end) {
-        return viewShiftUC.getShiftsBetween(start, end);
+        return configureShiftUC.getShiftsBetween(start, end);
     }
 
 
@@ -116,13 +113,13 @@ public class UseCaseInteractor {
     }
 
     public void showCurrentWeek(LocalDate monday) {
-        List<Shift> shifts = viewShiftUC.getShiftsBetween(monday, monday.plusDays(6));
+        List<Shift> shifts = configureShiftUC.getShiftsBetween(monday, monday.plusDays(6));
         presenter.showShiftsInThisWeek(shifts);
     }
 
     public void showWeeks(LocalDate monday, int weeks) {
         LocalDate end = monday.plusDays(weeks * 7L - 1);
-        List<Shift> shifts = viewShiftUC.getShiftsBetween(monday, end);
+        List<Shift> shifts = configureShiftUC.getShiftsBetween(monday, end);
         presenter.showShifts(monday, weeks, shifts);
     }
 

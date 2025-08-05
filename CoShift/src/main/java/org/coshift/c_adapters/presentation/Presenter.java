@@ -17,7 +17,9 @@ import java.time.temporal.ChronoUnit;
 public class Presenter implements PresenterInputPort {
     private List<DayCellViewModel> currentWeek;
     private WeekView weekView; 
-    // ToDo: WeekView ist komisch. 
+    // ToDo: WeekView ist komisch. Im Moment brauche ich es fast nur für die Anzeige der 3 Wochen.
+    //  Das könnte ich auch anders lösen.
+
     // Das Interface sollte besser ViewModel heißen. 
     // Die konkretet Implementierung sollte dann WeekViewModel heißen.
     // Presenter sollte nicht abhängig von der konkreten Implementierung sein.

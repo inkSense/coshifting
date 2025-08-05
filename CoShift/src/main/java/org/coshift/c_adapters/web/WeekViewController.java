@@ -46,6 +46,6 @@ public class WeekViewController {
         LocalDate monday0 = today.minusDays((today.getDayOfWeek().getValue()+6)%7);
 
         interactor.showWeeks(monday0, weeks);  
-        return weekViewModel.getCurrentWeeks(); // 21 Zellen
+        return weekViewModel.getCurrentWeeks(); // Default: 21 cells
     }
 }
