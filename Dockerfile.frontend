@@ -1,0 +1,26 @@
+########################
+# 1. Build-Stage – Vite
+########################
+FROM node:20-alpine AS vite_build
+
+WORKDIR /web
+
+# API-Basis­url (oder andere Vite-Variablen) beim Build übergeben:
+#   docker build --build-arg VITE_API_URL=http://backend:8080 -t frontend .
+ARG VITE_API_URL=http://localhost:8080
+ENV VITE_API_URL=$VITE_API_URL
+
+
+COPY CoShift/frontend/package*.json ./
+RUN npm ci --silent
+
+COPY CoShift/frontend ./
+RUN npm run build          # Ergebnis landet unter /web/dist
+
+########################
+# 2. Lauf-Stage – Nginx
+########################
+FROM nginx:1.25-alpine
+COPY --from=vite_build /web/dist /usr/share/nginx/html
+COPY CoShift/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
